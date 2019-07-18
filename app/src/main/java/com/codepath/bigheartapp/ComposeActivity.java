@@ -122,8 +122,9 @@ public class ComposeActivity extends AppCompatActivity {
         }
 
         final File file = photoFile;
-        if(photoFile == null) {
+        if(photoFile != null) {
             final ParseFile parseFile = new ParseFile(file);
+            parseFile.saveInBackground();
             newPost.setImage(parseFile);
         }
 
