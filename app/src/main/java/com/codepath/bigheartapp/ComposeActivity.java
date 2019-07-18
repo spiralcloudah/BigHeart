@@ -99,7 +99,7 @@ public class ComposeActivity extends AppCompatActivity {
                 final ParseUser user = ParseUser.getCurrentUser();
                 final String month = sMonth.getSelectedItem().toString();
                 final String day = sDay.getSelectedItem().toString();
-                final String time = sTime.getSelectedItem().toString() + sAmPm.getSelectedItem().toString();
+                final String time = sTime.getSelectedItem().toString() + " " + sAmPm.getSelectedItem().toString();
                 final String year = sYear.getSelectedItem().toString();
 
                 createPost(description, user, month, day, year, time);
