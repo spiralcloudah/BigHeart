@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -32,7 +33,11 @@ public class ComposeActivity extends AppCompatActivity {
     private EditText etDescription;
     private ImageView ivPicture;
     private Button btnAddPic;
-    private EditText etDate;
+    private Spinner sMonth;
+    private Spinner sDay;
+    private Spinner sYear;
+    private Spinner sTime;
+    private Spinner sAmPm;
     private EditText etLocation;
     private Switch switchEvent;
 
@@ -50,7 +55,11 @@ public class ComposeActivity extends AppCompatActivity {
         ivPicture = findViewById(R.id.ivPicture);
         etDescription = findViewById(R.id.etDescription);
         btnPost = findViewById(R.id.btnPost);
-//        etDate = findViewById(R.id.etDate);
+        sMonth = findViewById(R.id.sMonth);
+        sDay = findViewById(R.id.sDay);
+        sYear = findViewById(R.id.sYear);
+        sTime = findViewById(R.id.sTime);
+        sAmPm = findViewById(R.id.sAmPm);
         etLocation = findViewById(R.id.etLocation);
         switchEvent = findViewById(R.id.switchEvent);
         btnAddPic = findViewById(R.id.btnAddImage);
@@ -59,10 +68,18 @@ public class ComposeActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
-                    etDate.setVisibility(View.VISIBLE);
+                    sMonth.setVisibility(View.VISIBLE);
+                    sDay.setVisibility(View.VISIBLE);
+                    sYear.setVisibility(View.VISIBLE);
+                    sTime.setVisibility(View.VISIBLE);
+                    sAmPm.setVisibility(View.VISIBLE);
                     isEvent = true;
                 } else {
-                    etDate.setVisibility(View.GONE);
+                    sMonth.setVisibility(View.GONE);
+                    sDay.setVisibility(View.GONE);
+                    sYear.setVisibility(View.GONE);
+                    sTime.setVisibility(View.GONE);
+                    sAmPm.setVisibility(View.GONE);
                     isEvent = false;
                 }
             }
@@ -80,21 +97,28 @@ public class ComposeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final String description = etDescription.getText().toString();
                 final ParseUser user = ParseUser.getCurrentUser();
+                final String month = sMonth.getSelectedItem().toString();
+                final String day = sDay.getSelectedItem().toString();
+                final String time = sTime.getSelectedItem().toString() + sAmPm.getSelectedItem().toString();
+                final String year = sYear.getSelectedItem().toString();
 
-                createPost(description, user);
+                createPost(description, user, month, day, year, time);
             }
         });
 
     }
 
-    public void createPost(String description, ParseUser user) {
+    public void createPost(String description, ParseUser user, String month, String day, String year, String time) {
         final Post newPost = new Post();
         newPost.setDescription(description);
         newPost.setUser(user);
         newPost.setIsEvent(isEvent);
+
         if(isEvent) {
-//            Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(sDate1);
-//            newPost.setEventDate(eventDate);
+            newPost.setDay(day);
+            newPost.setMonth(month);
+            newPost.setYear(year);
+            newPost.setTime(time);
         }
 
         final File file = photoFile;
