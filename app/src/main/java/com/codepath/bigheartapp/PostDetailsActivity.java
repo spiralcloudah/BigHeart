@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
-
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.codepath.bigheartapp.model.Post;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -30,6 +29,7 @@ public class PostDetailsActivity extends AppCompatActivity {
     TextView tvDescription;
     ImageView imageView3;
     TextView tvDate;
+    ImageView ivHeart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvUser = (TextView) findViewById(R.id.tvUser);
         tvUser2 = (TextView) findViewById(R.id.tvUser2);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
-        imageView3 = (ImageView) findViewById(R.id.imageView3);
+        ivHeart = (ImageView) findViewById(R.id.ivHeart);
         tvDate = (TextView) findViewById(R.id.tvDate);
 
         // unwrap the movie passed in via intent, using its simple name as a key
@@ -50,6 +50,28 @@ public class PostDetailsActivity extends AppCompatActivity {
         Log.d("PostDetailsActivity", String.format("Showing details for '%s'", post.getDescription()));
 
         tvDescription.setText(post.getDescription());
+
+        if(post.isLiked()) {
+            ivHeart.setImageResource(R.drawable.heart_logo_vector);
+        }
+
+        ivHeart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!post.isLiked()) {
+                    post.likePost(ParseUser.getCurrentUser());
+                    ivHeart.setImageResource(R.drawable.heart_logo_vector);
+
+                    post.saveInBackground();
+
+                } else {
+                    post.unlikePost(ParseUser.getCurrentUser());
+                    ivHeart.setImageResource(R.drawable.heart_logo_vector);
+
+                    post.saveInBackground();
+                }
+            }
+        });
 
         ParseFile photo = post.getImage();
         if(photo != null) {

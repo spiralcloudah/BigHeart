@@ -13,6 +13,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.codepath.bigheartapp.model.Post;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import java.io.Serializable;
 import java.util.List;
@@ -59,18 +60,38 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final Post post = mPosts.get(position);
 
-            try {
-                holder.tvDate.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
-                holder.tvUserName2.setText(post.getUser().fetchIfNeeded().getUsername());
-                holder.tvUserName.setText(post.getUser().fetchIfNeeded().getUsername()); //????
+        try {
+            holder.tvDate.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
+            holder.tvUserName2.setText(post.getUser().fetchIfNeeded().getUsername());
+            holder.tvUserName.setText(post.getUser().fetchIfNeeded().getUsername());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-            } catch (ParseException e) {
-                e.printStackTrace();
+        if(post.isLiked()) {
+            holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
+        }
+
+        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!post.isLiked()) {
+                    post.likePost(ParseUser.getCurrentUser());
+                    holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
+
+                    post.saveInBackground();
+
+                } else {
+                    post.unlikePost(ParseUser.getCurrentUser());
+                    holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
+
+                    post.saveInBackground();
+                }
             }
-
+        });
 
             ParseFile p = post.getUser().getParseFile("profilePicture");
             if (p != null) {
@@ -113,6 +134,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public TextView tvUserName2;
         public TextView tvDesc;
         public TextView tvDate;
+        public ImageView ivHeart;
 
 
         public ViewHolder(View itemView) {
@@ -124,6 +146,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvDesc = (TextView) itemView.findViewById(R.id.tvDescription);
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
             ivProfilePic = (ImageView) itemView.findViewById(R.id.ivProfilePic);
+            ivHeart = (ImageView) itemView.findViewById(R.id.ivHeart);
 
             itemView.setOnClickListener(this);
         }
