@@ -21,11 +21,14 @@ import com.parse.ParseUser;
 import java.io.Serializable;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     private List<Post> mPosts;
     Context context;
+    ImageButton ibProfilePic;
 
     int whichFragment;
 
@@ -69,6 +72,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 holder.tvDate.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
                 holder.tvUserName2.setText(post.getUser().fetchIfNeeded().getUsername());
                 holder.tvUserName.setText(post.getUser().fetchIfNeeded().getUsername()); //????
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -78,7 +82,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             if (p != null) {
                 Glide.with(context)
                         .load(p.getUrl())
-                        .into(holder.ibProfilePic);
+                        .bitmapTransform(new CropCircleTransformation(context))
+                        .into(ibProfilePic);
 
                 holder.ibProfilePic.setBackgroundColor(Color.WHITE);
             }
