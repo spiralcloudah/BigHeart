@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class ProfileFragment extends Fragment {
 
@@ -89,8 +89,7 @@ public class ProfileFragment extends Fragment {
         if(p != null) {
             Glide.with(getContext())
                     .load(p.getUrl())
-                    .centerCrop()
-                    .bitmapTransform(new RoundedCornersTransformation(getContext(), 100, 0))
+                    .bitmapTransform(new CropCircleTransformation(getContext()))
                     .into(ivCurrentProfile);
         }
 
