@@ -62,7 +62,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Post post = mPosts.get(position);
 
-//        if(whichFragment == 0) {
             try {
                 holder.tvDate.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
                 holder.tvUserName2.setText(post.getUser().fetchIfNeeded().getUsername());
@@ -95,27 +94,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         .load(post.getImage().getUrl())
                         .into(holder.ivImage);
             }
-//        }
-//        else if(whichFragment==1){
-//            holder.tvDate.setVisibility(View.GONE);
-//            holder.tvDesc.setVisibility(View.GONE);
-//            holder.tvUserName.setVisibility(View.GONE);
-//            holder.tvUserName2.setVisibility(View.GONE);
-// //           Glide.with(context)
-////                    .load(post.getImage().getUrl())
-////                    .into(holder.ivImage);
-//
-//            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-//            int pxWidth = displayMetrics.widthPixels;
-//
-//            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(pxWidth/3, pxWidth/3);
-//            holder.ivImage.setLayoutParams(layoutParams);
-////            Glide.with(context).load(post.getImage().getUrl()).into(holder.ivImage);
-//
-//        }
-        // Glide.with(context)
-        //        .load(post.getProfileImage().getUrl())
-        //        .into(holder.ibProfilePic);
 
     }
 
