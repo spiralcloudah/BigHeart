@@ -72,7 +72,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         }
 
         if(post.isLiked()) {
-            holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
+            holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
         }
 
         holder.ivHeart.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +80,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             public void onClick(View v) {
                 if(!post.isLiked()) {
                     post.likePost(ParseUser.getCurrentUser());
-                    holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
+                    holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
 
                     post.saveInBackground();
 

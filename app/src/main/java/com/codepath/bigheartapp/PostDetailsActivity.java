@@ -60,7 +60,7 @@ public class PostDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(!post.isLiked()) {
                     post.likePost(ParseUser.getCurrentUser());
-                    ivHeart.setImageResource(R.drawable.heart_logo_vector);
+                    ivHeart.setImageResource(R.drawable.hot_pink_heart);
 
                     post.saveInBackground();
 
