@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import java.io.File;
@@ -100,7 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerUser(String firstName, String lastName, String email, String username, String password, File profilePic) {
         //create new parse user
-        ParseUser user = new ParseUser();
+        final ParseUser user = new ParseUser();
 
         // insert string values into User ParseObject
         user.setUsername(username);
@@ -109,13 +110,22 @@ public class RegisterActivity extends AppCompatActivity {
         user.put("firstName", firstName);
         user.put("lastName", lastName);
         // insert Image file into User ParseObject
-        ParseFile profileImg = new ParseFile(profilePic);
-        profileImg.saveInBackground();
-        user.put("profilePicture", new ParseFile(profilePic));
+        final ParseFile profileImg = new ParseFile(profilePic);
+        profileImg.saveInBackground(new SaveCallback() {
+            public void done(ParseException e) {
+                // If successful add file to user and signUpInBackground
+                if(e == null) {
+                    user.put("profilePicture", profileImg);
+                    loginUser(user);
+                } else {
+                    loginUser(user);
+                }
+            }
+        });
 
+    }
 
-
-
+    public void loginUser(ParseUser user) {
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
