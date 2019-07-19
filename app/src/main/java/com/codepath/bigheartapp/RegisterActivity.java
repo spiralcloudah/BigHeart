@@ -69,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
                 final String username = etUsername.getText().toString();
                 final String password = etPassword.getText().toString();
 
-                if (photoFile == null || ivProfilePic.getDrawable() == null) {
+                 if (photoFile == null || ivProfilePic.getDrawable() == null) {
                     Log.d("HomeActivity", "No image imported");
                     Toast.makeText(RegisterActivity.this, "You haven't taken a photo yet :/. Try again", Toast.LENGTH_LONG).show();
                     return;
