@@ -188,6 +188,7 @@ public class ComposeActivity extends AppCompatActivity {
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 // Load the taken image into a preview
                 ivPicture.setImageBitmap(takenImage);
+                ivPicture.setVisibility(View.VISIBLE);
 
             } else { // Result was a failure
                 Toast.makeText(ComposeActivity.this, "No picture taken", Toast.LENGTH_SHORT).show();
