@@ -1,22 +1,17 @@
 package com.codepath.bigheartapp;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.bigheartapp.model.Post;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseUser;
 
 import java.io.Serializable;
 import java.util.List;
@@ -67,7 +62,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Post post = mPosts.get(position);
 
-        if(whichFragment == 0) {
+//        if(whichFragment == 0) {
             try {
                 holder.tvDate.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
                 holder.tvUserName2.setText(post.getUser().fetchIfNeeded().getUsername());
@@ -78,14 +73,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             }
 
 
-            ParseFile p = post.getUser().getParseFile("profilePic");
+            ParseFile p = post.getUser().getParseFile("profilePicture");
             if (p != null) {
                 Glide.with(context)
                         .load(p.getUrl())
                         .bitmapTransform(new CropCircleTransformation(context))
+<<<<<<< HEAD
                         .into(ibProfilePic);
+=======
+                        .into(holder.ivProfilePic);
+>>>>>>> 92ee6135366ace5dffa6e513125ad0ad9dc4a765
 
-                holder.ibProfilePic.setBackgroundColor(Color.WHITE);
+//                holder.ivProfilePic.setBackgroundColor(Color.WHITE);
             }
 
 //            holder.ibProfilePic.setOnClickListener(new View.OnClickListener() {
@@ -95,9 +94,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 //                }
 //            });
 
-            ParseUser myUser = null;
-            myUser = post.getUser();
-            System.out.println("User is " + myUser);
             holder.tvDesc.setText(post.getDescription());
 
             if (!(post.getImage() == null)){
@@ -105,24 +101,24 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         .load(post.getImage().getUrl())
                         .into(holder.ivImage);
             }
-        }
-        else if(whichFragment==1){
-            holder.tvDate.setVisibility(View.GONE);
-            holder.tvDesc.setVisibility(View.GONE);
-            holder.tvUserName.setVisibility(View.GONE);
-            holder.tvUserName2.setVisibility(View.GONE);
- //           Glide.with(context)
-//                    .load(post.getImage().getUrl())
-//                    .into(holder.ivImage);
-
-            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-            int pxWidth = displayMetrics.widthPixels;
-
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(pxWidth/3, pxWidth/3);
-            holder.ivImage.setLayoutParams(layoutParams);
-//            Glide.with(context).load(post.getImage().getUrl()).into(holder.ivImage);
-
-        }
+//        }
+//        else if(whichFragment==1){
+//            holder.tvDate.setVisibility(View.GONE);
+//            holder.tvDesc.setVisibility(View.GONE);
+//            holder.tvUserName.setVisibility(View.GONE);
+//            holder.tvUserName2.setVisibility(View.GONE);
+// //           Glide.with(context)
+////                    .load(post.getImage().getUrl())
+////                    .into(holder.ivImage);
+//
+//            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+//            int pxWidth = displayMetrics.widthPixels;
+//
+//            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(pxWidth/3, pxWidth/3);
+//            holder.ivImage.setLayoutParams(layoutParams);
+////            Glide.with(context).load(post.getImage().getUrl()).into(holder.ivImage);
+//
+//        }
         // Glide.with(context)
         //        .load(post.getProfileImage().getUrl())
         //        .into(holder.ibProfilePic);
@@ -136,7 +132,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public ImageButton ibProfilePic;
+        public ImageView ivProfilePic;
         public ImageView ivImage;
         public TextView tvUserName;
         public TextView tvUserName2;
@@ -152,7 +148,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvUserName2 = (TextView) itemView.findViewById(R.id.tvUser2);
             tvDesc = (TextView) itemView.findViewById(R.id.tvDescription);
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
-            ibProfilePic = (ImageButton) itemView.findViewById(R.id.ibProfilePic);
+            ivProfilePic = (ImageView) itemView.findViewById(R.id.ivProfilePic);
 
             itemView.setOnClickListener(this);
         }
