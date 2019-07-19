@@ -1,15 +1,16 @@
 package com.codepath.bigheartapp;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.codepath.bigheartapp.model.Post;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -23,7 +24,7 @@ public class PostDetailsActivity extends AppCompatActivity {
 
     // the view objects
     ImageView ivImage;
-    ImageButton ibProfilePic;
+    ImageView ivProfilePic;
     TextView tvUser;
     TextView tvUser2;
     TextView tvDescription;
@@ -37,7 +38,7 @@ public class PostDetailsActivity extends AppCompatActivity {
 
         // resolve the view objects
         ivImage = (ImageView) findViewById(R.id.ivImage);
-        ibProfilePic = (ImageButton) findViewById(R.id.ibProfilePic);
+        ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
         tvUser = (TextView) findViewById(R.id.tvUser);
         tvUser2 = (TextView) findViewById(R.id.tvUser2);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
@@ -49,11 +50,14 @@ public class PostDetailsActivity extends AppCompatActivity {
         Log.d("PostDetailsActivity", String.format("Showing details for '%s'", post.getDescription()));
 
         tvDescription.setText(post.getDescription());
-        Glide.with(this).load(post.getImage().getUrl()).into(ivImage);
-  //      Glide.with(this)
-  //              .load(post.getImage().getUrl())
-  //              .bitmapTransform(new CropCircleTransformation(this))
-  //              .into(ibProfilePic);
+
+        ParseFile photo = post.getImage();
+        if(photo != null) {
+            Glide.with(PostDetailsActivity.this)
+                    .load(photo.getUrl())
+                    .bitmapTransform(new CenterCrop(PostDetailsActivity.this))
+                    .into(ivImage);
+        }
         try {
             tvUser.setText(post.getUser().fetchIfNeeded().getUsername());
             tvUser2.setText(post.getUser().fetchIfNeeded().getUsername());
@@ -63,16 +67,15 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvDate.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
 
         ParseFile p = post.getUser().getParseFile("profilePicture");
+
         if(p != null) {
             Glide.with(this)
                     .load(p.getUrl())
-                    .into(ibProfilePic);
-
-            ibProfilePic.setBackgroundColor(Color.WHITE);
+                    .bitmapTransform(new CropCircleTransformation(PostDetailsActivity.this))
+                    .into(ivProfilePic);
         } else {
-            ibProfilePic.setVisibility(View.GONE);
+            ivProfilePic.setVisibility(View.GONE);
         }
-
 
     }
 }

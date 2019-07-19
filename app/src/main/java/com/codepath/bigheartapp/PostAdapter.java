@@ -80,7 +80,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         .into(holder.ivProfilePic);
             }
 
-//            holder.ibProfilePic.setOnClickListener(new View.OnClickListener() {
+//            holder.ivProfilePic.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
 //                    ((TimelineActivity) context).showProfileFragment(post);
