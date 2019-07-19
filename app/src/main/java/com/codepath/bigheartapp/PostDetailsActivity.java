@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,6 +13,8 @@ import com.bumptech.glide.Glide;
 import com.codepath.bigheartapp.model.Post;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class PostDetailsActivity extends AppCompatActivity {
 
@@ -47,7 +50,10 @@ public class PostDetailsActivity extends AppCompatActivity {
 
         tvDescription.setText(post.getDescription());
         Glide.with(this).load(post.getImage().getUrl()).into(ivImage);
-//        Glide.with(this).load(post.getProfileImage().getUrl()).into(ibProfilePic);
+  //      Glide.with(this)
+  //              .load(post.getImage().getUrl())
+  //              .bitmapTransform(new CropCircleTransformation(this))
+  //              .into(ibProfilePic);
         try {
             tvUser.setText(post.getUser().fetchIfNeeded().getUsername());
             tvUser2.setText(post.getUser().fetchIfNeeded().getUsername());
@@ -56,13 +62,15 @@ public class PostDetailsActivity extends AppCompatActivity {
         }
         tvDate.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
 
-        ParseFile p = post.getUser().getParseFile("profilePic");
+        ParseFile p = post.getUser().getParseFile("profilePicture");
         if(p != null) {
             Glide.with(this)
                     .load(p.getUrl())
                     .into(ibProfilePic);
 
             ibProfilePic.setBackgroundColor(Color.WHITE);
+        } else {
+            ibProfilePic.setVisibility(View.GONE);
         }
 
 
