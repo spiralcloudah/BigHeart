@@ -57,6 +57,8 @@ public class PostDetailsActivity extends AppCompatActivity {
                     .load(photo.getUrl())
                     .bitmapTransform(new CenterCrop(PostDetailsActivity.this))
                     .into(ivImage);
+        } else {
+            ivImage.setVisibility(View.GONE);
         }
         try {
             tvUser.setText(post.getUser().fetchIfNeeded().getUsername());
@@ -73,9 +75,6 @@ public class PostDetailsActivity extends AppCompatActivity {
                     .load(p.getUrl())
                     .bitmapTransform(new CropCircleTransformation(PostDetailsActivity.this))
                     .into(ivProfilePic);
-        } else {
-            ivProfilePic.setVisibility(View.GONE);
         }
-
     }
 }
