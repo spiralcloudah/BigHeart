@@ -5,15 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,9 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.bigheartapp.EndlessRecyclerViewScrollListener;
@@ -47,8 +41,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static com.parse.Parse.getApplicationContext;
 
 public class ProfileFragment extends Fragment {
 
@@ -91,7 +83,6 @@ public class ProfileFragment extends Fragment {
             Glide.with(getContext())
                     .load(p.getUrl())
                     .into(ivCurrentProfile);
-
         }
 
         rvPostView= rootView.findViewById(R.id.rvUserPosts);
