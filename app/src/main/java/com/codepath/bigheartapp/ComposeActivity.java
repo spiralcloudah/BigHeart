@@ -102,6 +102,8 @@ public class ComposeActivity extends AppCompatActivity {
                 final String time = sTime.getSelectedItem().toString() + " " + sAmPm.getSelectedItem().toString();
                 final String year = sYear.getSelectedItem().toString();
 
+                // create HttpRequest for location and fetch geocode for address inputted
+
                 createPost(description, user, month, day, year, time);
             }
         });
