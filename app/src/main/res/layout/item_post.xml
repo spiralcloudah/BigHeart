@@ -35,8 +35,8 @@
 
     <ImageView
         android:id="@+id/ivImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
         android:layout_below="@+id/ivProfilePic"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
@@ -45,8 +45,8 @@
         android:layout_marginEnd="0dp"
         android:background="@android:color/white"
         android:padding="5dp"
-        android:visibility="visible"
         android:src="@drawable/ic_launcher_foreground"
+        android:visibility="visible"
         tools:background="#000000"
         tools:layout_editor_absoluteX="53dp"
         tools:layout_editor_absoluteY="16dp" />
