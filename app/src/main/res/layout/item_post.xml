@@ -45,6 +45,7 @@
         android:layout_marginEnd="0dp"
         android:background="@android:color/white"
         android:padding="5dp"
+        android:visibility="visible"
         android:src="@drawable/ic_launcher_foreground"
         tools:background="#000000"
         tools:layout_editor_absoluteX="53dp"
