@@ -57,6 +57,7 @@ public class ProfileFragment extends Fragment {
     private SwipeRefreshLayout swipeContainer;
     Button logoutBtn;
     ImageButton ivCurrentProfile;
+    TextView tvCurrentUser;
     int whichFragment=1;
 
     public final static int PICK_PHOTO_CODE = 1046;
@@ -81,6 +82,8 @@ public class ProfileFragment extends Fragment {
 //        ivCurrentProfile = rootView.findViewById(R.id.ivCurrentProfile);
         String currentUser = ParseUser.getCurrentUser().getUsername(); // this will now be null
         System.out.println("The current user is "+ currentUser);
+        tvCurrentUser = (TextView) rootView.findViewById(R.id.tvCurrentUser);
+        tvCurrentUser.setText(currentUser);
 
 
         ParseFile p = ParseUser.getCurrentUser().getParseFile("profilePic");
@@ -89,11 +92,9 @@ public class ProfileFragment extends Fragment {
                     .load(p.getUrl())
                     .into(ivCurrentProfile);
 
-            ivCurrentProfile.setBackgroundColor(Color.WHITE);
         }
 
         rvPostView= rootView.findViewById(R.id.rvUserPosts);
-
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override

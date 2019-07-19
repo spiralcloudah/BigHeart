@@ -16,7 +16,15 @@ public class Post extends ParseObject implements Serializable {
     private static final String KEY_LOCATION = "Location";
     public static final String KEY_USER = "userId";
     public static final String KEY_DATE = "createdAt";
+    public static final String KEY_IS_EVENT = "isEvent";
+    private static final String KEY_MONTH = "month";
+    private static final String KEY_DAY = "day";
+    private static final String KEY_YEAR = "year";
+    private static final String KEY_TIME = "time";
 
+    public void setIsEvent(boolean isEvent) {
+        put(KEY_IS_EVENT, isEvent);
+    }
 
     public String getDescription() {
         return getString(KEY_DESCRIPTION);
@@ -50,9 +58,43 @@ public class Post extends ParseObject implements Serializable {
         put(KEY_USER, user);
     }
 
+    //Date columns
+    public String getMonth() {
+        return getString(KEY_MONTH);
+    }
+
+    public void setMonth(String month) {
+        put(KEY_MONTH, month);
+    }
+
+    public String getDay() {
+        return getString(KEY_DAY);
+    }
+
+    public void setDay(String day) {
+        put(KEY_DAY, day);
+    }
+
+    public String getYear() {
+        return getString(KEY_YEAR);
+    }
+
+    public void setYear(String year) {
+        put(KEY_YEAR, year);
+    }
+
+    public String getTime() {
+        return getString(KEY_TIME);
+    }
+
+    public void setTime(String time) {
+        put(KEY_TIME, time);
+    }
+
     public static class Query extends ParseQuery<Post> {
 
         public Query() {
+
             super(Post.class);
         }
 
@@ -66,8 +108,7 @@ public class Post extends ParseObject implements Serializable {
             return this;
         }
     }
-
-
 }
+
 
 
