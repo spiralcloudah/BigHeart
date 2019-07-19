@@ -9,6 +9,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,7 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -42,13 +44,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 public class ProfileFragment extends Fragment {
 
     // Store a member variable for the listener
     private EndlessRecyclerViewScrollListener scrollListener;
     private SwipeRefreshLayout swipeContainer;
     Button logoutBtn;
-    ImageButton ivCurrentProfile;
+    ImageView ivCurrentProfile;
     TextView tvCurrentUser;
     int whichFragment=1;
 
@@ -68,24 +72,29 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+        return inflater.inflate(R.layout.fragment_profile, container, false);
+    }
 
-        logoutBtn = rootView.findViewById(R.id.btnLogout);
-//        ivCurrentProfile = rootView.findViewById(R.id.ivCurrentProfile);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        logoutBtn = view.findViewById(R.id.btnLogout);
+        ivCurrentProfile = view.findViewById(R.id.ivCurrentProfile);
         String currentUser = ParseUser.getCurrentUser().getUsername(); // this will now be null
         System.out.println("The current user is "+ currentUser);
-        tvCurrentUser = (TextView) rootView.findViewById(R.id.tvCurrentUser);
+        tvCurrentUser = (TextView) view.findViewById(R.id.tvCurrentUser);
         tvCurrentUser.setText(currentUser);
 
 
-        ParseFile p = ParseUser.getCurrentUser().getParseFile("image");
+        ParseFile p = ParseUser.getCurrentUser().getParseFile("profilePicture");
         if(p != null) {
             Glide.with(getContext())
                     .load(p.getUrl())
+                    .centerCrop()
+                    .bitmapTransform(new RoundedCornersTransformation(getContext(), 100, 0))
                     .into(ivCurrentProfile);
         }
 
-        rvPostView= rootView.findViewById(R.id.rvUserPosts);
+        rvPostView= view.findViewById(R.id.rvUserPosts);
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,39 +103,39 @@ public class ProfileFragment extends Fragment {
             }
         });
 //        ivCurrentProfile.setOnClickListener(new View.OnClickListener() {
- //           @Override
- //           public void onClick(View v) {
- //               Activity activity = (Activity) ProfileFragment.this.getActivity();
+        //           @Override
+        //           public void onClick(View v) {
+        //               Activity activity = (Activity) ProfileFragment.this.getActivity();
 
- //               Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //               Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
- //               File mediaStorage = null;
- //               try {
-  //                  mediaStorage = getTempImageFile(getContext());
-  //              } catch (IOException e) {
-  ////                  e.printStackTrace();
-  //              }
-  //              // Create the storage directory if it does not exist
-   //             if (!mediaStorage.exists() && !mediaStorage.mkdirs()){
-  //                  Log.d(APP_TAG, "failed to create directory");
-  //              }
+        //               File mediaStorage = null;
+        //               try {
+        //                  mediaStorage = getTempImageFile(getContext());
+        //              } catch (IOException e) {
+        ////                  e.printStackTrace();
+        //              }
+        //              // Create the storage directory if it does not exist
+        //             if (!mediaStorage.exists() && !mediaStorage.mkdirs()){
+        //                  Log.d(APP_TAG, "failed to create directory");
+        //              }
 
-   //             String path = mediaStorage.getAbsolutePath();
-   //             Uri uri = FileProvider.getUriForFile(activity, "com.codepath.parsetagram", mediaStorage);
-   //             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        //             String path = mediaStorage.getAbsolutePath();
+        //             Uri uri = FileProvider.getUriForFile(activity, "com.codepath.parsetagram", mediaStorage);
+        //             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
-   //             photoFile = new File(path);
-                //
-    //            startActivityForResult(intent,
-   //                     CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-   //         }
-   //     });
+        //             photoFile = new File(path);
+        //
+        //            startActivityForResult(intent,
+        //                     CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        //         }
+        //     });
 
         loadTopPosts();
         posts = new ArrayList<>();
 
         adapter = new PostAdapter(posts, whichFragment);
-        rvPostView = (RecyclerView) rootView.findViewById(R.id.rvUserPosts);
+        rvPostView = (RecyclerView) view.findViewById(R.id.rvUserPosts);
 
         rvPostView.setAdapter(adapter);
 
@@ -157,28 +166,28 @@ public class ProfileFragment extends Fragment {
 
 
 
-        swipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
 //        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
- //           @Override
- //           public void onRefresh() {
-                // Your code here
- //               Toast.makeText(getApplicationContext(), "Refreshed!", Toast.LENGTH_LONG).show();
-                // To keep animation for 4 seconds
-  //              posts.clear();
-  //              adapter.clear();
-  //              loadTopPosts();
+        //           @Override
+        //           public void onRefresh() {
+        // Your code here
+        //               Toast.makeText(getApplicationContext(), "Refreshed!", Toast.LENGTH_LONG).show();
+        // To keep animation for 4 seconds
+        //              posts.clear();
+        //              adapter.clear();
+        //              loadTopPosts();
 
-   //         }
-   //     });
+        //         }
+        //     });
 
         // Scheme colors for animation
 //        swipeContainer.setColorSchemeColors(
- //               getResources().getColor(android.R.color.holo_blue_bright),
- //               getResources().getColor(android.R.color.holo_green_light),
- //               getResources().getColor(android.R.color.holo_orange_light),
- //               getResources().getColor(android.R.color.holo_red_light)
- //       );
+        //               getResources().getColor(android.R.color.holo_blue_bright),
+        //               getResources().getColor(android.R.color.holo_green_light),
+        //               getResources().getColor(android.R.color.holo_orange_light),
+        //               getResources().getColor(android.R.color.holo_red_light)
+        //       );
 
 
 
@@ -186,8 +195,6 @@ public class ProfileFragment extends Fragment {
 
 
         getConfiguration();
-
-        return rootView;
     }
 
     public void getConfiguration() {
