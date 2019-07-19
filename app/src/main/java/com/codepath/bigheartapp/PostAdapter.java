@@ -106,16 +106,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.tvDesc.setVisibility(View.GONE);
             holder.tvUserName.setVisibility(View.GONE);
             holder.tvUserName2.setVisibility(View.GONE);
-            Glide.with(context)
-                    .load(post.getImage().getUrl())
-                    .into(holder.ivImage);
+ //           Glide.with(context)
+//                    .load(post.getImage().getUrl())
+//                    .into(holder.ivImage);
 
             DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
             int pxWidth = displayMetrics.widthPixels;
 
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(pxWidth/3, pxWidth/3);
             holder.ivImage.setLayoutParams(layoutParams);
-            Glide.with(context).load(post.getImage().getUrl()).into(holder.ivImage);
+//            Glide.with(context).load(post.getImage().getUrl()).into(holder.ivImage);
 
         }
         // Glide.with(context)
