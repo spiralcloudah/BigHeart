@@ -79,11 +79,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         .load(p.getUrl())
                         .bitmapTransform(new CropCircleTransformation(context))
                         .into(holder.ivProfilePic);
-
-//                holder.ivProfilePic.setBackgroundColor(Color.WHITE);
             }
 
-//            holder.ibProfilePic.setOnClickListener(new View.OnClickListener() {
+//            holder.ivProfilePic.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
 //                    ((TimelineActivity) context).showProfileFragment(post);
