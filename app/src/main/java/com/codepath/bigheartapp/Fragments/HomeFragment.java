@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,6 @@ public class HomeFragment extends Fragment {
     public RecyclerView rvPost;
     PostAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
-    int whichFragment = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,7 +55,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 final int curSize = adapter.getItemCount();
-                adapter.addAll(posts);
+                adapter.addAll(posts, rootView);
 
                 view.post(new Runnable() {
                     @Override
@@ -81,7 +79,7 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getApplicationContext(), "Refreshed!", Toast.LENGTH_LONG).show();
                 // To keep animation for 4 seconds
                 posts.clear();
-                adapter.clear();
+                adapter.clear(rootView);
                 loadTopPosts();
 
             }
@@ -130,7 +128,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void done(List<Post> objects, ParseException e) {
                 if(e == null) {
-                    adapter.clear();
+                    adapter.clear(getView());
                     for(int i = 0; i < objects.size(); i++) {
                         posts.add(objects.get(i));
                         adapter.notifyItemInserted(posts.size() - 1);

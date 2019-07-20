@@ -37,15 +37,25 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public TextView tvDate;
 
     // Clean all elements of the recycler
-    public void clear() {
+    public void clear(final View view) {
         mPosts.clear();
-        notifyDataSetChanged();
+        view.post(new Runnable() {
+            public void run() {
+                // There is no need to use notifyDataSetChanged()
+                notifyDataSetChanged();
+            }
+        });
     }
 
     // Add a list of items -- change to type used
-    public void addAll(List<Post> p) {
+    public void addAll(List<Post> p, View view) {
         mPosts.addAll(p);
-        notifyDataSetChanged();
+        view.post(new Runnable() {
+            public void run() {
+                // There is no need to use notifyDataSetChanged()
+                notifyDataSetChanged();
+            }
+        });
     }
 
 
@@ -56,6 +66,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         View postView = inflater.inflate(R.layout.item_post, parent, false);
         ViewHolder viewHolder = new ViewHolder(postView);
+
+
         return viewHolder;
     }
 
