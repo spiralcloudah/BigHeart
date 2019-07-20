@@ -150,7 +150,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 final int curSize = adapter.getItemCount();
-                adapter.addAll(posts);
+                adapter.addAll(posts, view);
 
                 view.post(new Runnable() {
                     @Override
