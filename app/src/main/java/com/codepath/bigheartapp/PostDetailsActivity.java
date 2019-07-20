@@ -52,7 +52,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvDescription.setText(post.getDescription());
 
         if(post.isLiked()) {
-            ivHeart.setImageResource(R.drawable.heart_logo_vector);
+            ivHeart.setImageResource(R.drawable.hot_pink_heart);
         }
 
         ivHeart.setOnClickListener(new View.OnClickListener() {
