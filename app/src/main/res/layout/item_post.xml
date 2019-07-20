@@ -84,8 +84,8 @@
         android:layout_height="32dp"
         android:layout_below="@+id/ivImage"
         android:layout_alignStart="@+id/ivImage"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:scaleType="fitStart"
         app:srcCompat="@drawable/heart_logo_vector" />
 
