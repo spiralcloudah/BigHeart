@@ -7,6 +7,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+
 import java.io.Serializable;
 
 @ParseClassName("Post")
@@ -15,11 +16,13 @@ public class Post extends ParseObject implements Serializable {
     private static final String KEY_IMAGE = "image";
     private static final String KEY_LOCATION = "location";
     public static final String KEY_USER = "userId";
+    public static final String KEY_DATE = "createdAt";
     public static final String KEY_IS_EVENT = "isEvent";
     private static final String KEY_MONTH = "month";
     private static final String KEY_DAY = "day";
     private static final String KEY_YEAR = "year";
     private static final String KEY_TIME = "time";
+    private static final String KEY_LIKED_BY = "hearts";
 
 
     public String getDescription() {
@@ -62,7 +65,6 @@ public class Post extends ParseObject implements Serializable {
         put(KEY_USER, user);
     }
 
-
     //Date columns
     public String getMonth() {
         return getString(KEY_MONTH);
@@ -97,7 +99,7 @@ public class Post extends ParseObject implements Serializable {
     }
 
 
-    //Querying posts
+            //Querying
     public static class Query extends ParseQuery<Post> {
 
         public Query() {
@@ -114,7 +116,5 @@ public class Post extends ParseObject implements Serializable {
             return this;
         }
     }
-
-
 }
 
