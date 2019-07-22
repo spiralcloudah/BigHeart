@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.bigheartapp.EndlessRecyclerViewScrollListener;
@@ -45,6 +46,8 @@ import java.util.Date;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
+import static com.parse.Parse.getApplicationContext;
 
 public class ProfileFragment extends Fragment {
 
@@ -167,26 +170,26 @@ public class ProfileFragment extends Fragment {
 
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
-//        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-        //           @Override
-        //           public void onRefresh() {
-        // Your code here
-        //               Toast.makeText(getApplicationContext(), "Refreshed!", Toast.LENGTH_LONG).show();
-        // To keep animation for 4 seconds
-        //              posts.clear();
-        //              adapter.clear();
-        //              loadTopPosts();
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code here
+                Toast.makeText(getApplicationContext(), "Refreshed!", Toast.LENGTH_LONG).show();
+                // To keep animation for 4 seconds
+                posts.clear();
+                adapter.clear();
+                loadTopPosts();
 
-        //         }
-        //     });
+            }
+        });
 
         // Scheme colors for animation
-//        swipeContainer.setColorSchemeColors(
-        //               getResources().getColor(android.R.color.holo_blue_bright),
-        //               getResources().getColor(android.R.color.holo_green_light),
-        //               getResources().getColor(android.R.color.holo_orange_light),
-        //               getResources().getColor(android.R.color.holo_red_light)
-        //       );
+        swipeContainer.setColorSchemeColors(
+                getResources().getColor(android.R.color.holo_blue_bright),
+                getResources().getColor(android.R.color.holo_green_light),
+                getResources().getColor(android.R.color.holo_orange_light),
+                getResources().getColor(android.R.color.holo_red_light)
+        );
 
 
 
@@ -301,7 +304,7 @@ public class ProfileFragment extends Fragment {
                 } else {
                     e.printStackTrace();
                 }
-//                swipeContainer.setRefreshing(false);
+                swipeContainer.setRefreshing(false);
             }
         });
     }
