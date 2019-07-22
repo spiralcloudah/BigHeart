@@ -43,6 +43,7 @@ import static java.lang.Float.parseFloat;
 
 public class ComposeActivity extends AppCompatActivity {
 
+    // instantiate layout properties...
     private Button btnPost;
     private EditText etDescription;
     private ImageView ivPicture;
@@ -55,15 +56,19 @@ public class ComposeActivity extends AppCompatActivity {
     private EditText etLocation;
     private Switch switchEvent;
 
+    //instantiate vars for image capture
     public final String APP_TAG = "Big<3";
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "photo.jpg";
     public boolean isEvent = false;
     File photoFile;
 
+    // API key and URL information..
+    // TODO - store in a more secure place!
     private String API_KEY = "AIzaSyBlqBLcO4u2GXQ8utsYRlsV55kmCavovfI";
     private String BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
 
+    // instantiate vars that will store retrieved lat and long coordinates
     public String lat;
     public String lng;
 
@@ -72,6 +77,7 @@ public class ComposeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose);
 
+        //create pointers to layout id values
         ivPicture = findViewById(R.id.ivPicture);
         etDescription = findViewById(R.id.etDescription);
         btnPost = findViewById(R.id.btnPost);
@@ -84,6 +90,7 @@ public class ComposeActivity extends AppCompatActivity {
         switchEvent = findViewById(R.id.switchEvent);
         btnAddPic = findViewById(R.id.btnAddImage);
 
+        //simple function that reveals extra input fields if post is an event.
         switchEvent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -115,6 +122,7 @@ public class ComposeActivity extends AppCompatActivity {
         btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // create final strings to be passed into database
                 final String description = etDescription.getText().toString();
                 final ParseUser user = ParseUser.getCurrentUser();
                 final String month = sMonth.getSelectedItem().toString();
@@ -124,16 +132,16 @@ public class ComposeActivity extends AppCompatActivity {
                 final String location = etLocation.getText().toString().replace(" ","+");
 
 
-                // create HttpRequest for location and fetch geocode for address inputted
-                // new GetCoordinates().execute(etLocation.getText().toString().replace(" ","+"));
+                // run function that calls to API and creates post
+                // TODO - (Gene) is this bad code writing? Could i break this function up into 2?
+                createPostWithCoords(description, user, month, day, year, time, location);
 
-                 createPost(description, user, month, day, year, time, location);
             }
         });
 
     }
 
-    private String getCoordinates(String location) {
+    private void createPostWithCoords(final String description, final ParseUser user, final String month, final String day, final String year, final String time, final String location) {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("address", location );
@@ -149,31 +157,55 @@ public class ComposeActivity extends AppCompatActivity {
 
 
                     lng = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("geometry")
-                            .getJSONObject("location").get("lat").toString();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                try {
-                    Log.d("ComposeActivity", "Request Success!");
-                    // retrieve json lat and long coordinates
-                    lat = response.getJSONObject(0).getJSONObject("geometry")
-                            .getJSONObject("location").get("lat").toString();
-
-
-                    lng = response.getJSONObject(0).getJSONObject("geometry")
                             .getJSONObject("location").get("lng").toString();
 
+                    // since async API call Post object must me created within the onSuccess function to ba able to access lat and lng data.
+                    Post newPost = new Post();
+
+                    // set values to post object
+                    newPost.setDescription(description);
+                    newPost.setUser(user);
+
+                    newPost.setIsEvent(isEvent);
+
+                    // if post is an event, then date information will be updated in Parse DB
+                    if(isEvent) {
+                        newPost.setDay(day);
+                        newPost.setMonth(month);
+                        newPost.setYear(year);
+                        newPost.setTime(time);
+                    }
+
+                    // create new ParseGeopoint to store lat and lng as doubles...
+                    ParseGeoPoint coordinates = new ParseGeoPoint(parseDouble(lat),parseDouble(lng));
+                    newPost.setLocation(coordinates);
+
+                    // checks for optional photo, if photo exists, adds to post object.
+                    final File file = photoFile;
+                    if (file != null ) {
+                        ParseFile postPic = new ParseFile(file);
+                        postPic.saveInBackground();
+                        newPost.setImage(postPic);
+                    }
+
+                    // finally save post object to parse database
+                    newPost.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                Toast.makeText(ComposeActivity.this, "Successfully posted", Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }
 
+            }
 
 
             @Override
@@ -191,55 +223,8 @@ public class ComposeActivity extends AppCompatActivity {
 
         });
 
-        return (lat + "," + lng);
     }
 
-    public void createPost(String description, ParseUser user, String month, String day, String year, String time, String location) {
-        final Post newPost = new Post();
-        newPost.setDescription(description);
-        newPost.setUser(user);
-
-        // input location geocode .. but first convert strings to floats
-//        Float latitude = parseFloat(lat);
-//        Float longitude = parseFloat(lng);
-        String coordinates = getCoordinates(location);
-        String[] latlng = coordinates.split(",");
-         Double[] fixed = new Double[2];
-
-        for (int i = 0; i < latlng.length; i++) {
-            fixed[i] = parseDouble(latlng[i]);
-        }
-
-        ParseGeoPoint point = new ParseGeoPoint(fixed[0],fixed[1]);
-        newPost.setLocation(point);
-        newPost.setIsEvent(isEvent);
-
-        if(isEvent) {
-            newPost.setDay(day);
-            newPost.setMonth(month);
-            newPost.setYear(year);
-            newPost.setTime(time);
-        }
-
-        final File file = photoFile;
-        if(photoFile != null) {
-            final ParseFile parseFile = new ParseFile(file);
-            parseFile.saveInBackground();
-            newPost.setImage(parseFile);
-        }
-
-        newPost.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Toast.makeText(ComposeActivity.this, "Successfully posted", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
     public void onLaunchCamera() {
         // create Intent to take a picture and return control to the calling application
