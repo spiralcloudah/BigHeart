@@ -54,13 +54,11 @@ public class HomeFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                final int curSize = adapter.getItemCount();
-                adapter.addAll(posts, rootView);
 
                 view.post(new Runnable() {
                     @Override
                     public void run() {
-                        adapter.notifyItemRangeInserted(curSize, adapter.getItemCount() - 1);
+                        //not quite sure if we need this?
                     }
                 });
             }
@@ -81,7 +79,6 @@ public class HomeFragment extends Fragment {
                 posts.clear();
                 adapter.clear(rootView);
                 loadTopPosts();
-
             }
         });
 
@@ -98,24 +95,7 @@ public class HomeFragment extends Fragment {
         loadTopPosts();
 
 
-        getConfiguration();
-
         return rootView;
-
-    }
-
-    // Append the next page of data into the adapter
-    // This method probably sends out a network request and appends new data items to your adapter.
-    public void loadNextDataFromApi(int offset) {
-        // Send an API request to retrieve appropriate paginated data
-        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
-        //  --> Deserialize and construct new model objects from the API response
-        //  --> Append the new data objects to the existing set of items inside the array of items
-        //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
-    }
-
-
-    public void getConfiguration() {
 
     }
 
