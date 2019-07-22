@@ -79,7 +79,7 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getApplicationContext(), "Refreshed!", Toast.LENGTH_LONG).show();
                 // To keep animation for 4 seconds
                 posts.clear();
-                adapter.clear(rootView);
+                adapter.clear();
                 loadTopPosts();
 
             }
