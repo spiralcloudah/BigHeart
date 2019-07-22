@@ -7,8 +7,11 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 @ParseClassName("Post")
 public class Post extends ParseObject implements Serializable {
@@ -98,6 +101,38 @@ public class Post extends ParseObject implements Serializable {
         put(KEY_TIME, time);
     }
 
+    //Likes
+    public JSONArray getLikes() {
+        return getJSONArray(KEY_LIKED_BY);
+    }
+
+    public int getNumLikes() { return getLikes().length(); }
+
+    public void likePost(ParseUser user) {
+        add(KEY_LIKED_BY, user);
+    }
+
+    public void unlikePost(ParseUser user) {
+        ArrayList<ParseUser> a = new ArrayList<>();
+        a.add(user);
+        removeAll(KEY_LIKED_BY, a);
+    }
+
+    public boolean isLiked() {
+        JSONArray a = getLikes();
+        if(a != null) {
+            for (int i = 0; i < a.length(); i++) {
+                try {
+                    if (a.getJSONObject(i).getString("objectId").equals(ParseUser.getCurrentUser().getObjectId())) {
+                        return true;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
 
             //Querying
     public static class Query extends ParseQuery<Post> {
