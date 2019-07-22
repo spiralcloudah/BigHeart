@@ -116,6 +116,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         .load(p.getUrl())
                         .bitmapTransform(new CropCircleTransformation(context))
                         .into(holder.ivProfilePic);
+            } else {
+                holder.ivProfilePic.setImageResource(R.drawable.profile);
             }
 
 //            holder.ivProfilePic.setOnClickListener(new View.OnClickListener() {
