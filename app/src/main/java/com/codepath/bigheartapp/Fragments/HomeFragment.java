@@ -112,7 +112,6 @@ public class HomeFragment extends Fragment {
                     for(int i = 0; i < objects.size(); i++) {
                         posts.add(objects.get(i));
                         adapter.notifyItemInserted(posts.size() - 1);
-//                        Log.i("HomeFragment", "Post " + i + " " + objects.get(i).getDescription());
                     }
                 } else {
                     Toast.makeText(getContext(), "Failed to query posts", Toast.LENGTH_SHORT).show();
