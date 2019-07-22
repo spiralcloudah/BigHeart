@@ -26,6 +26,11 @@ public class PostDetailsActivity extends AppCompatActivity {
     ImageView ivProfilePic;
     TextView tvUser;
     TextView tvUser2;
+    TextView tvLocation;
+    TextView tvMonth;
+    TextView tvDay;
+    TextView tvYear;
+    TextView tvTime;
     TextView tvDescription;
     ImageView imageView3;
     TextView tvDate;
@@ -44,8 +49,13 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvDescription = (TextView) findViewById(R.id.tvDescription);
         ivHeart = (ImageView) findViewById(R.id.ivHeart);
         tvDate = (TextView) findViewById(R.id.tvDate);
+        tvLocation = (TextView) findViewById(R.id.tvLocation);
+        tvMonth = (TextView) findViewById(R.id.tvMonth);
+        tvDay = (TextView) findViewById(R.id.tvDay);
+        tvYear = (TextView) findViewById(R.id.tvYear);
+        tvTime = (TextView) findViewById(R.id.tvTime);
 
-        // unwrap the movie passed in via intent, using its simple name as a key
+        // unwrap the post passed in via intent, using its simple name as a key
         post = (Post) getIntent().getParcelableExtra(Post.class.getSimpleName());
         Log.d("PostDetailsActivity", String.format("Showing details for '%s'", post.getDescription()));
 

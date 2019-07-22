@@ -71,6 +71,23 @@
         tools:textColor="@color/colorPrimaryDark" />
 
     <TextView
+        android:id="@+id/tvLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDescription"
+        android:layout_alignStart="@+id/tvUser"
+        android:layout_alignLeft="@+id/tvUser"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="2dp"
+        android:text="Location"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tvUser"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription"
+        tools:textColor="@color/colorPrimaryDark" />
+
+    <TextView
         android:id="@+id/tvDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -85,6 +102,63 @@
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/tvUser"
         app:layout_constraintTop_toTopOf="@+id/tvUser" />
+
+    <TextView
+        android:id="@+id/tvMonth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvLocation"
+        android:layout_alignStart="@+id/tvLocation"
+        android:layout_alignLeft="@+id/tvLocation"
+        android:text="Month"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/tvLocation"
+        app:layout_constraintTop_toBottomOf="@+id/tvLocation" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvMonth"
+        android:layout_alignStart="@+id/tvMonth"
+        android:layout_alignLeft="@+id/tvMonth"
+        android:text="Time"
+        android:textColor="#5A5858"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="@+id/tvMonth"
+        app:layout_constraintTop_toBottomOf="@+id/tvMonth" />
+
+    <TextView
+        android:id="@+id/tvDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvMonth"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_toEndOf="@+id/tvMonth"
+        android:layout_toRightOf="@+id/tvMonth"
+        android:text="Day"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/tvMonth"
+        app:layout_constraintTop_toTopOf="@+id/tvMonth" />
+
+    <TextView
+        android:id="@+id/tvYear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvDay"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_toEndOf="@+id/tvDay"
+        android:layout_toRightOf="@+id/tvDay"
+        android:text="Year"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/tvDay"
+        app:layout_constraintTop_toTopOf="@+id/tvDay" />
 
     <ImageView
         android:id="@+id/ivHeart"
@@ -110,9 +184,7 @@
         android:layout_alignStart="@+id/ivImage"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="4dp"
         android:autoLink="all"
         android:fontFamily="sans-serif-light"
         android:text="Date here"
@@ -120,6 +192,6 @@
         android:textSize="14sp"
         android:textStyle="italic"
         app:layout_constraintStart_toStartOf="@+id/tvUser"
-        app:layout_constraintTop_toBottomOf="@+id/tvUser" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTime" />
 
 </android.support.constraint.ConstraintLayout>

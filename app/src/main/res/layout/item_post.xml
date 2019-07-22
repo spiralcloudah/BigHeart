@@ -75,6 +75,21 @@
         tools:textColor="@color/colorPrimaryDark" />
 
     <TextView
+        android:id="@+id/tvLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDescription"
+        android:layout_alignStart="@+id/tvUser"
+        android:layout_alignLeft="@+id/tvUser"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="2dp"
+        android:text="Location"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:textColor="@color/colorPrimaryDark" />
+
+    <TextView
         android:id="@+id/tvDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -84,6 +99,63 @@
         android:layout_marginTop="2dp"
         android:layout_toEndOf="@+id/tvUser"
         android:text="Write a caption..."
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvMonth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvLocation"
+        android:layout_alignStart="@+id/tvLocation"
+        android:layout_alignLeft="@+id/tvLocation"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:text="Month"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvMonth"
+        android:layout_alignStart="@+id/tvMonth"
+        android:layout_alignLeft="@+id/tvMonth"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:text="Time"
+        android:textColor="#5A5858"
+        android:textSize="16sp"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/tvDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvMonth"
+        android:layout_marginStart="47dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/tvMonth"
+        android:layout_toRightOf="@+id/tvMonth"
+        android:text="Day"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvYear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvDay"
+        android:layout_marginStart="61dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/tvDay"
+        android:layout_toRightOf="@+id/tvDay"
+        android:text="Year"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="16sp" />
 
@@ -102,17 +174,16 @@
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvDescription"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="false"
+        android:layout_below="@+id/tvTime"
+        android:layout_alignStart="@+id/ivHeart"
+        android:layout_alignLeft="@+id/ivHeart"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="7dp"
         android:autoLink="all"
         android:fontFamily="sans-serif-light"
         android:text="Date here"
