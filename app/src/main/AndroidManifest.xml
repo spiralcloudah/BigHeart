@@ -20,7 +20,6 @@
         <activity android:name=".ComposeActivity"></activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".HomeActivity" />
-        <activity android:name=".ComposeActivity"/>
         <activity android:name=".PostDetailsActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
