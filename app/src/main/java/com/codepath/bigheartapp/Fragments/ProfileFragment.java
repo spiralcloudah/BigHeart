@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -143,13 +142,12 @@ public class ProfileFragment extends Fragment {
 
         // Configure the RecyclerView
 
-        GridLayoutManager gridLayoutManager= new GridLayoutManager(getContext(), 3);
+        LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        rvPostView.setLayoutManager(gridLayoutManager);
+        rvPostView.setLayoutManager(linearLayoutManager);
 
         // Retain an instance so that you can call `resetState()` for fresh searches
-        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 final int curSize = adapter.getItemCount();
