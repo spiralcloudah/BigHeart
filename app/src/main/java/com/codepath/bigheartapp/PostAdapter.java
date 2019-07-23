@@ -138,6 +138,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 holder.ivImage.setVisibility(View.GONE);
             }
 
+        if (!(post.getMonth() == null)){
+            holder.tvMonth.setText(post.getMonth());
+            holder.tvDay.setText(post.getDay());
+            holder.tvYear.setText(post.getYear());
+            holder.tvTime.setText(post.getTime());
+        } else {
+            holder.tvMonth.setVisibility(View.GONE);
+            holder.tvDay.setVisibility(View.GONE);
+            holder.tvYear.setVisibility(View.GONE);
+            holder.tvTime.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -154,6 +166,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public TextView tvDesc;
         public TextView tvDate;
         public ImageView ivHeart;
+        public TextView tvMonth;
+        public TextView tvDay;
+        public TextView tvYear;
+        public TextView tvTime;
 
 
         public ViewHolder(View itemView) {
@@ -166,6 +182,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
             ivProfilePic = (ImageView) itemView.findViewById(R.id.ivProfilePic);
             ivHeart = (ImageView) itemView.findViewById(R.id.ivHeart);
+            tvMonth = (TextView) itemView.findViewById(R.id.tvMonth);
+            tvDay = (TextView) itemView.findViewById(R.id.tvDay);
+            tvYear = (TextView) itemView.findViewById(R.id.tvYear);
+            tvTime = (TextView) itemView.findViewById(R.id.tvTime);
 
             itemView.setOnClickListener(this);
         }

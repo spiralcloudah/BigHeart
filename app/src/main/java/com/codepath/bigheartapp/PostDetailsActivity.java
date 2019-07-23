@@ -26,7 +26,6 @@ public class PostDetailsActivity extends AppCompatActivity {
     ImageView ivProfilePic;
     TextView tvUser;
     TextView tvUser2;
-    TextView tvLocation;
     TextView tvMonth;
     TextView tvDay;
     TextView tvYear;
@@ -49,7 +48,6 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvDescription = (TextView) findViewById(R.id.tvDescription);
         ivHeart = (ImageView) findViewById(R.id.ivHeart);
         tvDate = (TextView) findViewById(R.id.tvDate);
-        tvLocation = (TextView) findViewById(R.id.tvLocation);
         tvMonth = (TextView) findViewById(R.id.tvMonth);
         tvDay = (TextView) findViewById(R.id.tvDay);
         tvYear = (TextView) findViewById(R.id.tvYear);
@@ -60,6 +58,11 @@ public class PostDetailsActivity extends AppCompatActivity {
         Log.d("PostDetailsActivity", String.format("Showing details for '%s'", post.getDescription()));
 
         tvDescription.setText(post.getDescription());
+        tvMonth.setText(post.getMonth());
+        tvDay.setText(post.getDay());
+        tvYear.setText(post.getYear());
+        tvTime.setText(post.getTime());
+
 
         if(post.isLiked()) {
             ivHeart.setImageResource(R.drawable.hot_pink_heart);
