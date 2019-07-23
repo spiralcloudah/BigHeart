@@ -39,7 +39,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     Location mCurrentLocation;
     private final int MY_LOCATION_REQUEST_CODE = 130;
     private final static String KEY_LOCATION = "location";
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
 
     //required empty constructor
@@ -88,9 +87,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 PackageManager.PERMISSION_GRANTED) {
             getMyLocation();
         } else {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_LOCATION_REQUEST_CODE);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_LOCATION_REQUEST_CODE);
         }
     }
 
@@ -98,11 +95,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         getActivity().onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             getMyLocation();
         } else {
-            Toast.makeText(getContext(), "No permission", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "App does not have access to user's location", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -118,6 +116,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                     public void onSuccess(Location location) {
                         if (location != null) {
                             onLocationChanged(location);
+                            moveCamera();
                         }
                     }
                 })
@@ -129,6 +128,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                     }
                 });
 
+    }
+
+    public void moveCamera() {
         if(mCurrentLocation != null) {
             LatLng userLocation = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             CameraPosition cameraPosition = CameraPosition.builder().target(userLocation).zoom(16).bearing(0).tilt(45).build();
