@@ -20,6 +20,7 @@ public class Post extends ParseObject implements Serializable {
     private static final String KEY_DAY = "day";
     private static final String KEY_YEAR = "year";
     private static final String KEY_TIME = "time";
+    private static final String KEY_ADDRESS = "address";
 
 
     public String getDescription() {
@@ -60,6 +61,14 @@ public class Post extends ParseObject implements Serializable {
 
     public void setUser(ParseUser user){
         put(KEY_USER, user);
+    }
+
+    public void setAddress(String address){
+        put(KEY_ADDRESS, address);
+    }
+
+    public String getAddress(){
+        return getString(KEY_ADDRESS);
     }
 
 

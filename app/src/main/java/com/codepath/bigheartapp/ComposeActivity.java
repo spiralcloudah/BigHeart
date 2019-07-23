@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -39,7 +38,6 @@ import java.io.File;
 import cz.msebera.android.httpclient.Header;
 
 import static java.lang.Double.parseDouble;
-import static java.lang.Float.parseFloat;
 
 public class ComposeActivity extends AppCompatActivity {
 
@@ -71,6 +69,7 @@ public class ComposeActivity extends AppCompatActivity {
     // instantiate vars that will store retrieved lat and long coordinates
     public String lat;
     public String lng;
+    public String address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,19 +128,20 @@ public class ComposeActivity extends AppCompatActivity {
                 final String day = sDay.getSelectedItem().toString();
                 final String time = sTime.getSelectedItem().toString() + " " + sAmPm.getSelectedItem().toString();
                 final String year = sYear.getSelectedItem().toString();
+                address = etLocation.getText().toString();
                 final String location = etLocation.getText().toString().replace(" ","+");
 
 
                 // run function that calls to API and creates post
                 // TODO - (Gene) is this bad code writing? Could i break this function up into 2?
-                createPostWithCoords(description, user, month, day, year, time, location);
+                createPostWithCoords(description, user, month, day, year, time, location, address);
 
             }
         });
 
     }
 
-    private void createPostWithCoords(final String description, final ParseUser user, final String month, final String day, final String year, final String time, final String location) {
+    private void createPostWithCoords(final String description, final ParseUser user, final String month, final String day, final String year, final String time, final String location, final String address) {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("address", location );
@@ -159,12 +159,16 @@ public class ComposeActivity extends AppCompatActivity {
                     lng = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("geometry")
                             .getJSONObject("location").get("lng").toString();
 
+                    // TODO - for some reason, retrieving the formatted address has an infinite/veryy long runtime. For now i will  just have the String location be what the user inputs.
+                    // address = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("formatted_address").toString();
+
                     // since async API call Post object must me created within the onSuccess function to ba able to access lat and lng data.
                     Post newPost = new Post();
 
                     // set values to post object
                     newPost.setDescription(description);
                     newPost.setUser(user);
+                    newPost.setAddress(address);
 
                     newPost.setIsEvent(isEvent);
 
