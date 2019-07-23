@@ -134,7 +134,7 @@ public class Post extends ParseObject implements Serializable {
         return false;
     }
 
-            //Querying
+    //Querying
     public static class Query extends ParseQuery<Post> {
 
         public Query() {

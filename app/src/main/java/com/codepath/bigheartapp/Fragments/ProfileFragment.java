@@ -60,7 +60,6 @@ public class ProfileFragment extends Fragment {
 
     public final static int PICK_PHOTO_CODE = 1046;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
-    public final String APP_TAG = "MyCustomApp";
     File photoFile;
 
     String currentPath;
@@ -132,7 +131,6 @@ public class ProfileFragment extends Fragment {
         //         }
         //     });
 
-        loadTopPosts();
         posts = new ArrayList<>();
 
         adapter = new PostAdapter(posts, whichFragment);
@@ -150,13 +148,11 @@ public class ProfileFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                final int curSize = adapter.getItemCount();
-                adapter.addAll(posts, view);
 
                 view.post(new Runnable() {
                     @Override
                     public void run() {
-                        adapter.notifyItemRangeInserted(curSize, adapter.getItemCount() - 1);
+                        // should have something to load more posts...
                     }
                 });
             }

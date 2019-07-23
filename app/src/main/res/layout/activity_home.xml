@@ -14,6 +14,8 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
+        app:contentInsetLeft="60dp"
+        app:contentInsetStart="60dp"
         app:layout_constraintBottom_toTopOf="@+id/flContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

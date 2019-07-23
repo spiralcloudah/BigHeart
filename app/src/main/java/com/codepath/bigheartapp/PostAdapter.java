@@ -34,8 +34,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         this.whichFragment = whichFragment;
     }
 
-    public TextView tvDate;
-
     // Clean all elements of the recycler
     public void clear(final View view) {
         mPosts.clear();
