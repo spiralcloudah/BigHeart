@@ -58,6 +58,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         });
     }
 
+
     // Clean all elements of the recycler
     public void clear() {
         mPosts.clear();
