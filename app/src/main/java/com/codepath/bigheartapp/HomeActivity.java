@@ -15,6 +15,7 @@ import android.view.View;
 import com.codepath.bigheartapp.Fragments.HomeFragment;
 import com.codepath.bigheartapp.Fragments.MapsFragment;
 import com.codepath.bigheartapp.Fragments.ProfileFragment;
+import com.codepath.bigheartapp.Fragments.SearchFragment;
 import com.codepath.bigheartapp.model.Post;
 
 import java.io.Serializable;
@@ -24,6 +25,7 @@ public class HomeActivity extends AppCompatActivity {
     public HomeFragment homeFragment;
     public MapsFragment mapsFragment;
     public ProfileFragment profileFragment;
+    public SearchFragment searchFragment;
     private final int REQUEST_CODE = 20;
 
     @Override
@@ -62,6 +64,7 @@ public class HomeActivity extends AppCompatActivity {
         homeFragment = new HomeFragment();
         mapsFragment = new MapsFragment();
         profileFragment = new ProfileFragment();
+        searchFragment = new SearchFragment();
 
         setSupportActionBar((Toolbar) findViewById(R.id.tbMain));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -86,7 +89,11 @@ public class HomeActivity extends AppCompatActivity {
                             case R.id.miProfile:
                                 fragment = profileFragment;
                                 break;
-                            default:
+                            case R.id.miSearch:
+                                fragment = searchFragment;
+                                break;
+
+                                default:
                                 fragment = homeFragment;
                                 break;
                         }
