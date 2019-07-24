@@ -14,10 +14,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.PermissionRequest;
 import android.widget.Toast;
 
 import com.codepath.bigheartapp.R;
+import com.codepath.bigheartapp.model.Post;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,8 +26,16 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+
+import java.util.List;
+
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 
@@ -89,6 +97,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         } else {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_LOCATION_REQUEST_CODE);
         }
+
+        drawMarkers(mGoogleMap);
     }
 
 
@@ -148,5 +158,50 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
         mCurrentLocation = location;
     }
+
+    public void drawMarkers(final GoogleMap mGoogleMap) {
+
+        // get current user
+        ParseUser currentUser = ParseUser.getCurrentUser();
+
+        // query for list of post objects unique to current user
+        Post.Query postQuery = new Post.Query();
+
+        postQuery.getTop().withUser();
+
+        postQuery.whereEqualTo("userId",currentUser);
+
+        postQuery.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> objects, ParseException e) {
+                if (e == null) {
+                    Log.d("Maps Fragment", "Success!");
+                    for (int i = 0; i < objects.size(); i++) {
+                        try {
+                            Double latitude = objects.get(i).getLocation().getLatitude();
+                            Double longitude = objects.get(i).getLocation().getLongitude();
+                            LatLng pos = new LatLng(latitude,longitude);
+                            Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                                    .position(pos)
+                                    .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
+                                    .snippet(objects.get(i).getDescription()));
+                        } catch (ParseException er ) {
+                            er.printStackTrace();
+                        }
+
+                    }
+                } else {
+                    Log.d("Maps Fragment", "Failure");
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
+    }
+
+
+
 }
 
