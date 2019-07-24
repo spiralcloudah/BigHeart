@@ -293,7 +293,7 @@ public class ProfileFragment extends Fragment {
                         }
 
                         posts.add(0,objects.get(i));
-                        adapter.notifyItemInserted(posts.size()-1);
+                        adapter.notifyItemInserted(posts.size() - 1);
 
                     }
                 } else {
