@@ -73,7 +73,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         context = parent.getContext();
 
         RecyclerView.ViewHolder viewHolder;
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        LayoutInflater inflater = LayoutInflater.from(context);
 
         switch (viewType) {
             case TYPE_POST:
@@ -188,11 +188,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.tvDay.setText(post.getDay());
             holder.tvYear.setText(post.getYear());
             holder.tvTime.setText(post.getTime());
-        } else {
-            holder.tvMonth.setVisibility(View.GONE);
-            holder.tvDay.setVisibility(View.GONE);
-            holder.tvYear.setVisibility(View.GONE);
-            holder.tvTime.setVisibility(View.GONE);
         }
     }
 
@@ -256,6 +251,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else {
                 holder.ivImage.setVisibility(View.GONE);
             }
+
     }
 
     @Override
