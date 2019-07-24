@@ -54,9 +54,7 @@ public class EventFragment extends Fragment {
     private SwipeRefreshLayout swipeContainer;
     ImageView ivCurrentProfile;
     TextView tvCurrentUser;
-    int whichFragment=1;
-
-    public final static int PICK_PHOTO_CODE = 1046;
+    int whichFragment = 1;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
     public final String APP_TAG = "MyCustomApp";
     File photoFile;
@@ -72,7 +70,7 @@ public class EventFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        return inflater.inflate(R.layout.fragment_event, container, false);
     }
 
     @Override
@@ -93,36 +91,6 @@ public class EventFragment extends Fragment {
         }
 
         rvPostView= view.findViewById(R.id.rvUserPosts);
-
-
-//        ivCurrentProfile.setOnClickListener(new View.OnClickListener() {
-        //           @Override
-        //           public void onClick(View v) {
-        //               Activity activity = (Activity) ProfileFragment.this.getActivity();
-
-        //               Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        //               File mediaStorage = null;
-        //               try {
-        //                  mediaStorage = getTempImageFile(getContext());
-        //              } catch (IOException e) {
-        ////                  e.printStackTrace();
-        //              }
-        //              // Create the storage directory if it does not exist
-        //             if (!mediaStorage.exists() && !mediaStorage.mkdirs()){
-        //                  Log.d(APP_TAG, "failed to create directory");
-        //              }
-
-        //             String path = mediaStorage.getAbsolutePath();
-        //             Uri uri = FileProvider.getUriForFile(activity, "com.codepath.parsetagram", mediaStorage);
-        //             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-
-        //             photoFile = new File(path);
-        //
-        //            startActivityForResult(intent,
-        //                     CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-        //         }
-        //     });
 
         loadTopPosts();
         posts = new ArrayList<>();
@@ -189,23 +157,6 @@ public class EventFragment extends Fragment {
     public void getConfiguration() {
     }
 
-    public void logoutUser(View view) {
-
-        ParseUser.logOut();
-        ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-        System.out.println("The current user is "+ currentUser);
-        Intent i = new Intent(getContext(), MainActivity.class);
-        startActivity(i);
-    }
-
-    private static File getTempImageFile(Context context) throws IOException {
-        String currTime = getCurrentTimestamp();
-        String fileNamePrefix = "JPEG_" + currTime + "_";
-        String fileNameSuffix = ".jpg";
-        File directory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        return File.createTempFile(fileNamePrefix, fileNameSuffix, directory);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -222,43 +173,12 @@ public class EventFragment extends Fragment {
                 ParseUser.getCurrentUser().put("profilePic", parseFile);
                 ParseUser.getCurrentUser().saveInBackground();
 
-//                parseFile.saveInBackground(new SaveCallback() {
-//                    @Override
-//                    public void done(ParseException e) {
-//                        if (e == null){
-//                            String s = parseFile.getUrl();
-//                            Drawable draw = LoadImageFromWebOperations(s);
-//                            ibProfilePic.setBackgroundDrawable(ob);
-//                        //    ibProfilePic.saveInBackground();
-//
-//                        } else {
-//                            e.printStackTrace();
-//                            Toast.makeText(getContext(),"Could not save Profile Pic",Toast.LENGTH_LONG).show();
-//                            String s = "Failed: " + e.getMessage() + " ... ";
-//                            Log.d("ProfileFragment",s);
-//
-//                        }
-//                    }
-//                });
-
             }
 
         }
     }
 
-    private Drawable LoadImageFromWebOperations(String save) {
-        try {
-            InputStream is = (InputStream) new URL(save).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
-            return d;
-        } catch (Exception e) {
-            return null;
-        }
-    }
 
-    public static String getCurrentTimestamp() {
-        return new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-    }
 
     public void loadTopPosts(){
         final Post.Query postsQuery = new Post.Query();
