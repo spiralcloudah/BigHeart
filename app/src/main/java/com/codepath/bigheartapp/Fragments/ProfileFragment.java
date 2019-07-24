@@ -140,7 +140,7 @@ public class ProfileFragment extends Fragment {
 
         // Configure the RecyclerView
 
-        LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
         rvPostView.setLayoutManager(linearLayoutManager);
 
@@ -159,7 +159,6 @@ public class ProfileFragment extends Fragment {
         };
         // Adds the scroll listener to RecyclerView
         rvPostView.addOnScrollListener(scrollListener);
-
 
 
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
@@ -292,7 +291,7 @@ public class ProfileFragment extends Fragment {
                         }
 
                         posts.add(0,objects.get(i));
-                        adapter.notifyItemInserted(posts.size()-1);
+                        adapter.notifyItemInserted(posts.size() - 1);
 
                     }
                 } else {

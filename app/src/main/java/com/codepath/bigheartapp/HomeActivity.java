@@ -10,11 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.codepath.bigheartapp.Fragments.HomeFragment;
 import com.codepath.bigheartapp.Fragments.MapsFragment;
 import com.codepath.bigheartapp.Fragments.ProfileFragment;
+import com.codepath.bigheartapp.Fragments.EventFragment;
 import com.codepath.bigheartapp.model.Post;
 
 import java.io.Serializable;
@@ -24,6 +24,8 @@ public class HomeActivity extends AppCompatActivity {
     public HomeFragment homeFragment;
     public MapsFragment mapsFragment;
     public ProfileFragment profileFragment;
+
+    public EventFragment eventFragment;
     private final int REQUEST_CODE = 20;
 
     @Override
@@ -63,6 +65,8 @@ public class HomeActivity extends AppCompatActivity {
         mapsFragment = new MapsFragment();
         profileFragment = new ProfileFragment();
 
+        eventFragment = new EventFragment();
+
         setSupportActionBar((Toolbar) findViewById(R.id.tbMain));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -86,7 +90,11 @@ public class HomeActivity extends AppCompatActivity {
                             case R.id.miProfile:
                                 fragment = profileFragment;
                                 break;
-                            default:
+                            case R.id.miSearch:
+                                fragment = eventFragment;
+                                break;
+
+                                default:
                                 fragment = homeFragment;
                                 break;
                         }

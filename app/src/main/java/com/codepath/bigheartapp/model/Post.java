@@ -26,7 +26,15 @@ public class Post extends ParseObject implements Serializable {
     private static final String KEY_YEAR = "year";
     private static final String KEY_TIME = "time";
     private static final String KEY_LIKED_BY = "hearts";
+    private static final String KEY_EVENT_TITLE = "hearts";
 
+    public void setEventTitle(String title) {
+        put(KEY_EVENT_TITLE, title);
+    }
+
+    public String getEventTitle() {
+        return getString(KEY_EVENT_TITLE);
+    }
 
     public String getDescription() {
         return getString(KEY_DESCRIPTION);
@@ -36,8 +44,8 @@ public class Post extends ParseObject implements Serializable {
         put(KEY_DESCRIPTION, description);
     }
 
-    public ParseObject getEventDate() {
-        return getParseObject(KEY_DESCRIPTION);
+    public boolean getIsEvent() {
+        return getBoolean(KEY_IS_EVENT);
     }
 
     public void setIsEvent(boolean isEvent) {
