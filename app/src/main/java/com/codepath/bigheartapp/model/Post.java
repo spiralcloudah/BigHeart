@@ -36,8 +36,8 @@ public class Post extends ParseObject implements Serializable {
         put(KEY_DESCRIPTION, description);
     }
 
-    public ParseObject getEventDate() {
-        return getParseObject(KEY_DESCRIPTION);
+    public boolean getIsEvent() {
+        return getBoolean(KEY_IS_EVENT);
     }
 
     public void setIsEvent(boolean isEvent) {

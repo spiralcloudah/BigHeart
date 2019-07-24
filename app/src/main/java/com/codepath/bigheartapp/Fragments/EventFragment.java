@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.codepath.bigheartapp.R;
 
-public class SearchFragment extends Fragment {
+public class EventFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
