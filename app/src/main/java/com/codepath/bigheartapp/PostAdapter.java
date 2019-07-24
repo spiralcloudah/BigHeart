@@ -69,7 +69,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View postView = inflater.inflate(R.layout.item_post, parent, false);
+        View postView = inflater.inflate(R.layout.item_event, parent, false);
         ViewHolder viewHolder = new ViewHolder(postView);
 
 
@@ -138,7 +138,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 holder.ivImage.setVisibility(View.GONE);
             }
 
-        if (!(post.getMonth() == null)){
+        if (!(post.getTime() == null)){
+            holder.tvMonth.setVisibility(View.VISIBLE);
+            holder.tvDay.setVisibility(View.VISIBLE);
+            holder.tvYear.setVisibility(View.VISIBLE);
+            holder.tvTime.setVisibility(View.VISIBLE);
             holder.tvMonth.setText(post.getMonth());
             holder.tvDay.setText(post.getDay());
             holder.tvYear.setText(post.getYear());
