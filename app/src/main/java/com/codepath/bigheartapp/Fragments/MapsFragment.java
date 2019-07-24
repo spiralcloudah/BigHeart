@@ -24,6 +24,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -181,10 +182,20 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                             Double latitude = objects.get(i).getLocation().getLatitude();
                             Double longitude = objects.get(i).getLocation().getLongitude();
                             LatLng pos = new LatLng(latitude,longitude);
-                            Marker marker = mGoogleMap.addMarker(new MarkerOptions()
-                                    .position(pos)
-                                    .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
-                                    .snippet(objects.get(i).getDescription()));
+                            if (objects.get(i).getIsEvent()) {
+                                Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                                        .position(pos)
+                                        .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                                        .snippet(objects.get(i).getDescription()));
+                            } else {
+                                Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                                        .position(pos)
+                                        .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
+                                        .snippet(objects.get(i).getDescription()));
+
+                            }
                         } catch (ParseException er ) {
                             er.printStackTrace();
                         }
