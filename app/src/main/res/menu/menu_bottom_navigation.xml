@@ -17,7 +17,7 @@
 
     <item
         android:id="@+id/miSearch"
-        android:icon="@drawable/search"
+        android:icon="@drawable/events"
         android:enabled="true"
         app:showAsAction="ifRoom"
         android:title="" />
