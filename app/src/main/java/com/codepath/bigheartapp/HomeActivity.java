@@ -24,6 +24,7 @@ public class HomeActivity extends AppCompatActivity {
     public HomeFragment homeFragment;
     public MapsFragment mapsFragment;
     public ProfileFragment profileFragment;
+
     public EventFragment eventFragment;
     private final int REQUEST_CODE = 20;
 
@@ -63,6 +64,7 @@ public class HomeActivity extends AppCompatActivity {
         homeFragment = new HomeFragment();
         mapsFragment = new MapsFragment();
         profileFragment = new ProfileFragment();
+
         eventFragment = new EventFragment();
 
         setSupportActionBar((Toolbar) findViewById(R.id.tbMain));
