@@ -78,23 +78,23 @@
 
     <Spinner
         android:id="@+id/sMonth"
-        android:layout_width="133dp"
-        android:layout_height="41dp"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:entries="@array/month_array"
         android:spinnerMode="dropdown"
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/sDay"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchEvent" />
+        app:layout_constraintTop_toBottomOf="@+id/etEventTitle" />
 
     <Spinner
         android:id="@+id/sDay"
-        android:layout_width="78dp"
-        android:layout_height="43dp"
+        android:layout_width="80dp"
+        android:layout_height="41dp"
         android:entries="@array/day_array"
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/sYear"
@@ -153,5 +153,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:color/black" />
+
+    <EditText
+        android:id="@+id/etEventTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Event Title"
+        android:inputType="textPersonName"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchEvent" />
 
 </android.support.constraint.ConstraintLayout>
