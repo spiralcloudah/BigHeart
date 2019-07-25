@@ -131,14 +131,14 @@ public class EventFragment extends Fragment {
         searchEvents.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // filter recycler view when query submitted
+                // signUp recycler view when query submitted
                 adapter.getFilter().filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
-                // filter recycler view when text is changed
+                // signUp recycler view when text is changed
                 adapter.getFilter().filter(query);
                 return false;
             }
