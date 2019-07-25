@@ -143,11 +143,12 @@ public class ComposeActivity extends AppCompatActivity {
 
                 final String eventTitle = etEventTitle.getText().toString();
                 final String location = etLocation.getText().toString().replace(" ","+");
+                final String address = etLocation.getText().toString();
 
 
                 // run function that calls to API and creates post
                 // TODO - (Gene) is this bad code writing? Could i break this function up into 2?
-                createPostWithCoords(description, user, month, day, year, time, location, eventTitle);
+                createPostWithCoords(description, user, month, day, year, time, location,eventTitle, address);
 
             }
         });
@@ -208,7 +209,7 @@ public class ComposeActivity extends AppCompatActivity {
 
     }
 
-    private void createPostWithCoords(final String description, final ParseUser user, final String month, final String day, final String year, final String time, final String location, final String eventTitle) {
+    private void createPostWithCoords(final String description, final ParseUser user, final String month, final String day, final String year, final String time, final String location, final String eventTitle, final String address) {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("address", location );
@@ -251,6 +252,7 @@ public class ComposeActivity extends AppCompatActivity {
                     // create new ParseGeopoint to store lat and lng as doubles...
                     ParseGeoPoint coordinates = new ParseGeoPoint(parseDouble(lat),parseDouble(lng));
                     newPost.setLocation(coordinates);
+                    newPost.setAddress(address);
 
                     // checks for optional photo, if photo exists, adds to post object.
                     final File file = photoFile;
