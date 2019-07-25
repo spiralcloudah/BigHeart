@@ -108,7 +108,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void done(List<Post> objects, ParseException e) {
                 if(e == null) {
-                    adapter.clear(getView());
+                    adapter.clear();
                     for(int i = 0; i < objects.size(); i++) {
                         posts.add(objects.get(i));
                         adapter.notifyItemInserted(posts.size() - 1);

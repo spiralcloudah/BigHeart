@@ -15,12 +15,13 @@ import java.util.ArrayList;
 
 @ParseClassName("Post")
 public class Post extends ParseObject implements Serializable {
-    private static final String KEY_DESCRIPTION = "description";
-    private static final String KEY_IMAGE = "image";
-    private static final String KEY_LOCATION = "location";
+    public static final String KEY_DESCRIPTION = "description";
+    public static final String KEY_IMAGE = "image";
+    public static final String KEY_LOCATION = "location";
     public static final String KEY_USER = "userId";
     public static final String KEY_DATE = "createdAt";
     public static final String KEY_IS_EVENT = "isEvent";
+
     private static final String KEY_MONTH = "month";
     private static final String KEY_DAY = "day";
     private static final String KEY_YEAR = "year";
