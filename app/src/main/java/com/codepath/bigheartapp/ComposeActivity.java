@@ -62,11 +62,11 @@ public class ComposeActivity extends AppCompatActivity {
     private EditText etDescription;
     private ImageView ivPicture;
     private Button btnAddPic;
-    private TextView tvDatePicker;
+    private Button btnDatePicker;
     private EditText etLocation;
     private Switch switchEvent;
     private EditText etEventTitle;
-    private TextView tvTimePicker;
+    private Button btnTimePicker;
 
     //for date picker
     private DatePickerDialog.OnDateSetListener dateSetListener;
@@ -102,12 +102,12 @@ public class ComposeActivity extends AppCompatActivity {
         ivPicture = findViewById(R.id.ivPicture);
         etDescription = findViewById(R.id.etDescription);
         btnPost = findViewById(R.id.btnPost);
-        tvDatePicker = findViewById(R.id.tvDateChooser);
+        btnDatePicker = findViewById(R.id.btnDateChooser);
         etLocation = findViewById(R.id.etLocation);
         switchEvent = findViewById(R.id.switchEvent);
         btnAddPic = findViewById(R.id.btnAddImage);
         etEventTitle = findViewById(R.id.etEventTitle);
-        tvTimePicker = findViewById(R.id.tvTimeChooser);
+        btnTimePicker = findViewById(R.id.btnTimeChooser);
 
         //simple function that reveals extra input fields if post is an event.
         switchEvent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -115,13 +115,13 @@ public class ComposeActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
                     etEventTitle.setVisibility(View.VISIBLE);
-                    tvDatePicker.setVisibility(View.VISIBLE);
-                    tvTimePicker.setVisibility(View.VISIBLE);
+                    btnDatePicker.setVisibility(View.VISIBLE);
+                    btnTimePicker.setVisibility(View.VISIBLE);
                     isEvent = true;
                 } else {
                     etEventTitle.setVisibility(View.GONE);
-                    tvDatePicker.setVisibility(View.GONE);
-                    tvTimePicker.setVisibility(View.GONE);
+                    btnDatePicker.setVisibility(View.GONE);
+                    btnTimePicker.setVisibility(View.GONE);
                     isEvent = false;
                 }
             }
@@ -153,7 +153,7 @@ public class ComposeActivity extends AppCompatActivity {
             }
         });
 
-        tvDatePicker.setOnClickListener(new View.OnClickListener() {
+        btnDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();
@@ -174,11 +174,11 @@ public class ComposeActivity extends AppCompatActivity {
                 year = Integer.toString(pickerYear);
                 day = Integer.toString(dayOfMonth);
                 month = new DateFormatSymbols().getMonths()[pickerMonth];
-                tvDatePicker.setText(month + " " + day + ", " + year);
+                btnDatePicker.setText(month + " " + day + ", " + year);
             }
         };
 
-        tvTimePicker.setOnClickListener(new View.OnClickListener() {
+        btnTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();
@@ -203,7 +203,7 @@ public class ComposeActivity extends AppCompatActivity {
                 } catch (java.text.ParseException e) {
                     e.printStackTrace();
                 }
-                tvTimePicker.setText(time);
+                btnTimePicker.setText(time);
             }
         };
 

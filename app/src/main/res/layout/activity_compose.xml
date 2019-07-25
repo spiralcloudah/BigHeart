@@ -85,18 +85,23 @@
         app:layout_constraintTop_toBottomOf="@+id/etEventTitle" />
 
 
-    <TextView
-        android:id="@+id/tvDateChooser"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/btnDateChooser"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:text="Choose a Date"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="?attr/colorControlHighlight"
+        android:gravity="center"
+        android:hint="Date"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorPrimaryText"
+        android:textColorHint="@color/colorTextHint"
         android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/tvTimeChooser"
+        app:layout_constraintEnd_toStartOf="@+id/btnTimeChooser"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switchEvent" />
@@ -132,21 +137,26 @@
         android:textColorHint="@color/colorTextHint"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDateChooser" />
+        app:layout_constraintTop_toBottomOf="@+id/btnDateChooser" />
 
-    <TextView
-        android:id="@+id/tvTimeChooser"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/btnTimeChooser"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="Choose a Time"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:background="?attr/colorControlHighlight"
+        android:hint="Time"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorPrimaryText"
+        android:textColorHint="@color/colorTextHint"
+        android:textColorLink="@color/colorTextHint"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tvDateChooser"
-        app:layout_constraintTop_toTopOf="@+id/tvDateChooser" />
+        app:layout_constraintStart_toEndOf="@+id/btnDateChooser"
+        app:layout_constraintTop_toTopOf="@+id/btnDateChooser" />
 
 </android.support.constraint.ConstraintLayout>
