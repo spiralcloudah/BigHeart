@@ -75,7 +75,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         switch (viewType) {
             case TYPE_POST:
-                View postView = inflater.inflate(R.layout.item_post, parent, false);
+                View postView = inflater.inflate(R.layout.item_post_cardview, parent, false);
                 viewHolder = new PostViewHolder(postView);
                 break;
             case TYPE_EVENT:
@@ -83,7 +83,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 viewHolder = new EventViewHolder(eventView);
                 break;
             default:
-                View otherView = inflater.inflate(R.layout.item_post, parent, false);
+                View otherView = inflater.inflate(R.layout.item_post_cardview, parent, false);
                 viewHolder = new PostViewHolder(otherView){
                 };
                 break;
