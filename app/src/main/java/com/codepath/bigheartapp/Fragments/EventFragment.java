@@ -41,7 +41,7 @@ public class EventFragment extends Fragment {
     public RecyclerView rvEventPosts;
     SearchView searchEvents;
     PostAdapter adapter;
-    ImageView ivFilter;
+    ImageButton ibFilter;
     private SwipeRefreshLayout swipeContainer;
     private final int REQUEST_CODE = 120;
 
@@ -57,7 +57,7 @@ public class EventFragment extends Fragment {
         adapter = new PostAdapter(posts, 0);
         rvEventPosts = (RecyclerView) rootView.findViewById(R.id.rvEventPosts);
         searchEvents = (SearchView) rootView.findViewById(R.id.searchEvents);
-        ivFilter = (ImageView) rootView.findViewById(R.id.ivFilter);
+        ibFilter = (ImageButton) rootView.findViewById(R.id.ibFilter);
 
         rvEventPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvEventPosts.setAdapter(adapter);
@@ -106,7 +106,7 @@ public class EventFragment extends Fragment {
                 getResources().getColor(android.R.color.holo_red_light)
         );
 
-        ivFilter.setOnClickListener(new View.OnClickListener() {
+        ibFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent toFilterActivity = new Intent(getContext(), FilterActivity.class);
