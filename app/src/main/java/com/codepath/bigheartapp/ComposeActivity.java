@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -39,7 +38,6 @@ import java.io.File;
 import cz.msebera.android.httpclient.Header;
 
 import static java.lang.Double.parseDouble;
-import static java.lang.Float.parseFloat;
 
 public class ComposeActivity extends AppCompatActivity {
 
@@ -55,6 +53,7 @@ public class ComposeActivity extends AppCompatActivity {
     private Spinner sAmPm;
     private EditText etLocation;
     private Switch switchEvent;
+    private EditText etEventTitle;
 
     //instantiate vars for image capture
     public final String APP_TAG = "Big<3";
@@ -89,12 +88,14 @@ public class ComposeActivity extends AppCompatActivity {
         etLocation = findViewById(R.id.etLocation);
         switchEvent = findViewById(R.id.switchEvent);
         btnAddPic = findViewById(R.id.btnAddImage);
+        etEventTitle = findViewById(R.id.etEventTitle);
 
         //simple function that reveals extra input fields if post is an event.
         switchEvent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
+                    etEventTitle.setVisibility(View.VISIBLE);
                     sMonth.setVisibility(View.VISIBLE);
                     sDay.setVisibility(View.VISIBLE);
                     sYear.setVisibility(View.VISIBLE);
@@ -102,6 +103,7 @@ public class ComposeActivity extends AppCompatActivity {
                     sAmPm.setVisibility(View.VISIBLE);
                     isEvent = true;
                 } else {
+                    etEventTitle.setVisibility(View.GONE);
                     sMonth.setVisibility(View.GONE);
                     sDay.setVisibility(View.GONE);
                     sYear.setVisibility(View.GONE);
@@ -129,19 +131,20 @@ public class ComposeActivity extends AppCompatActivity {
                 final String day = sDay.getSelectedItem().toString();
                 final String time = sTime.getSelectedItem().toString() + " " + sAmPm.getSelectedItem().toString();
                 final String year = sYear.getSelectedItem().toString();
+                final String eventTitle = etEventTitle.getText().toString();
                 final String location = etLocation.getText().toString().replace(" ","+");
 
 
                 // run function that calls to API and creates post
                 // TODO - (Gene) is this bad code writing? Could i break this function up into 2?
-                createPostWithCoords(description, user, month, day, year, time, location);
+                createPostWithCoords(description, user, month, day, year, time, location, eventTitle);
 
             }
         });
 
     }
 
-    private void createPostWithCoords(final String description, final ParseUser user, final String month, final String day, final String year, final String time, final String location) {
+    private void createPostWithCoords(final String description, final ParseUser user, final String month, final String day, final String year, final String time, final String location, final String eventTitle) {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("address", location );
@@ -174,6 +177,7 @@ public class ComposeActivity extends AppCompatActivity {
                         newPost.setMonth(month);
                         newPost.setYear(year);
                         newPost.setTime(time);
+                        newPost.setEventTitle(eventTitle);
                     }
 
                     // create new ParseGeopoint to store lat and lng as doubles...
