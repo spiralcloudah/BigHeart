@@ -15,18 +15,18 @@ import java.util.ArrayList;
 
 @ParseClassName("Post")
 public class Post extends ParseObject implements Serializable {
-    private static final String KEY_DESCRIPTION = "description";
-    private static final String KEY_IMAGE = "image";
-    private static final String KEY_LOCATION = "location";
+    public static final String KEY_DESCRIPTION = "description";
+    public static final String KEY_IMAGE = "image";
+    public static final String KEY_LOCATION = "location";
     public static final String KEY_USER = "userId";
     public static final String KEY_DATE = "createdAt";
     public static final String KEY_IS_EVENT = "isEvent";
-    private static final String KEY_MONTH = "month";
-    private static final String KEY_DAY = "day";
-    private static final String KEY_YEAR = "year";
-    private static final String KEY_TIME = "time";
-    private static final String KEY_LIKED_BY = "hearts";
-    private static final String KEY_EVENT_TITLE = "eventTitle";
+    public static final String KEY_MONTH = "month";
+    public static final String KEY_DAY = "day";
+    public static final String KEY_YEAR = "year";
+    public static final String KEY_TIME = "time";
+    public static final String KEY_LIKED_BY = "hearts";
+    public static final String KEY_EVENT_TITLE = "eventTitle";
 
     public void setEventTitle(String title) {
         put(KEY_EVENT_TITLE, title);
