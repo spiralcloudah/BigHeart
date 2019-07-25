@@ -31,9 +31,9 @@ public class PostDetailsActivity extends AppCompatActivity {
     TextView tvYear;
     TextView tvTime;
     TextView tvDescription;
-    ImageView imageView3;
     TextView tvDate;
     ImageView ivHeart;
+    TextView tvTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvDay = (TextView) findViewById(R.id.tvDay);
         tvYear = (TextView) findViewById(R.id.tvYear);
         tvTime = (TextView) findViewById(R.id.tvTime);
+        tvTitle = (TextView) findViewById(R.id.tvTitle);
 
         // unwrap the post passed in via intent, using its simple name as a key
         post = (Post) getIntent().getParcelableExtra(Post.class.getSimpleName());
@@ -66,6 +67,12 @@ public class PostDetailsActivity extends AppCompatActivity {
 
         if(post.isLiked()) {
             ivHeart.setImageResource(R.drawable.hot_pink_heart);
+        }
+
+        if (post.getEventTitle() == null) {
+            tvTitle.setVisibility(View.GONE);
+        } else {
+            tvTitle.setVisibility(View.VISIBLE);
         }
 
         ivHeart.setOnClickListener(new View.OnClickListener() {
