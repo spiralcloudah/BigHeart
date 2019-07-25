@@ -1,5 +1,6 @@
 package com.codepath.bigheartapp;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,10 +14,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.bigheartapp.model.Post;
@@ -46,14 +49,13 @@ public class ComposeActivity extends AppCompatActivity {
     private EditText etDescription;
     private ImageView ivPicture;
     private Button btnAddPic;
-    private Spinner sMonth;
-    private Spinner sDay;
-    private Spinner sYear;
-    private Spinner sTime;
-    private Spinner sAmPm;
+    private TextView tvDatePicker;
     private EditText etLocation;
     private Switch switchEvent;
     private EditText etEventTitle;
+
+    //for date picker
+    private DatePickerDialog.OnDateSetListener dateSetListener;
 
     //instantiate vars for image capture
     public final String APP_TAG = "Big<3";
@@ -80,11 +82,7 @@ public class ComposeActivity extends AppCompatActivity {
         ivPicture = findViewById(R.id.ivPicture);
         etDescription = findViewById(R.id.etDescription);
         btnPost = findViewById(R.id.btnPost);
-        sMonth = findViewById(R.id.sMonth);
-        sDay = findViewById(R.id.sDay);
-        sYear = findViewById(R.id.sYear);
-        sTime = findViewById(R.id.sTime);
-        sAmPm = findViewById(R.id.sAmPm);
+        tvDatePicker = findViewById(R.id.tvDateChooser);
         etLocation = findViewById(R.id.etLocation);
         switchEvent = findViewById(R.id.switchEvent);
         btnAddPic = findViewById(R.id.btnAddImage);
@@ -96,19 +94,11 @@ public class ComposeActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
                     etEventTitle.setVisibility(View.VISIBLE);
-                    sMonth.setVisibility(View.VISIBLE);
-                    sDay.setVisibility(View.VISIBLE);
-                    sYear.setVisibility(View.VISIBLE);
-                    sTime.setVisibility(View.VISIBLE);
-                    sAmPm.setVisibility(View.VISIBLE);
+                    tvDatePicker.setVisibility(View.VISIBLE);
                     isEvent = true;
                 } else {
                     etEventTitle.setVisibility(View.GONE);
-                    sMonth.setVisibility(View.GONE);
-                    sDay.setVisibility(View.GONE);
-                    sYear.setVisibility(View.GONE);
-                    sTime.setVisibility(View.GONE);
-                    sAmPm.setVisibility(View.GONE);
+                    tvDatePicker.setVisibility(View.GONE);
                     isEvent = false;
                 }
             }
@@ -138,6 +128,13 @@ public class ComposeActivity extends AppCompatActivity {
                 // run function that calls to API and creates post
                 // TODO - (Gene) is this bad code writing? Could i break this function up into 2?
                 createPostWithCoords(description, user, month, day, year, time, location, eventTitle);
+
+            }
+        });
+
+        tvDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
             }
         });

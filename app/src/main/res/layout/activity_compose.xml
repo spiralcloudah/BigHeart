@@ -75,74 +75,31 @@
         android:id="@+id/btnAddImage"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="16dp"
         android:background="?attr/colorControlHighlight"
         android:text="Add Picture"
         android:textColor="?attr/colorButtonNormal"
         app:layout_constraintStart_toStartOf="@+id/switchEvent"
-        app:layout_constraintTop_toTopOf="@+id/sTime" />
+        app:layout_constraintTop_toBottomOf="@+id/tvDateChooser" />
 
-    <Spinner
-        android:id="@+id/sMonth"
-        android:layout_width="150dp"
-        android:layout_height="40dp"
+
+    <TextView
+        android:id="@+id/tvDateChooser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:entries="@array/month_array"
-        android:spinnerMode="dropdown"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/sDay"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEventTitle" />
-
-    <Spinner
-        android:id="@+id/sDay"
-        android:layout_width="80dp"
-        android:layout_height="41dp"
-        android:entries="@array/day_array"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/sYear"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/sMonth"
-        app:layout_constraintTop_toTopOf="@+id/sMonth" />
-
-    <Spinner
-        android:id="@+id/sYear"
-        android:layout_width="105dp"
-        android:layout_height="44dp"
-        android:entries="@array/year_array"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/sDay"
-        app:layout_constraintTop_toTopOf="@+id/sDay" />
-
-    <Spinner
-        android:id="@+id/sAmPm"
-        android:layout_width="105dp"
-        android:layout_height="31dp"
-        android:entries="@array/ampm_array"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/sTime"
-        app:layout_constraintTop_toTopOf="@+id/sTime" />
-
-    <Spinner
-        android:id="@+id/sTime"
-        android:layout_width="216dp"
-        android:layout_height="39dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:entries="@array/time_array"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#FFFFFF"
         android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/sAmPm"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sMonth" />
+        app:layout_constraintTop_toBottomOf="@+id/switchEvent"
+        tools:text="Choose a Date" />
+
 
     <ImageView
         android:id="@+id/ivPicture"
