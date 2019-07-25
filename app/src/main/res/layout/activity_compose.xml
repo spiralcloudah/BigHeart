@@ -21,6 +21,7 @@
         android:inputType="textMultiLine"
         android:maxLength="280"
         android:textColor="#FFFFFF"
+        android:textColorHint="@color/colorTextHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,6 +68,7 @@
         android:hint="Location"
         android:inputType="textPostalAddress"
         android:textColor="#FFFFFF"
+        android:textColorHint="@color/colorTextHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etDescription" />
@@ -75,74 +77,30 @@
         android:id="@+id/btnAddImage"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="16dp"
         android:background="?attr/colorControlHighlight"
         android:text="Add Picture"
         android:textColor="?attr/colorButtonNormal"
         app:layout_constraintStart_toStartOf="@+id/switchEvent"
-        app:layout_constraintTop_toTopOf="@+id/sTime" />
+        app:layout_constraintTop_toBottomOf="@+id/etEventTitle" />
 
-    <Spinner
-        android:id="@+id/sMonth"
-        android:layout_width="150dp"
-        android:layout_height="40dp"
+
+    <TextView
+        android:id="@+id/tvDateChooser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:entries="@array/month_array"
-        android:spinnerMode="dropdown"
+        android:text="Choose a Date"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/colorPrimaryText"
         android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/sDay"
+        app:layout_constraintEnd_toStartOf="@+id/tvTimeChooser"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEventTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/switchEvent" />
 
-    <Spinner
-        android:id="@+id/sDay"
-        android:layout_width="80dp"
-        android:layout_height="41dp"
-        android:entries="@array/day_array"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/sYear"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/sMonth"
-        app:layout_constraintTop_toTopOf="@+id/sMonth" />
-
-    <Spinner
-        android:id="@+id/sYear"
-        android:layout_width="105dp"
-        android:layout_height="44dp"
-        android:entries="@array/year_array"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/sDay"
-        app:layout_constraintTop_toTopOf="@+id/sDay" />
-
-    <Spinner
-        android:id="@+id/sAmPm"
-        android:layout_width="105dp"
-        android:layout_height="31dp"
-        android:entries="@array/ampm_array"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/sTime"
-        app:layout_constraintTop_toTopOf="@+id/sTime" />
-
-    <Spinner
-        android:id="@+id/sTime"
-        android:layout_width="216dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:entries="@array/time_array"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/sAmPm"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sMonth" />
 
     <ImageView
         android:id="@+id/ivPicture"
@@ -166,12 +124,29 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Event Title"
         android:inputType="textPersonName"
+        android:textColor="@color/colorPrimaryText"
+        android:textColorHint="@color/colorTextHint"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchEvent" />
+        app:layout_constraintTop_toBottomOf="@+id/tvDateChooser" />
+
+    <TextView
+        android:id="@+id/tvTimeChooser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Choose a Time"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/colorPrimaryText"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvDateChooser"
+        app:layout_constraintTop_toTopOf="@+id/tvDateChooser" />
 
 </android.support.constraint.ConstraintLayout>
