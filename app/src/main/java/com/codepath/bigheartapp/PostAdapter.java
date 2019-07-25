@@ -16,6 +16,8 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import org.w3c.dom.Text;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -186,6 +188,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.tvDay.setText(post.getDay());
             holder.tvYear.setText(post.getYear());
             holder.tvTime.setText(post.getTime());
+            holder.tvTitle.setText(post.getEventTitle());
         }
     }
 
@@ -309,6 +312,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public TextView tvDay;
         public TextView tvYear;
         public TextView tvTime;
+        public TextView tvTitle;
 
 
         public EventViewHolder(View itemView) {
@@ -325,6 +329,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvDay = (TextView) itemView.findViewById(R.id.tvDay);
             tvYear = (TextView) itemView.findViewById(R.id.tvYear);
             tvTime = (TextView) itemView.findViewById(R.id.tvTime);
+            tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
 
             itemView.setOnClickListener(this);
         }
