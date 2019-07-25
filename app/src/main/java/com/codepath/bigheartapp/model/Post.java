@@ -21,6 +21,7 @@ public class Post extends ParseObject implements Serializable {
     public static final String KEY_USER = "userId";
     public static final String KEY_DATE = "createdAt";
     public static final String KEY_IS_EVENT = "isEvent";
+
     public static final String KEY_MONTH = "month";
     public static final String KEY_DAY = "day";
     public static final String KEY_YEAR = "year";
