@@ -1,15 +1,21 @@
 package com.codepath.bigheartapp;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.icu.text.DateFormatSymbols;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.codepath.bigheartapp.model.Post;
@@ -37,9 +44,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.Calendar;
+import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
 
+import static java.lang.Double.min;
 import static java.lang.Double.parseDouble;
 
 public class ComposeActivity extends AppCompatActivity {
@@ -53,9 +66,11 @@ public class ComposeActivity extends AppCompatActivity {
     private EditText etLocation;
     private Switch switchEvent;
     private EditText etEventTitle;
+    private TextView tvTimePicker;
 
     //for date picker
     private DatePickerDialog.OnDateSetListener dateSetListener;
+    private TimePickerDialog.OnTimeSetListener timeSetListener;
 
     //instantiate vars for image capture
     public final String APP_TAG = "Big<3";
@@ -72,6 +87,11 @@ public class ComposeActivity extends AppCompatActivity {
     // instantiate vars that will store retrieved lat and long coordinates
     public String lat;
     public String lng;
+    public String month;
+    public String day;
+    public String year;
+    public String time;
+    public int ampm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +107,7 @@ public class ComposeActivity extends AppCompatActivity {
         switchEvent = findViewById(R.id.switchEvent);
         btnAddPic = findViewById(R.id.btnAddImage);
         etEventTitle = findViewById(R.id.etEventTitle);
+        tvTimePicker = findViewById(R.id.tvTimeChooser);
 
         //simple function that reveals extra input fields if post is an event.
         switchEvent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -95,10 +116,12 @@ public class ComposeActivity extends AppCompatActivity {
                 if(isChecked) {
                     etEventTitle.setVisibility(View.VISIBLE);
                     tvDatePicker.setVisibility(View.VISIBLE);
+                    tvTimePicker.setVisibility(View.VISIBLE);
                     isEvent = true;
                 } else {
                     etEventTitle.setVisibility(View.GONE);
                     tvDatePicker.setVisibility(View.GONE);
+                    tvTimePicker.setVisibility(View.GONE);
                     isEvent = false;
                 }
             }
@@ -117,10 +140,7 @@ public class ComposeActivity extends AppCompatActivity {
                 // create final strings to be passed into database
                 final String description = etDescription.getText().toString();
                 final ParseUser user = ParseUser.getCurrentUser();
-                final String month = sMonth.getSelectedItem().toString();
-                final String day = sDay.getSelectedItem().toString();
-                final String time = sTime.getSelectedItem().toString() + " " + sAmPm.getSelectedItem().toString();
-                final String year = sYear.getSelectedItem().toString();
+
                 final String eventTitle = etEventTitle.getText().toString();
                 final String location = etLocation.getText().toString().replace(" ","+");
 
@@ -135,9 +155,56 @@ public class ComposeActivity extends AppCompatActivity {
         tvDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+                DatePickerDialog dialog = new DatePickerDialog(ComposeActivity.this,
+                        dateSetListener, year, month, day);
+                dialog.show();
             }
         });
+
+        dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @SuppressLint("NewApi")
+            @Override
+            public void onDateSet(DatePicker view, int pickerYear, int pickerMonth, int dayOfMonth) {
+                year = Integer.toString(pickerYear);
+                day = Integer.toString(dayOfMonth);
+                month = new DateFormatSymbols().getMonths()[pickerMonth];
+                tvDatePicker.setText(month + " " + day + ", " + year);
+            }
+        };
+
+        tvTimePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                int minute = calendar.get(Calendar.MINUTE);
+                ampm = calendar.get(Calendar.AM_PM);
+
+                TimePickerDialog dialog = new TimePickerDialog(ComposeActivity.this, timeSetListener,
+                        hour, minute, DateFormat.is24HourFormat(ComposeActivity.this));
+                dialog.show();
+            }
+        });
+
+        timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                String preFormat = hourOfDay + ":" + minute;
+                try {
+                    final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+                    final Date dateObj = sdf.parse(preFormat);
+                    time = new SimpleDateFormat("K:mm a").format(dateObj);
+                } catch (java.text.ParseException e) {
+                    e.printStackTrace();
+                }
+                tvTimePicker.setText(time);
+            }
+        };
 
     }
 
@@ -170,10 +237,14 @@ public class ComposeActivity extends AppCompatActivity {
 
                     // if post is an event, then date information will be updated in Parse DB
                     if(isEvent) {
-                        newPost.setDay(day);
-                        newPost.setMonth(month);
-                        newPost.setYear(year);
-                        newPost.setTime(time);
+                        try {
+                            newPost.setDay(day);
+                            newPost.setMonth(month);
+                            newPost.setYear(year);
+                            newPost.setTime(time);
+                        } catch (Exception e) {
+                            Toast.makeText(ComposeActivity.this,"Must choose a time for your event!", Toast.LENGTH_LONG);
+                        }
                         newPost.setEventTitle(eventTitle);
                     }
 
