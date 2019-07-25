@@ -63,6 +63,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvDay.setText(post.getDay());
         tvYear.setText(post.getYear());
         tvTime.setText(post.getTime());
+        tvTitle.setText(post.getEventTitle());
 
 
         if(post.isLiked()) {
@@ -70,7 +71,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         }
 
         if (post.getEventTitle() == null) {
-            tvTitle.setVisibility(View.GONE);
+            tvTitle.setVisibility(View.INVISIBLE);
         } else {
             tvTitle.setVisibility(View.VISIBLE);
         }
