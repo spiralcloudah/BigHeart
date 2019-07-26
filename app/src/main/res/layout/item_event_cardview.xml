@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
     card_view:cardCornerRadius="12dp"
     card_view:cardElevation="24dp"
     card_view:cardBackgroundColor="#91ffd4"
