@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                final String username = etUsername.getText().toString();
                final String password = etPassword.getText().toString();
 
-                loginUser(username, password);
+               loginUser(username, password);
             }
         });
 
@@ -65,23 +65,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loginUser(String username, String password) {
-
-
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
                 if ( e == null ) {
-                    Log.d("MainActivity", "Login Success!");
-
                     Intent toHome = new Intent(MainActivity.this, HomeActivity.class);
                     startActivity(toHome);
                     finish();
-
-                    // Intent to home activity
                 } else {
-                    Log.d("MainActivity", "Login Failed :/ ");
-                    e.printStackTrace();
-
+                    Toast.makeText(getApplicationContext(), "Invalid username or password", Toast.LENGTH_LONG).show();
                 }
             }
         });
