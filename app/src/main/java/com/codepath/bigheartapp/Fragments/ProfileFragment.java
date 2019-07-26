@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,7 +82,7 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         logoutBtn = view.findViewById(R.id.btnLogout);
         ivCurrentProfile = view.findViewById(R.id.ivCurrentProfile);
-        String currentUser = ParseUser.getCurrentUser().getUsername(); // this will now be null
+        final String currentUser = ParseUser.getCurrentUser().getUsername(); // this will now be null
         System.out.println("The current user is "+ currentUser);
         tabLayout = view.findViewById(R.id.tabLayout);
         tvCurrentUser = (TextView) view.findViewById(R.id.tvCurrentUser);
@@ -102,9 +101,7 @@ public class ProfileFragment extends Fragment {
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                logoutUser(v);
-            }
+            public void onClick(View v) { logoutUser(v); }
         });
 //        ivCurrentProfile.setOnClickListener(new View.OnClickListener() {
         //           @Override
@@ -170,8 +167,6 @@ public class ProfileFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code here
-                Toast.makeText(getApplicationContext(), "Refreshed!", Toast.LENGTH_LONG).show();
                 // To keep animation for 4 seconds
                 posts.clear();
                 adapter.clear();
@@ -215,10 +210,9 @@ public class ProfileFragment extends Fragment {
     }
 
     public void logoutUser(View view) {
-
+        Toast.makeText(getContext(), ParseUser.getCurrentUser() + " is now logged out.", Toast.LENGTH_LONG).show();
         ParseUser.logOut();
         ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-        System.out.println("The current user is "+ currentUser);
         Intent i = new Intent(getContext(), MainActivity.class);
         startActivity(i);
     }

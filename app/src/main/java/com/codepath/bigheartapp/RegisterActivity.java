@@ -71,8 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
                 final String password = etPassword.getText().toString();
 
                  if (photoFile == null || ivProfilePic.getDrawable() == null) {
-                    Log.d("HomeActivity", "No image imported");
-                    Toast.makeText(RegisterActivity.this, "You haven't taken a photo yet :/. Try again", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, "Please take a profile picture", Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -198,7 +197,7 @@ public class RegisterActivity extends AppCompatActivity {
                 // ImageView ivPreview = (ImageView) findViewById(R.id.ivPreview);
                 ivProfilePic.setImageBitmap(takenImage);
             } else { // Result was a failure
-                Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_LONG).show();
             }
         }
     }

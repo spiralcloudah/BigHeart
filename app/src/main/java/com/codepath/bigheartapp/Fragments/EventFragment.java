@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -25,7 +24,6 @@ import com.codepath.bigheartapp.R;
 import com.codepath.bigheartapp.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,8 +87,6 @@ public class EventFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code here
-                Toast.makeText(getApplicationContext(), "Refreshed!", Toast.LENGTH_LONG).show();
                 // To keep animation for 4 seconds
                 posts.clear();
                 adapter.clear();
@@ -162,7 +158,7 @@ public class EventFragment extends Fragment {
                         adapter.notifyItemInserted(posts.size() - 1);
                     }
                 } else {
-                    Toast.makeText(getContext(), "Failed to query posts", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Failed to query posts", Toast.LENGTH_LONG).show();
                 }
                 swipeContainer.setRefreshing(false);
             }
@@ -172,6 +168,7 @@ public class EventFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+            Toast.makeText(getContext(), "Showing filtered events", Toast.LENGTH_LONG).show();
             posts.clear();
 
             final Post.Query postQuery = new Post.Query();
@@ -193,7 +190,7 @@ public class EventFragment extends Fragment {
                             adapter.notifyItemInserted(posts.size() - 1);
                         }
                     } else {
-                        Toast.makeText(getContext(), "No posts matching applied filters", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "No posts matching applied filters", Toast.LENGTH_LONG).show();
                     }
                     swipeContainer.setRefreshing(false);
                 }

@@ -6,8 +6,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.icu.text.DateFormatSymbols;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,9 +21,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -45,14 +41,11 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.Calendar;
 import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
 
-import static java.lang.Double.min;
 import static java.lang.Double.parseDouble;
 
 public class ComposeActivity extends AppCompatActivity {
@@ -139,17 +132,18 @@ public class ComposeActivity extends AppCompatActivity {
                 // create final strings to be passed into database
                 final String description = etDescription.getText().toString();
                 final ParseUser user = ParseUser.getCurrentUser();
-
-
-
                 final String eventTitle = etEventTitle.getText().toString();
                 final String location = etLocation.getText().toString().replace(" ","+");
                 final String address = etLocation.getText().toString();
 
-                if(day == null) {
-                    Toast.makeText(getApplicationContext(), "Must select a date!", Toast.LENGTH_LONG);
-                } else if(time == null) {
-                    Toast.makeText(getApplicationContext(), "Must select a time!", Toast.LENGTH_LONG);
+                if(address.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Must select a location!", Toast.LENGTH_LONG).show();
+                } else if(isEvent && day == null) {
+                    Toast.makeText(getApplicationContext(), "Must select a date!", Toast.LENGTH_LONG).show();
+                } else if(isEvent && time == null) {
+                    Toast.makeText(getApplicationContext(), "Must specify a time!", Toast.LENGTH_LONG).show();
+                } else if(isEvent && eventTitle.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Must give event a title!", Toast.LENGTH_LONG).show();
                 } else {
                     // run function that calls to API and creates post
                     // TODO - (Gene) is this bad code writing? Could i break this function up into 2?
@@ -247,12 +241,8 @@ public class ComposeActivity extends AppCompatActivity {
 
                     // if post is an event, then date information will be updated in Parse DB
                     if(isEvent) {
-                        try {
-                            newPost.setDay(day);
-                            newPost.setTime(time);
-                        } catch (Exception e) {
-                            Toast.makeText(ComposeActivity.this,"Must choose a time for your event!", Toast.LENGTH_LONG);
-                        }
+                        newPost.setDay(day);
+                        newPost.setTime(time);
                         newPost.setEventTitle(eventTitle);
                     }
 
@@ -274,10 +264,16 @@ public class ComposeActivity extends AppCompatActivity {
                         @Override
                         public void done(ParseException e) {
                             if (e == null) {
-                                Toast.makeText(ComposeActivity.this, "Successfully posted", Toast.LENGTH_SHORT).show();
+                                if(isEvent)
+                                    Toast.makeText(ComposeActivity.this, "Successfully posted event!", Toast.LENGTH_SHORT).show();
+                                else
+                                    Toast.makeText(ComposeActivity.this, "Successfully posted!", Toast.LENGTH_SHORT).show();
                                 finish();
                             } else {
-                                e.printStackTrace();
+                                if(isEvent)
+                                    Toast.makeText(ComposeActivity.this, "Failed to post event", Toast.LENGTH_LONG).show();
+                                else
+                                    Toast.makeText(ComposeActivity.this, "Failed to post", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
@@ -355,7 +351,7 @@ public class ComposeActivity extends AppCompatActivity {
                 ivPicture.setVisibility(View.VISIBLE);
 
             } else { // Result was a failure
-                Toast.makeText(ComposeActivity.this, "No picture taken", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ComposeActivity.this, "No picture taken!", Toast.LENGTH_LONG).show();
             }
         }
     }
