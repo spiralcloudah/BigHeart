@@ -59,9 +59,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         Log.d("PostDetailsActivity", String.format("Showing details for '%s'", post.getDescription()));
 
         tvDescription.setText(post.getDescription());
-        tvMonth.setText(post.getMonth());
         tvDay.setText(post.getDay());
-        tvYear.setText(post.getYear());
         tvTime.setText(post.getTime());
         tvTitle.setText(post.getEventTitle());
 

@@ -178,8 +178,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             holder.ivEventImage.setVisibility(View.GONE);
         }
 
-        if (!(post.getMonth() == null)){
-            holder.tvDateOfEvent.setText(post.getMonth() + " " + post.getDay() + ", " + post.getYear());
+        if (!(post.getDay() == null)){
+            holder.tvDateOfEvent.setText(post.getDay());
             holder.tvTime.setText(post.getTime());
             //holder.tvMonth.setText(post.getMonth());
             //holder.tvDay.setText(post.getDay());
