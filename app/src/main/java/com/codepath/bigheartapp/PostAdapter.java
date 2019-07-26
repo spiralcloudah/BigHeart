@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,14 +19,16 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 
-public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
 
     private List<Post> mPosts;
+    private List<Post> mFilteredPosts;
     Context context;
     int whichFragment;
     final int TYPE_POST = 101;
@@ -33,23 +37,14 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     //pass in the post array
     public PostAdapter(List<Post> posts, int whichFragment) {
         mPosts = posts;
+        mFilteredPosts = posts;
         this.whichFragment = whichFragment;
     }
 
-    // Clean all elements of the recycler
-    public void clear(final View view) {
-        mPosts.clear();
-        view.post(new Runnable() {
-            public void run() {
-                // There is no need to use notifyDataSetChanged()
-                notifyDataSetChanged();
-            }
-        });
-    }
 
-    // Add a list of items -- change to type used
+
     public void addAll(List<Post> p, View view) {
-        mPosts.addAll(p);
+        mFilteredPosts.addAll(p);
         view.post(new Runnable() {
             public void run() {
                 // There is no need to use notifyDataSetChanged()
@@ -61,7 +56,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     // Clean all elements of the recycler
     public void clear() {
-        mPosts.clear();
+        mFilteredPosts.clear();
         notifyDataSetChanged();
     }
 
@@ -93,9 +88,9 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        if (!(mPosts.get(position).getIsEvent())) {
+        if (!(mFilteredPosts.get(position).getIsEvent())) {
             return TYPE_POST;
-        } else if (mPosts.get(position).getIsEvent()) {
+        } else if (mFilteredPosts.get(position).getIsEvent()) {
             return TYPE_EVENT;
         }
         return -1;
@@ -121,7 +116,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void configureEventViewHolder(final EventViewHolder holder, int position) {
-        final Post post = mPosts.get(position);
+        final Post post = mFilteredPosts.get(position);
 
         try {
             holder.tvTimePosted.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
@@ -186,15 +181,19 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (!(post.getMonth() == null)){
             holder.tvDateOfEvent.setText(post.getMonth() + " " + post.getDay() + ", " + post.getYear());
             holder.tvTime.setText(post.getTime());
+<<<<<<< HEAD
             //holder.tvMonth.setText(post.getMonth());
             //holder.tvDay.setText(post.getDay());
             //holder.tvYear.setText(post.getYear());
             //holder.tvTime.setText(post.getTime());
+=======
+            holder.tvTitle.setText(post.getEventTitle());
+>>>>>>> 01aaba6c81dcdca6277b8b7877930ef5ef720b21
         }
     }
 
     public void configurePostViewHolder(final PostViewHolder holder, int position){
-            final Post post = mPosts.get(position);
+            final Post post = mFilteredPosts.get(position);
 
             try {
                 holder.tvDate.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
@@ -258,7 +257,41 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mPosts.size();
+        return mFilteredPosts.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    mFilteredPosts = mPosts;
+                } else {
+                    List<Post> filteredList = new ArrayList<>();
+                    for (Post row : mPosts) {
+
+                        // match event title
+                        if (row.getEventTitle().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    mFilteredPosts = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mFilteredPosts;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mFilteredPosts = (ArrayList<Post>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -293,7 +326,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             // make sure the position is valid, i.e. actually exists in the view
             if (position != RecyclerView.NO_POSITION) {
                 // get the post at the position, this won't work if the class is static
-                Post post = mPosts.get(position);
+                Post post = mFilteredPosts.get(position);
                 // tell Feed Fragment to start the Details activity
                 ((HomeActivity) context).showDetailsFor((Serializable) post);
             }
@@ -313,9 +346,13 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public TextView tvDay;
         public TextView tvYear;
         public TextView tvTime;
+<<<<<<< HEAD
         public TextView tvDateOfEvent;
         public TextView tvTimePosted;
         public TextView tvAddress;
+=======
+        public TextView tvTitle;
+>>>>>>> 01aaba6c81dcdca6277b8b7877930ef5ef720b21
 
 
         public EventViewHolder(View itemView) {
@@ -337,7 +374,12 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvMonth = (TextView) itemView.findViewById(R.id.tvMonth);
             tvDay = (TextView) itemView.findViewById(R.id.tvDay);
             tvYear = (TextView) itemView.findViewById(R.id.tvYear);
+<<<<<<< HEAD
 
+=======
+            tvTime = (TextView) itemView.findViewById(R.id.tvTime);
+            tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
+>>>>>>> 01aaba6c81dcdca6277b8b7877930ef5ef720b21
 
             itemView.setOnClickListener(this);
         }
@@ -349,7 +391,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             // make sure the position is valid, i.e. actually exists in the view
             if (position != RecyclerView.NO_POSITION) {
                 // get the post at the position, this won't work if the class is static
-                Post post = mPosts.get(position);
+                Post post = mFilteredPosts.get(position);
                 // tell Feed Fragment to start the Details activity
                 ((HomeActivity) context).showDetailsFor((Serializable) post);
             }
