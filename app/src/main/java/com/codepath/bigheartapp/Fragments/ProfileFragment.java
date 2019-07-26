@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +58,7 @@ public class ProfileFragment extends Fragment {
     Button logoutBtn;
     ImageView ivCurrentProfile;
     TextView tvCurrentUser;
+    TabLayout tabLayout;
     int whichFragment=1;
 
     public final static int PICK_PHOTO_CODE = 1046;
@@ -82,6 +85,7 @@ public class ProfileFragment extends Fragment {
         ivCurrentProfile = view.findViewById(R.id.ivCurrentProfile);
         String currentUser = ParseUser.getCurrentUser().getUsername(); // this will now be null
         System.out.println("The current user is "+ currentUser);
+        tabLayout = view.findViewById(R.id.tabLayout);
         tvCurrentUser = (TextView) view.findViewById(R.id.tvCurrentUser);
         tvCurrentUser.setText(currentUser);
 
@@ -184,7 +188,22 @@ public class ProfileFragment extends Fragment {
                 getResources().getColor(android.R.color.holo_red_light)
         );
 
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
 
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         loadTopPosts();
 
