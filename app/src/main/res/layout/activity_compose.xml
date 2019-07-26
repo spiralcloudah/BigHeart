@@ -139,6 +139,7 @@
         android:ems="10"
         android:hint="Event Title"
         android:inputType="textPersonName"
+        android:textAllCaps="false"
         android:textColor="@color/colorPrimaryText"
         android:textColorHint="@color/colorTextHint"
         android:visibility="gone"

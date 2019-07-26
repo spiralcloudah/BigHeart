@@ -22,14 +22,16 @@ public class Post extends ParseObject implements Serializable {
     public static final String KEY_DATE = "createdAt";
     public static final String KEY_IS_EVENT = "isEvent";
 
-
     public static final String KEY_MONTH = "month";
     public static final String KEY_DAY = "day";
     public static final String KEY_YEAR = "year";
+
+
     public static final String KEY_TIME = "time";
     public static final String KEY_LIKED_BY = "hearts";
     public static final String KEY_EVENT_TITLE = "eventTitle";
     public static final String KEY_ADDRESS = "address";
+    public static final String KEY_BOOKMARKED = "bookmarks";
 
     public void setEventTitle(String title) {
         put(KEY_EVENT_TITLE, title);
@@ -80,6 +82,8 @@ public class Post extends ParseObject implements Serializable {
     }
 
 
+
+
     public String getAddress() {
         return getString(KEY_ADDRESS);
     }
@@ -87,7 +91,6 @@ public class Post extends ParseObject implements Serializable {
     public void setAddress(String address) {
         put(KEY_ADDRESS, address);
     }
-
 
     //Date columns
     public String getMonth() {
@@ -141,6 +144,39 @@ public class Post extends ParseObject implements Serializable {
 
     public boolean isLiked() {
         JSONArray a = getLikes();
+        if(a != null) {
+            for (int i = 0; i < a.length(); i++) {
+                try {
+                    if (a.getJSONObject(i).getString("objectId").equals(ParseUser.getCurrentUser().getObjectId())) {
+                        return true;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
+    //Bookmarks
+    public JSONArray getBookmarked() {
+        return getJSONArray(KEY_BOOKMARKED);
+    }
+
+    public int getNumBookmarks() { return getBookmarked().length(); }
+
+    public void bookmarkPost(ParseUser user) {
+        add(KEY_BOOKMARKED, user);
+    }
+
+    public void unbookmarkPost(ParseUser user) {
+        ArrayList<ParseUser> a = new ArrayList<>();
+        a.add(user);
+        removeAll(KEY_BOOKMARKED, a);
+    }
+
+    public boolean isBookmarked() {
+        JSONArray a = getBookmarked();
         if(a != null) {
             for (int i = 0; i < a.length(); i++) {
                 try {

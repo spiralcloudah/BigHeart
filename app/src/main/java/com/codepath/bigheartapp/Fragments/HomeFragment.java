@@ -1,5 +1,6 @@
 package com.codepath.bigheartapp.Fragments;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -66,6 +67,8 @@ public class HomeFragment extends Fragment {
         // Adds the scroll listener to RecyclerView
         rvPost.addOnScrollListener(scrollListener);
 
+        rvPost.addItemDecoration(new VerticalSpaceItemDecoration(12));
+
 
 
         swipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
@@ -119,5 +122,21 @@ public class HomeFragment extends Fragment {
                 swipeContainer.setRefreshing(false);
             }
         });
+    }
+
+    //put space between cardviews
+    public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
+
+        private final int verticalSpaceHeight;
+
+        public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
+            this.verticalSpaceHeight = verticalSpaceHeight;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                                   RecyclerView.State state) {
+            outRect.bottom = verticalSpaceHeight;
+        }
     }
 }
