@@ -10,11 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.codepath.bigheartapp.Fragments.HomeFragment;
 import com.codepath.bigheartapp.Fragments.MapsFragment;
 import com.codepath.bigheartapp.Fragments.ProfileFragment;
+import com.codepath.bigheartapp.Fragments.EventFragment;
+import com.codepath.bigheartapp.model.Post;
+
+import java.io.Serializable;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -22,7 +25,29 @@ public class HomeActivity extends AppCompatActivity {
     public MapsFragment mapsFragment;
     public ProfileFragment profileFragment;
 
-    public MenuItem menuItemCompose;
+    public EventFragment eventFragment;
+    private final int REQUEST_CODE = 20;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
+        return true;
+    }
+
+    public void toCompose(MenuItem menuItem) {
+        Intent toCompose = new Intent(HomeActivity.this, ComposeActivity.class);
+        startActivityForResult(toCompose, REQUEST_CODE);
+    }
+
+    public void showDetailsFor(Serializable post) {
+        // create intent for the new activity
+        Intent intent = new Intent(this, PostDetailsActivity.class);
+        // serialize the post using parceler, use its short name as a key
+        intent.putExtra(Post.class.getSimpleName(), (Serializable) post);
+        // show the activity
+        startActivityForResult(intent,123);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         // Find the toolbar view inside the activity layout
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.tbMain);
         // Sets the Toolbar to act as the ActionBar for this Activity window.
         // Make sure the toolbar exists in the activity and is not null
         setSupportActionBar(toolbar);
@@ -39,6 +64,11 @@ public class HomeActivity extends AppCompatActivity {
         homeFragment = new HomeFragment();
         mapsFragment = new MapsFragment();
         profileFragment = new ProfileFragment();
+
+        eventFragment = new EventFragment();
+
+        setSupportActionBar((Toolbar) findViewById(R.id.tbMain));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -60,7 +90,11 @@ public class HomeActivity extends AppCompatActivity {
                             case R.id.miProfile:
                                 fragment = profileFragment;
                                 break;
-                            default:
+                            case R.id.miSearch:
+                                fragment = eventFragment;
+                                break;
+
+                                default:
                                 fragment = homeFragment;
                                 break;
                         }
@@ -72,16 +106,4 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.miHome);
     }
 
-    // Menu icons are inflated just as they were with actionbar
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
-    }
-
-    public void toCompose(MenuItem menuItem) {
-        Intent toCompose = new Intent(HomeActivity.this, ComposeActivity.class);
-        startActivity(toCompose);
-    }
 }

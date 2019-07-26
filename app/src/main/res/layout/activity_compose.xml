@@ -4,21 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/compose_background"
     tools:context=".ComposeActivity">
 
     <EditText
         android:id="@+id/etDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:ems="10"
         android:hint="Description"
         android:inputType="textMultiLine"
         android:maxLength="280"
+        android:textColor="#FFFFFF"
+        android:textColorHint="@color/colorTextHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,9 +31,11 @@
         android:id="@+id/btnPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="?attr/colorControlHighlight"
         android:text="Post"
+        android:textColor="?attr/colorButtonNormal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnAddImage" />
 
@@ -38,11 +43,12 @@
         android:id="@+id/switchEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-light"
         android:text="Is this an event? "
+        android:textColor="#FFFFFF"
         android:textOff="NO"
         android:textOn="YES"
         android:textSize="18sp"
@@ -53,90 +59,53 @@
         android:id="@+id/etLocation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:ems="10"
         android:hint="Location"
         android:inputType="textPostalAddress"
+        android:textColor="#FFFFFF"
+        android:textColorHint="@color/colorTextHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etDescription" />
 
     <Button
         android:id="@+id/btnAddImage"
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/colorControlHighlight"
         android:text="Add Picture"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/sTime" />
+        android:textColor="?attr/colorButtonNormal"
+        app:layout_constraintStart_toStartOf="@+id/switchEvent"
+        app:layout_constraintTop_toBottomOf="@+id/etEventTitle" />
 
-    <Spinner
-        android:id="@+id/sMonth"
-        android:layout_width="133dp"
-        android:layout_height="41dp"
+
+    <Button
+        android:id="@+id/btnDateChooser"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
-        android:entries="@array/month_array"
-        android:spinnerMode="dropdown"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="?attr/colorControlHighlight"
+        android:gravity="center"
+        android:hint="Date"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorPrimaryText"
+        android:textColorHint="@color/colorTextHint"
         android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/sDay"
+        app:layout_constraintEnd_toStartOf="@+id/btnTimeChooser"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switchEvent" />
 
-    <Spinner
-        android:id="@+id/sDay"
-        android:layout_width="78dp"
-        android:layout_height="43dp"
-        android:entries="@array/day_array"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/sYear"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/sMonth"
-        app:layout_constraintTop_toTopOf="@+id/sMonth" />
-
-    <Spinner
-        android:id="@+id/sYear"
-        android:layout_width="105dp"
-        android:layout_height="44dp"
-        android:entries="@array/year_array"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/sDay"
-        app:layout_constraintTop_toTopOf="@+id/sDay" />
-
-    <Spinner
-        android:id="@+id/sAmPm"
-        android:layout_width="105dp"
-        android:layout_height="31dp"
-        android:entries="@array/ampm_array"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/sTime"
-        app:layout_constraintTop_toTopOf="@+id/sTime" />
-
-    <Spinner
-        android:id="@+id/sTime"
-        android:layout_width="216dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:entries="@array/time_array"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/sAmPm"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sMonth" />
 
     <ImageView
         android:id="@+id/ivPicture"
@@ -153,5 +122,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:color/black" />
+
+    <EditText
+        android:id="@+id/etEventTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Event Title"
+        android:inputType="textPersonName"
+        android:textColor="@color/colorPrimaryText"
+        android:textColorHint="@color/colorTextHint"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnDateChooser" />
+
+    <Button
+        android:id="@+id/btnTimeChooser"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="?attr/colorControlHighlight"
+        android:hint="Time"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorPrimaryText"
+        android:textColorHint="@color/colorTextHint"
+        android:textColorLink="@color/colorTextHint"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnDateChooser"
+        app:layout_constraintTop_toTopOf="@+id/btnDateChooser" />
 
 </android.support.constraint.ConstraintLayout>

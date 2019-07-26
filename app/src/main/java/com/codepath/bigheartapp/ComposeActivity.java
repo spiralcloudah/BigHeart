@@ -1,22 +1,32 @@
 package com.codepath.bigheartapp;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.icu.text.DateFormatSymbols;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.codepath.bigheartapp.model.Post;
@@ -34,9 +44,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.Calendar;
+import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
 
+import static java.lang.Double.min;
 import static java.lang.Double.parseDouble;
 
 public class ComposeActivity extends AppCompatActivity {
@@ -46,13 +62,15 @@ public class ComposeActivity extends AppCompatActivity {
     private EditText etDescription;
     private ImageView ivPicture;
     private Button btnAddPic;
-    private Spinner sMonth;
-    private Spinner sDay;
-    private Spinner sYear;
-    private Spinner sTime;
-    private Spinner sAmPm;
+    private Button btnDatePicker;
     private EditText etLocation;
     private Switch switchEvent;
+    private EditText etEventTitle;
+    private Button btnTimePicker;
+
+    //for date picker
+    private DatePickerDialog.OnDateSetListener dateSetListener;
+    private TimePickerDialog.OnTimeSetListener timeSetListener;
 
     //instantiate vars for image capture
     public final String APP_TAG = "Big<3";
@@ -69,7 +87,12 @@ public class ComposeActivity extends AppCompatActivity {
     // instantiate vars that will store retrieved lat and long coordinates
     public String lat;
     public String lng;
-    public String address;
+    public String month;
+    public String day;
+    public String year;
+    public String time;
+    public int ampm;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,32 +103,26 @@ public class ComposeActivity extends AppCompatActivity {
         ivPicture = findViewById(R.id.ivPicture);
         etDescription = findViewById(R.id.etDescription);
         btnPost = findViewById(R.id.btnPost);
-        sMonth = findViewById(R.id.sMonth);
-        sDay = findViewById(R.id.sDay);
-        sYear = findViewById(R.id.sYear);
-        sTime = findViewById(R.id.sTime);
-        sAmPm = findViewById(R.id.sAmPm);
+        btnDatePicker = findViewById(R.id.btnDateChooser);
         etLocation = findViewById(R.id.etLocation);
         switchEvent = findViewById(R.id.switchEvent);
         btnAddPic = findViewById(R.id.btnAddImage);
+        etEventTitle = findViewById(R.id.etEventTitle);
+        btnTimePicker = findViewById(R.id.btnTimeChooser);
 
         //simple function that reveals extra input fields if post is an event.
         switchEvent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
-                    sMonth.setVisibility(View.VISIBLE);
-                    sDay.setVisibility(View.VISIBLE);
-                    sYear.setVisibility(View.VISIBLE);
-                    sTime.setVisibility(View.VISIBLE);
-                    sAmPm.setVisibility(View.VISIBLE);
+                    etEventTitle.setVisibility(View.VISIBLE);
+                    btnDatePicker.setVisibility(View.VISIBLE);
+                    btnTimePicker.setVisibility(View.VISIBLE);
                     isEvent = true;
                 } else {
-                    sMonth.setVisibility(View.GONE);
-                    sDay.setVisibility(View.GONE);
-                    sYear.setVisibility(View.GONE);
-                    sTime.setVisibility(View.GONE);
-                    sAmPm.setVisibility(View.GONE);
+                    etEventTitle.setVisibility(View.GONE);
+                    btnDatePicker.setVisibility(View.GONE);
+                    btnTimePicker.setVisibility(View.GONE);
                     isEvent = false;
                 }
             }
@@ -124,24 +141,79 @@ public class ComposeActivity extends AppCompatActivity {
                 // create final strings to be passed into database
                 final String description = etDescription.getText().toString();
                 final ParseUser user = ParseUser.getCurrentUser();
-                final String month = sMonth.getSelectedItem().toString();
-                final String day = sDay.getSelectedItem().toString();
-                final String time = sTime.getSelectedItem().toString() + " " + sAmPm.getSelectedItem().toString();
-                final String year = sYear.getSelectedItem().toString();
-                address = etLocation.getText().toString();
+
+
+
+                final String eventTitle = etEventTitle.getText().toString();
                 final String location = etLocation.getText().toString().replace(" ","+");
+                final String address = etLocation.getText().toString();
 
 
                 // run function that calls to API and creates post
                 // TODO - (Gene) is this bad code writing? Could i break this function up into 2?
-                createPostWithCoords(description, user, month, day, year, time, location, address);
+                createPostWithCoords(description, user, month, day, year, time, location,eventTitle, address);
 
             }
         });
 
+        btnDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(ComposeActivity.this,
+                        dateSetListener, year, month, day);
+                dialog.show();
+            }
+        });
+
+        dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @SuppressLint("NewApi")
+            @Override
+            public void onDateSet(DatePicker view, int pickerYear, int pickerMonth, int dayOfMonth) {
+                year = Integer.toString(pickerYear);
+                day = Integer.toString(dayOfMonth);
+                month = new DateFormatSymbols().getMonths()[pickerMonth];
+                btnDatePicker.setText(month + " " + day + ", " + year);
+            }
+        };
+
+        btnTimePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                int minute = calendar.get(Calendar.MINUTE);
+                ampm = calendar.get(Calendar.AM_PM);
+
+                TimePickerDialog dialog = new TimePickerDialog(ComposeActivity.this, timeSetListener,
+                        hour, minute, DateFormat.is24HourFormat(ComposeActivity.this));
+                dialog.show();
+            }
+        });
+
+        timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                String preFormat = hourOfDay + ":" + minute;
+                try {
+                    final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+                    final Date dateObj = sdf.parse(preFormat);
+                    time = new SimpleDateFormat("K:mm a").format(dateObj);
+                } catch (java.text.ParseException e) {
+                    e.printStackTrace();
+                }
+                btnTimePicker.setText(time);
+            }
+        };
+
     }
 
-    private void createPostWithCoords(final String description, final ParseUser user, final String month, final String day, final String year, final String time, final String location, final String address) {
+
+    private void createPostWithCoords(final String description, final ParseUser user, final String month, final String day, final String year, final String time, final String location, final String eventTitle, final String address) {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("address", location );
@@ -174,15 +246,21 @@ public class ComposeActivity extends AppCompatActivity {
 
                     // if post is an event, then date information will be updated in Parse DB
                     if(isEvent) {
-                        newPost.setDay(day);
-                        newPost.setMonth(month);
-                        newPost.setYear(year);
-                        newPost.setTime(time);
+                        try {
+                            newPost.setDay(day);
+                            newPost.setMonth(month);
+                            newPost.setYear(year);
+                            newPost.setTime(time);
+                        } catch (Exception e) {
+                            Toast.makeText(ComposeActivity.this,"Must choose a time for your event!", Toast.LENGTH_LONG);
+                        }
+                        newPost.setEventTitle(eventTitle);
                     }
 
                     // create new ParseGeopoint to store lat and lng as doubles...
                     ParseGeoPoint coordinates = new ParseGeoPoint(parseDouble(lat),parseDouble(lng));
                     newPost.setLocation(coordinates);
+                    newPost.setAddress(address);
 
                     // checks for optional photo, if photo exists, adds to post object.
                     final File file = photoFile;

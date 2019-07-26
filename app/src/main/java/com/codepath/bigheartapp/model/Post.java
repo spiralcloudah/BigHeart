@@ -7,21 +7,37 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 
 @ParseClassName("Post")
 public class Post extends ParseObject implements Serializable {
-    private static final String KEY_DESCRIPTION = "description";
-    private static final String KEY_IMAGE = "image";
-    private static final String KEY_LOCATION = "location";
+    public static final String KEY_DESCRIPTION = "description";
+    public static final String KEY_IMAGE = "image";
+    public static final String KEY_LOCATION = "location";
     public static final String KEY_USER = "userId";
+    public static final String KEY_DATE = "createdAt";
     public static final String KEY_IS_EVENT = "isEvent";
-    private static final String KEY_MONTH = "month";
-    private static final String KEY_DAY = "day";
-    private static final String KEY_YEAR = "year";
-    private static final String KEY_TIME = "time";
-    private static final String KEY_ADDRESS = "address";
 
+
+    public static final String KEY_MONTH = "month";
+    public static final String KEY_DAY = "day";
+    public static final String KEY_YEAR = "year";
+    public static final String KEY_TIME = "time";
+    public static final String KEY_LIKED_BY = "hearts";
+    public static final String KEY_EVENT_TITLE = "eventTitle";
+    public static final String KEY_ADDRESS = "address";
+
+    public void setEventTitle(String title) {
+        put(KEY_EVENT_TITLE, title);
+    }
+
+    public String getEventTitle() {
+        return getString(KEY_EVENT_TITLE);
+    }
 
     public String getDescription() {
         return getString(KEY_DESCRIPTION);
@@ -31,8 +47,8 @@ public class Post extends ParseObject implements Serializable {
         put(KEY_DESCRIPTION, description);
     }
 
-    public ParseObject getEventDate() {
-        return getParseObject(KEY_DESCRIPTION);
+    public boolean getIsEvent() {
+        return getBoolean(KEY_IS_EVENT);
     }
 
     public void setIsEvent(boolean isEvent) {
@@ -63,12 +79,13 @@ public class Post extends ParseObject implements Serializable {
         put(KEY_USER, user);
     }
 
-    public void setAddress(String address){
-        put(KEY_ADDRESS, address);
+
+    public String getAddress() {
+        return getString(KEY_ADDRESS);
     }
 
-    public String getAddress(){
-        return getString(KEY_ADDRESS);
+    public void setAddress(String address) {
+        put(KEY_ADDRESS, address);
     }
 
 
@@ -105,8 +122,40 @@ public class Post extends ParseObject implements Serializable {
         put(KEY_TIME, time);
     }
 
+    //Likes
+    public JSONArray getLikes() {
+        return getJSONArray(KEY_LIKED_BY);
+    }
 
-    //Querying posts
+    public int getNumLikes() { return getLikes().length(); }
+
+    public void likePost(ParseUser user) {
+        add(KEY_LIKED_BY, user);
+    }
+
+    public void unlikePost(ParseUser user) {
+        ArrayList<ParseUser> a = new ArrayList<>();
+        a.add(user);
+        removeAll(KEY_LIKED_BY, a);
+    }
+
+    public boolean isLiked() {
+        JSONArray a = getLikes();
+        if(a != null) {
+            for (int i = 0; i < a.length(); i++) {
+                try {
+                    if (a.getJSONObject(i).getString("objectId").equals(ParseUser.getCurrentUser().getObjectId())) {
+                        return true;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
+    //Querying
     public static class Query extends ParseQuery<Post> {
 
         public Query() {
@@ -123,7 +172,5 @@ public class Post extends ParseObject implements Serializable {
             return this;
         }
     }
-
-
 }
 

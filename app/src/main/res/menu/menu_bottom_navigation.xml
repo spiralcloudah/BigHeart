@@ -16,6 +16,13 @@
         android:title="" />
 
     <item
+        android:id="@+id/miSearch"
+        android:icon="@drawable/events"
+        android:enabled="true"
+        app:showAsAction="ifRoom"
+        android:title="" />
+
+    <item
         android:id="@+id/miProfile"
         android:icon="@drawable/profile"
         android:enabled="true"
