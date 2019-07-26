@@ -132,7 +132,7 @@ public class HomeFragment extends Fragment {
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
                                    RecyclerView.State state) {
-            outRect.bottom = verticalSpaceHeight;
+            outRect.top = verticalSpaceHeight;
         }
     }
 }

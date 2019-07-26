@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -161,6 +162,7 @@ public class ProfileFragment extends Fragment {
         // Adds the scroll listener to RecyclerView
         rvPostView.addOnScrollListener(scrollListener);
 
+        rvPostView.addItemDecoration(new ProfileFragment.VerticalSpaceItemDecoration(12));
 
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
@@ -315,5 +317,19 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    //put space between cardviews
+    public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
 
+        private final int verticalSpaceHeight;
+
+        public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
+            this.verticalSpaceHeight = verticalSpaceHeight;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                                   RecyclerView.State state) {
+            outRect.top = verticalSpaceHeight;
+        }
+    }
 }

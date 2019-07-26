@@ -3,6 +3,7 @@ package com.codepath.bigheartapp.Fragments;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -80,7 +81,7 @@ public class EventFragment extends Fragment {
         // Adds the scroll listener to RecyclerView
         rvEventPosts.addOnScrollListener(scrollListener);
 
-
+        rvEventPosts.addItemDecoration(new EventFragment.VerticalSpaceItemDecoration(12));
 
         swipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
@@ -195,5 +196,21 @@ public class EventFragment extends Fragment {
             });
         }
 
+    }
+
+    //put space between cardviews
+    public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
+
+        private final int verticalSpaceHeight;
+
+        public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
+            this.verticalSpaceHeight = verticalSpaceHeight;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                                   RecyclerView.State state) {
+            outRect.top = verticalSpaceHeight;
+        }
     }
 }
