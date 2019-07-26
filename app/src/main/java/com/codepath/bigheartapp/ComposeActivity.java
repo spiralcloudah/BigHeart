@@ -145,10 +145,15 @@ public class ComposeActivity extends AppCompatActivity {
                 final String location = etLocation.getText().toString().replace(" ","+");
                 final String address = etLocation.getText().toString();
 
-
-                // run function that calls to API and creates post
-                // TODO - (Gene) is this bad code writing? Could i break this function up into 2?
-                createPostWithCoords(description, user, month, day, year, time, location,eventTitle, address);
+                if(month == null || day == null || year == null) {
+                    Toast.makeText(getApplicationContext(), "Must select a date!", Toast.LENGTH_LONG);
+                } else if(time == null) {
+                    Toast.makeText(getApplicationContext(), "Must select a time!", Toast.LENGTH_LONG);
+                } else {
+                    // run function that calls to API and creates post
+                    // TODO - (Gene) is this bad code writing? Could i break this function up into 2?
+                    createPostWithCoords(description, user, month, day, year, time, location, eventTitle, address);
+                }
 
             }
         });
