@@ -18,6 +18,8 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import org.w3c.dom.Text;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,7 +129,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
 //        if(post.isLiked()) {
 //            holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
 //        }
@@ -181,10 +182,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         if (!(post.getDay() == null)){
             holder.tvDateOfEvent.setText(post.getDay());
             holder.tvTime.setText(post.getTime());
-            //holder.tvMonth.setText(post.getMonth());
-            //holder.tvDay.setText(post.getDay());
-            //holder.tvYear.setText(post.getYear());
-            //holder.tvTime.setText(post.getTime());
 
             holder.tvEventTitle.setText(post.getEventTitle());
 
@@ -196,6 +193,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
             try {
                 holder.tvDate.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
+                holder.tvLocation.setText(post.getAddress());
                 holder.tvUserName2.setText(post.getUser().fetchIfNeeded().getUsername());
                 holder.tvUserName.setText(post.getUser().fetchIfNeeded().getUsername());
             } catch (ParseException e) {
@@ -243,6 +241,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
             holder.tvDesc.setText(post.getDescription());
 
+            // don't show if null
             if (!(post.getImage() == null)){
                 Glide.with(context)
                         .load(post.getImage().getUrl())
@@ -251,6 +250,14 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             } else {
                 holder.ivImage.setVisibility(View.GONE);
             }
+
+        if (!(post.getAddress() == null)){
+            holder.tvLocation.setVisibility(View.VISIBLE);
+        } else {
+            holder.tvLocation.setVisibility(View.GONE);
+        }
+
+
 
     }
 
@@ -302,6 +309,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         public TextView tvDesc;
         public TextView tvDate;
         public ImageView ivHeart;
+        public TextView tvLocation;
 
 
         public PostViewHolder(View itemView) {
@@ -314,6 +322,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
             ivProfilePic = (ImageView) itemView.findViewById(R.id.ivProfilePic);
             ivHeart = (ImageView) itemView.findViewById(R.id.ivHeart);
+            tvLocation = (TextView) itemView.findViewById(R.id.tvLocation);
 
             itemView.setOnClickListener(this);
         }
