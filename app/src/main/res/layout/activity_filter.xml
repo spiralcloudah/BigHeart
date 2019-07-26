@@ -113,6 +113,8 @@
         android:layout_marginRight="8dp"
         android:background="?attr/colorControlHighlight"
         android:text="Filter Results"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:textColor="?attr/colorButtonNormal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sYearFilter" />

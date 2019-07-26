@@ -87,9 +87,7 @@ public class ComposeActivity extends AppCompatActivity {
     // instantiate vars that will store retrieved lat and long coordinates
     public String lat;
     public String lng;
-    public String month;
     public String day;
-    public String year;
     public String time;
     public int ampm;
 
@@ -148,14 +146,14 @@ public class ComposeActivity extends AppCompatActivity {
                 final String location = etLocation.getText().toString().replace(" ","+");
                 final String address = etLocation.getText().toString();
 
-                if(month == null || day == null || year == null) {
+                if(day == null) {
                     Toast.makeText(getApplicationContext(), "Must select a date!", Toast.LENGTH_LONG);
                 } else if(time == null) {
                     Toast.makeText(getApplicationContext(), "Must select a time!", Toast.LENGTH_LONG);
                 } else {
                     // run function that calls to API and creates post
                     // TODO - (Gene) is this bad code writing? Could i break this function up into 2?
-                    createPostWithCoords(description, user, month, day, year, time, location, eventTitle, address);
+                    createPostWithCoords(description, user, day, time, location, eventTitle, address);
                 }
 
             }
@@ -179,10 +177,8 @@ public class ComposeActivity extends AppCompatActivity {
             @SuppressLint("NewApi")
             @Override
             public void onDateSet(DatePicker view, int pickerYear, int pickerMonth, int dayOfMonth) {
-                year = Integer.toString(pickerYear);
-                day = Integer.toString(dayOfMonth);
-                month = new DateFormatSymbols().getMonths()[pickerMonth];
-                btnDatePicker.setText(month + " " + day + ", " + year);
+                day = new DateFormatSymbols().getMonths()[pickerMonth] + " " + dayOfMonth + ", " + pickerYear;
+                btnDatePicker.setText(day);
             }
         };
 
@@ -218,7 +214,7 @@ public class ComposeActivity extends AppCompatActivity {
     }
 
 
-    private void createPostWithCoords(final String description, final ParseUser user, final String month, final String day, final String year, final String time, final String location, final String eventTitle, final String address) {
+    private void createPostWithCoords(final String description, final ParseUser user, final String day, final String time, final String location, final String eventTitle, final String address) {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("address", location );
@@ -253,8 +249,6 @@ public class ComposeActivity extends AppCompatActivity {
                     if(isEvent) {
                         try {
                             newPost.setDay(day);
-                            newPost.setMonth(month);
-                            newPost.setYear(year);
                             newPost.setTime(time);
                         } catch (Exception e) {
                             Toast.makeText(ComposeActivity.this,"Must choose a time for your event!", Toast.LENGTH_LONG);
