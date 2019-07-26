@@ -248,8 +248,6 @@ public class ComposeActivity extends AppCompatActivity {
                     if(isEvent) {
                         try {
                             newPost.setDay(day);
-                            newPost.setMonth(month);
-                            newPost.setYear(year);
                             newPost.setTime(time);
                         } catch (Exception e) {
                             Toast.makeText(ComposeActivity.this,"Must choose a time for your event!", Toast.LENGTH_LONG);

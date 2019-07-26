@@ -179,9 +179,7 @@ public class EventFragment extends Fragment {
             postQuery.addDescendingOrder(Post.KEY_DATE);
 
             postQuery.whereEqualTo(Post.KEY_IS_EVENT, true);
-            postQuery.whereEqualTo(Post.KEY_MONTH, data.getStringExtra(Post.KEY_MONTH));
             postQuery.whereEqualTo(Post.KEY_DAY, data.getStringExtra(Post.KEY_DAY));
-            postQuery.whereEqualTo(Post.KEY_YEAR, data.getStringExtra(Post.KEY_YEAR));
 
             postQuery.findInBackground(new FindCallback<Post>() {
                 @Override

@@ -30,9 +30,7 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent backToEvents = new Intent();
-                backToEvents.putExtra(Post.KEY_MONTH, sMonth.getSelectedItem().toString());
                 backToEvents.putExtra(Post.KEY_DAY, sDay.getSelectedItem().toString());
-                backToEvents.putExtra(Post.KEY_YEAR, sYear.getSelectedItem().toString());
                 setResult(RESULT_OK, backToEvents);
                 finish();
             }

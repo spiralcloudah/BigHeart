@@ -22,10 +22,7 @@ public class Post extends ParseObject implements Serializable {
     public static final String KEY_DATE = "createdAt";
     public static final String KEY_IS_EVENT = "isEvent";
 
-    public static final String KEY_MONTH = "month";
     public static final String KEY_DAY = "day";
-    public static final String KEY_YEAR = "year";
-
 
     public static final String KEY_TIME = "time";
     public static final String KEY_LIKED_BY = "hearts";
@@ -92,29 +89,12 @@ public class Post extends ParseObject implements Serializable {
         put(KEY_ADDRESS, address);
     }
 
-    //Date columns
-    public String getMonth() {
-        return getString(KEY_MONTH);
-    }
-
-    public void setMonth(String month) {
-        put(KEY_MONTH, month);
-    }
-
     public String getDay() {
         return getString(KEY_DAY);
     }
 
     public void setDay(String day) {
         put(KEY_DAY, day);
-    }
-
-    public String getYear() {
-        return getString(KEY_YEAR);
-    }
-
-    public void setYear(String year) {
-        put(KEY_YEAR, year);
     }
 
     public String getTime() {
