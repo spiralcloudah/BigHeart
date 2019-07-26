@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -22,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,7 +83,7 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         logoutBtn = view.findViewById(R.id.btnLogout);
         ivCurrentProfile = view.findViewById(R.id.ivCurrentProfile);
-        String currentUser = ParseUser.getCurrentUser().getUsername(); // this will now be null
+        final String currentUser = ParseUser.getCurrentUser().getUsername(); // this will now be null
         System.out.println("The current user is "+ currentUser);
         tabLayout = view.findViewById(R.id.tabLayout);
         tvCurrentUser = (TextView) view.findViewById(R.id.tvCurrentUser);
@@ -102,9 +102,7 @@ public class ProfileFragment extends Fragment {
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                logoutUser(v);
-            }
+            public void onClick(View v) { logoutUser(v); }
         });
 //        ivCurrentProfile.setOnClickListener(new View.OnClickListener() {
         //           @Override
@@ -164,14 +162,13 @@ public class ProfileFragment extends Fragment {
         // Adds the scroll listener to RecyclerView
         rvPostView.addOnScrollListener(scrollListener);
 
+        rvPostView.addItemDecoration(new ProfileFragment.VerticalSpaceItemDecoration(12));
 
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code here
-                Toast.makeText(getApplicationContext(), "Refreshed!", Toast.LENGTH_LONG).show();
                 // To keep animation for 4 seconds
                 posts.clear();
                 adapter.clear();
@@ -215,10 +212,9 @@ public class ProfileFragment extends Fragment {
     }
 
     public void logoutUser(View view) {
-
+        Toast.makeText(getContext(), ParseUser.getCurrentUser().getUsername() + " is now logged out.", Toast.LENGTH_LONG).show();
         ParseUser.logOut();
         ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-        System.out.println("The current user is "+ currentUser);
         Intent i = new Intent(getContext(), MainActivity.class);
         startActivity(i);
     }
@@ -321,5 +317,19 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    //put space between cardviews
+    public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
 
+        private final int verticalSpaceHeight;
+
+        public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
+            this.verticalSpaceHeight = verticalSpaceHeight;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                                   RecyclerView.State state) {
+            outRect.top = verticalSpaceHeight;
+        }
+    }
 }

@@ -21,8 +21,6 @@ import com.parse.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.parse.Parse.getApplicationContext;
-
 public class HomeFragment extends Fragment {
     // Store a member variable for the listener
     private EndlessRecyclerViewScrollListener scrollListener;
@@ -76,8 +74,6 @@ public class HomeFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code here
-                Toast.makeText(getApplicationContext(), "Refreshed!", Toast.LENGTH_LONG).show();
                 // To keep animation for 4 seconds
                 posts.clear();
                 adapter.clear();
@@ -117,7 +113,7 @@ public class HomeFragment extends Fragment {
                         adapter.notifyItemInserted(posts.size() - 1);
                     }
                 } else {
-                    Toast.makeText(getContext(), "Failed to query posts", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Failed to query posts", Toast.LENGTH_LONG).show();
                 }
                 swipeContainer.setRefreshing(false);
             }
@@ -136,7 +132,7 @@ public class HomeFragment extends Fragment {
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
                                    RecyclerView.State state) {
-            outRect.bottom = verticalSpaceHeight;
+            outRect.top = verticalSpaceHeight;
         }
     }
 }

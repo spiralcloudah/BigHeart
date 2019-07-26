@@ -3,6 +3,7 @@ package com.codepath.bigheartapp.Fragments;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -25,7 +25,6 @@ import com.codepath.bigheartapp.R;
 import com.codepath.bigheartapp.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,15 +81,13 @@ public class EventFragment extends Fragment {
         // Adds the scroll listener to RecyclerView
         rvEventPosts.addOnScrollListener(scrollListener);
 
-
+        rvEventPosts.addItemDecoration(new EventFragment.VerticalSpaceItemDecoration(12));
 
         swipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code here
-                Toast.makeText(getApplicationContext(), "Refreshed!", Toast.LENGTH_LONG).show();
                 // To keep animation for 4 seconds
                 posts.clear();
                 adapter.clear();
@@ -162,7 +159,7 @@ public class EventFragment extends Fragment {
                         adapter.notifyItemInserted(posts.size() - 1);
                     }
                 } else {
-                    Toast.makeText(getContext(), "Failed to query posts", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Failed to query posts", Toast.LENGTH_LONG).show();
                 }
                 swipeContainer.setRefreshing(false);
             }
@@ -172,6 +169,7 @@ public class EventFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+            Toast.makeText(getContext(), "Showing filtered events", Toast.LENGTH_LONG).show();
             posts.clear();
 
             final Post.Query postQuery = new Post.Query();
@@ -191,12 +189,28 @@ public class EventFragment extends Fragment {
                             adapter.notifyItemInserted(posts.size() - 1);
                         }
                     } else {
-                        Toast.makeText(getContext(), "No posts matching applied filters", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "No posts matching applied filters", Toast.LENGTH_LONG).show();
                     }
                     swipeContainer.setRefreshing(false);
                 }
             });
         }
 
+    }
+
+    //put space between cardviews
+    public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
+
+        private final int verticalSpaceHeight;
+
+        public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
+            this.verticalSpaceHeight = verticalSpaceHeight;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                                   RecyclerView.State state) {
+            outRect.top = verticalSpaceHeight;
+        }
     }
 }
