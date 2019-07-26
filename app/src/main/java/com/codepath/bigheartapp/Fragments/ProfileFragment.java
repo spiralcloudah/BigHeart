@@ -212,7 +212,7 @@ public class ProfileFragment extends Fragment {
     }
 
     public void logoutUser(View view) {
-        Toast.makeText(getContext(), ParseUser.getCurrentUser() + " is now logged out.", Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), ParseUser.getCurrentUser().getUsername() + " is now logged out.", Toast.LENGTH_LONG).show();
         ParseUser.logOut();
         ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
         Intent i = new Intent(getContext(), MainActivity.class);
