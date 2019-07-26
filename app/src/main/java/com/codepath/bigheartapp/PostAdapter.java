@@ -70,15 +70,15 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
         switch (viewType) {
             case TYPE_POST:
-                View postView = inflater.inflate(R.layout.item_post, parent, false);
+                View postView = inflater.inflate(R.layout.item_post_cardview, parent, false);
                 viewHolder = new PostViewHolder(postView);
                 break;
             case TYPE_EVENT:
-                View eventView = inflater.inflate(R.layout.item_event, parent, false);
+                View eventView = inflater.inflate(R.layout.item_event_cardview, parent, false);
                 viewHolder = new EventViewHolder(eventView);
                 break;
             default:
-                View otherView = inflater.inflate(R.layout.item_post, parent, false);
+                View otherView = inflater.inflate(R.layout.item_post_cardview, parent, false);
                 viewHolder = new PostViewHolder(otherView){
                 };
                 break;
@@ -119,43 +119,45 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         final Post post = mFilteredPosts.get(position);
 
         try {
-            holder.tvDate.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
-            holder.tvUserName2.setText(post.getUser().fetchIfNeeded().getUsername());
-            holder.tvUserName.setText(post.getUser().fetchIfNeeded().getUsername());
+            holder.tvTimePosted.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
+            holder.tvUsertag.setText("@" + post.getUser().fetchIfNeeded().getUsername());
+            holder.tvFirstLast.setText(post.getUser().fetchIfNeeded().get("firstName").toString() + " " + post.getUser().fetchIfNeeded().get("lastName").toString());
+            holder.tvEventTitle.setText(post.getEventTitle());
+            holder.tvAddress.setText(post.getAddress());
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        if(post.isLiked()) {
-            holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
-        }
+//        if(post.isLiked()) {
+//            holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
+//        }
 
-        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!post.isLiked()) {
-                    post.likePost(ParseUser.getCurrentUser());
-                    holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
-
-                    post.saveInBackground();
-
-                } else {
-                    post.unlikePost(ParseUser.getCurrentUser());
-                    holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
-
-                    post.saveInBackground();
-                }
-            }
-        });
+//        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(!post.isLiked()) {
+//                    post.likePost(ParseUser.getCurrentUser());
+//                    holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
+//
+//                    post.saveInBackground();
+//
+//                } else {
+//                    post.unlikePost(ParseUser.getCurrentUser());
+//                    holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
+//
+//                    post.saveInBackground();
+//                }
+//            }
+//        });
 
         ParseFile p = post.getUser().getParseFile("profilePicture");
         if (p != null) {
             Glide.with(context)
                     .load(p.getUrl())
                     .bitmapTransform(new CropCircleTransformation(context))
-                    .into(holder.ivProfilePic);
+                    .into(holder.ivUserProfile);
         } else {
-            holder.ivProfilePic.setImageResource(R.drawable.profile);
+            holder.ivUserProfile.setImageResource(R.drawable.profile);
         }
 
 //            holder.ivProfilePic.setOnClickListener(new View.OnClickListener() {
@@ -165,23 +167,27 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 //                }
 //            });
 
-        holder.tvDesc.setText(post.getDescription());
+        holder.tvEventDesc.setText(post.getDescription());
 
         if (!(post.getImage() == null)){
             Glide.with(context)
                     .load(post.getImage().getUrl())
                     .bitmapTransform(new CenterCrop(context))
-                    .into(holder.ivImage);
+                    .into(holder.ivEventImage);
         } else {
-            holder.ivImage.setVisibility(View.GONE);
+            holder.ivEventImage.setVisibility(View.GONE);
         }
 
         if (!(post.getMonth() == null)){
-            holder.tvMonth.setText(post.getMonth());
-            holder.tvDay.setText(post.getDay());
-            holder.tvYear.setText(post.getYear());
+            holder.tvDateOfEvent.setText(post.getMonth() + " " + post.getDay() + ", " + post.getYear());
             holder.tvTime.setText(post.getTime());
-            holder.tvTitle.setText(post.getEventTitle());
+            //holder.tvMonth.setText(post.getMonth());
+            //holder.tvDay.setText(post.getDay());
+            //holder.tvYear.setText(post.getYear());
+            //holder.tvTime.setText(post.getTime());
+
+            holder.tvEventTitle.setText(post.getEventTitle());
+
         }
     }
 
@@ -328,35 +334,45 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     public class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public ImageView ivProfilePic;
-        public ImageView ivImage;
-        public TextView tvUserName;
-        public TextView tvUserName2;
-        public TextView tvDesc;
-        public TextView tvDate;
+        public ImageView ivUserProfile;
+        public ImageView ivEventImage;
+        public TextView tvFirstLast;
+        public TextView tvUsertag;
+        public TextView tvEventDesc;
+        public TextView tvEventTitle;
         public ImageView ivHeart;
         public TextView tvMonth;
         public TextView tvDay;
         public TextView tvYear;
         public TextView tvTime;
-        public TextView tvTitle;
+        public TextView tvDateOfEvent;
+        public TextView tvTimePosted;
+        public TextView tvAddress;
+
+
 
 
         public EventViewHolder(View itemView) {
             super(itemView);
+            //images
+            ivEventImage =  itemView.findViewById(R.id.ivEventImage);
+            ivUserProfile =  itemView.findViewById(R.id.ivUserProfile);
+            // text views
+            tvTime = (TextView) itemView.findViewById(R.id.tvTimeOfEvent);
+            tvFirstLast = (TextView) itemView.findViewById(R.id.tvFirstLast);
+            tvUsertag = (TextView) itemView.findViewById(R.id.tvUsertag);
+            tvEventDesc = (TextView) itemView.findViewById(R.id.tvEventDesc);
+            tvEventTitle = (TextView) itemView.findViewById(R.id.tvEventTitle);
+            tvDateOfEvent = itemView.findViewById(R.id.tvDate);
+            tvTimePosted = itemView.findViewById(R.id.tvTimePosted);
+            tvAddress = itemView.findViewById(R.id.tvAddress);
 
-            ivImage = (ImageView) itemView.findViewById(R.id.ivImage);
-            tvUserName = (TextView) itemView.findViewById(R.id.tvUser);
-            tvUserName2 = (TextView) itemView.findViewById(R.id.tvUser2);
-            tvDesc = (TextView) itemView.findViewById(R.id.tvDescription);
-            tvDate = (TextView) itemView.findViewById(R.id.tvDate);
-            ivProfilePic = (ImageView) itemView.findViewById(R.id.ivProfilePic);
             ivHeart = (ImageView) itemView.findViewById(R.id.ivHeart);
             tvMonth = (TextView) itemView.findViewById(R.id.tvMonth);
             tvDay = (TextView) itemView.findViewById(R.id.tvDay);
             tvYear = (TextView) itemView.findViewById(R.id.tvYear);
-            tvTime = (TextView) itemView.findViewById(R.id.tvTime);
-            tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
+
+
 
             itemView.setOnClickListener(this);
         }
