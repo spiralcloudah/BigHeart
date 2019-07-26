@@ -93,6 +93,7 @@ public class ComposeActivity extends AppCompatActivity {
     public String time;
     public int ampm;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +141,8 @@ public class ComposeActivity extends AppCompatActivity {
                 // create final strings to be passed into database
                 final String description = etDescription.getText().toString();
                 final ParseUser user = ParseUser.getCurrentUser();
+
+
 
                 final String eventTitle = etEventTitle.getText().toString();
                 final String location = etLocation.getText().toString().replace(" ","+");
@@ -214,6 +217,7 @@ public class ComposeActivity extends AppCompatActivity {
 
     }
 
+
     private void createPostWithCoords(final String description, final ParseUser user, final String month, final String day, final String year, final String time, final String location, final String eventTitle, final String address) {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
@@ -232,12 +236,16 @@ public class ComposeActivity extends AppCompatActivity {
                     lng = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("geometry")
                             .getJSONObject("location").get("lng").toString();
 
+                    // TODO - for some reason, retrieving the formatted address has an infinite/veryy long runtime. For now i will  just have the String location be what the user inputs.
+                    // address = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("formatted_address").toString();
+
                     // since async API call Post object must me created within the onSuccess function to ba able to access lat and lng data.
                     Post newPost = new Post();
 
                     // set values to post object
                     newPost.setDescription(description);
                     newPost.setUser(user);
+                    newPost.setAddress(address);
 
                     newPost.setIsEvent(isEvent);
 

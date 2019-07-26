@@ -22,6 +22,7 @@ public class Post extends ParseObject implements Serializable {
     public static final String KEY_DATE = "createdAt";
     public static final String KEY_IS_EVENT = "isEvent";
 
+
     public static final String KEY_MONTH = "month";
     public static final String KEY_DAY = "day";
     public static final String KEY_YEAR = "year";
@@ -77,6 +78,7 @@ public class Post extends ParseObject implements Serializable {
     public void setUser(ParseUser user){
         put(KEY_USER, user);
     }
+
 
     public String getAddress() {
         return getString(KEY_ADDRESS);
