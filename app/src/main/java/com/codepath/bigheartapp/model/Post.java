@@ -21,25 +21,19 @@ public class Post extends ParseObject implements Serializable {
     public static final String KEY_USER = "userId";
     public static final String KEY_DATE = "createdAt";
     public static final String KEY_IS_EVENT = "isEvent";
-<<<<<<< HEAD
-    private static final String KEY_MONTH = "month";
-    private static final String KEY_DAY = "day";
-    private static final String KEY_YEAR = "year";
-    private static final String KEY_TIME = "time";
-    private static final String KEY_LIKED_BY = "hearts";
-    private static final String KEY_EVENT_TITLE = "eventTitle";
-    private static final String KEY_ADDRESS = "address";
-=======
-
 
     public static final String KEY_MONTH = "month";
     public static final String KEY_DAY = "day";
     public static final String KEY_YEAR = "year";
-    public static final String KEY_TIME = "time";
-    public static final String KEY_LIKED_BY = "hearts";
-    public static final String KEY_EVENT_TITLE = "eventTitle";
-    public static final String KEY_ADDRESS = "address";
->>>>>>> 01aaba6c81dcdca6277b8b7877930ef5ef720b21
+    private static final String KEY_TIME = "time";
+    private static final String KEY_LIKED_BY = "hearts";
+    private static final String KEY_EVENT_TITLE = "eventTitle";
+    private static final String KEY_ADDRESS = "address";
+
+
+
+
+
 
     public void setEventTitle(String title) {
         put(KEY_EVENT_TITLE, title);
@@ -89,22 +83,17 @@ public class Post extends ParseObject implements Serializable {
         put(KEY_USER, user);
     }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 01aaba6c81dcdca6277b8b7877930ef5ef720b21
+
+
     public String getAddress() {
         return getString(KEY_ADDRESS);
     }
 
-<<<<<<< HEAD
-=======
     public void setAddress(String address) {
         put(KEY_ADDRESS, address);
     }
 
-
->>>>>>> 01aaba6c81dcdca6277b8b7877930ef5ef720b21
     //Date columns
     public String getMonth() {
         return getString(KEY_MONTH);

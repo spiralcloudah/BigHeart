@@ -181,14 +181,13 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         if (!(post.getMonth() == null)){
             holder.tvDateOfEvent.setText(post.getMonth() + " " + post.getDay() + ", " + post.getYear());
             holder.tvTime.setText(post.getTime());
-<<<<<<< HEAD
             //holder.tvMonth.setText(post.getMonth());
             //holder.tvDay.setText(post.getDay());
             //holder.tvYear.setText(post.getYear());
             //holder.tvTime.setText(post.getTime());
-=======
-            holder.tvTitle.setText(post.getEventTitle());
->>>>>>> 01aaba6c81dcdca6277b8b7877930ef5ef720b21
+
+            holder.tvEventTitle.setText(post.getEventTitle());
+
         }
     }
 
@@ -346,13 +345,11 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         public TextView tvDay;
         public TextView tvYear;
         public TextView tvTime;
-<<<<<<< HEAD
         public TextView tvDateOfEvent;
         public TextView tvTimePosted;
         public TextView tvAddress;
-=======
-        public TextView tvTitle;
->>>>>>> 01aaba6c81dcdca6277b8b7877930ef5ef720b21
+
+
 
 
         public EventViewHolder(View itemView) {
@@ -374,12 +371,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             tvMonth = (TextView) itemView.findViewById(R.id.tvMonth);
             tvDay = (TextView) itemView.findViewById(R.id.tvDay);
             tvYear = (TextView) itemView.findViewById(R.id.tvYear);
-<<<<<<< HEAD
 
-=======
-            tvTime = (TextView) itemView.findViewById(R.id.tvTime);
-            tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
->>>>>>> 01aaba6c81dcdca6277b8b7877930ef5ef720b21
+
 
             itemView.setOnClickListener(this);
         }
