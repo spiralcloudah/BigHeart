@@ -129,27 +129,27 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         } catch (ParseException e) {
             e.printStackTrace();
         }
-//        if(post.isLiked()) {
-//            holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
-//        }
+        if(post.isLiked()) {
+            holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
+        }
 
-//        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(!post.isLiked()) {
-//                    post.likePost(ParseUser.getCurrentUser());
-//                    holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
-//
-//                    post.saveInBackground();
-//
-//                } else {
-//                    post.unlikePost(ParseUser.getCurrentUser());
-//                    holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
-//
-//                    post.saveInBackground();
-//                }
-//            }
-//        });
+       holder.ivHeart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!post.isLiked()) {
+                    post.likePost(ParseUser.getCurrentUser());
+                    holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
+
+                    post.saveInBackground();
+
+                } else {
+                    post.unlikePost(ParseUser.getCurrentUser());
+                    holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
+
+                    post.saveInBackground();
+                }
+            }
+        });
 
         ParseFile p = post.getUser().getParseFile("profilePicture");
         if (p != null) {
