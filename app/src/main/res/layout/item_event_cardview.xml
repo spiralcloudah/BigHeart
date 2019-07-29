@@ -1,164 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
+    card_view:cardBackgroundColor="#DAFAFD"
     card_view:cardCornerRadius="12dp"
-    card_view:cardElevation="24dp"
-    card_view:cardBackgroundColor="#91ffd4"
-    >
+    card_view:cardElevation="24dp">
 
-    <android.support.constraint.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp">
 
         <ImageView
             android:id="@+id/ivUserProfile"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent"
-            card_view:srcCompat="@drawable/profile" />
-
-        <TextView
-            android:id="@+id/tvFirstLast"
-            android:layout_width="0dp"
-            android:layout_height="29dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="First Last Name"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintStart_toEndOf="@+id/ivUserProfile"
-            card_view:layout_constraintTop_toTopOf="@+id/ivUserProfile" />
+            android:layout_width="78dp"
+            android:layout_height="82dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/profile" />
 
         <TextView
             android:id="@+id/tvUsertag"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/ivUserProfile"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="29dp"
+            android:layout_toEndOf="@+id/ivUserProfile"
+            android:layout_toRightOf="@+id/ivUserProfile"
             android:text="Username"
-            card_view:layout_constraintStart_toStartOf="@+id/tvFirstLast"
-            card_view:layout_constraintTop_toBottomOf="@+id/tvFirstLast" />
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:textColor="@color/colorPrimaryDark" />
 
-        <TextView
-            android:id="@+id/tvEventTitle"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
-            android:text="Event Title"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            card_view:layout_constraintStart_toStartOf="@+id/ivUserProfile"
-            card_view:layout_constraintTop_toBottomOf="@+id/ivUserProfile" />
-
-        <TextView
-            android:id="@+id/tvAddress"
-            android:layout_width="393dp"
-            android:layout_height="37dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="Location"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintHorizontal_bias="0.0"
-            card_view:layout_constraintStart_toStartOf="@+id/tvEventTitle"
-            card_view:layout_constraintTop_toBottomOf="@+id/tvEventTitle" />
-
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="236dp"
-            android:layout_height="37dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:text="Date "
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/tvAddress" />
-
-        <TextView
-            android:id="@+id/tvTimeOfEvent"
-            android:layout_width="148dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="Time"
-            card_view:layout_constraintBottom_toBottomOf="@+id/tvDate"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintStart_toEndOf="@+id/tvDate"
-            card_view:layout_constraintTop_toTopOf="@+id/tvDate" />
-
-        <TextView
-            android:id="@+id/tvEventDesc"
-            android:layout_width="0dp"
-            android:layout_height="125dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="Description"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintHorizontal_bias="0.0"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/tvDate" />
 
         <ImageView
             android:id="@+id/ivEventImage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintHorizontal_bias="0.0"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/tvEventDesc"
-            card_view:layout_constraintVertical_bias="0.0"
-            tools:srcCompat="@tools:sample/avatars[12]" />
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_below="@+id/tvEventDesc"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:background="@android:color/white"
+            android:fadingEdge="horizontal|vertical"
+            android:fadingEdgeLength="5dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_launcher_foreground"
+            android:visibility="visible"
+            tools:background="#000000"
+            tools:layout_editor_absoluteX="53dp"
+            tools:layout_editor_absoluteY="16dp" />
 
-        <Button
-            android:id="@+id/btnBookmark"
+        <TextView
+            android:id="@+id/tvUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="Bookmark"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/tvTimePosted" />
+            android:layout_alignStart="@+id/tvUsertag"
+            android:layout_alignLeft="@+id/tvUsertag"
+            android:layout_alignParentBottom="false"
+            android:layout_marginStart="-47dp"
+            android:layout_marginLeft="-47dp"
+            android:text="Username"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:textColor="@color/colorPrimaryDark" />
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/ivHeart"
+            android:layout_marginStart="25dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="21dp"
+            android:layout_toEndOf="@+id/ivHeart"
+            android:layout_toRightOf="@+id/ivHeart"
+            android:text="Location"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            tools:textColor="@color/colorPrimaryDark" />
+
+        <TextView
+            android:id="@+id/tvEventDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvEventTitle"
+            android:layout_alignStart="@+id/tvEventTitle"
+            android:layout_alignLeft="@+id/tvEventTitle"
+            android:layout_marginStart="-1dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="2dp"
+            android:text="Write a caption..."
+            android:textAllCaps="false"
+            android:textColor="#090808"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvEventTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivUserProfile"
+            android:layout_alignStart="@+id/ivUserProfile"
+            android:layout_alignLeft="@+id/ivUserProfile"
+            android:layout_marginStart="-2dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="2dp"
+            android:text="TITLE"
+            android:textAllCaps="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvTimeOfEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivHeart"
+            android:layout_marginStart="77dp"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="4dp"
+            android:layout_toEndOf="@+id/tvDate"
+            android:layout_toRightOf="@+id/tvDate"
+            android:text="Time"
+            android:textColor="#5A5858"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivHeart"
+            android:layout_alignStart="@+id/ivHeart"
+            android:layout_alignLeft="@+id/ivHeart"
+            android:layout_marginStart="29dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
+            android:text="Day"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/ivHeart"
+            android:layout_width="89dp"
+            android:layout_height="67dp"
+            android:layout_below="@+id/ivEventImage"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="3dp"
+            android:scaleType="fitStart"
+            card_view:srcCompat="@drawable/heart_logo_vector" />
 
         <TextView
             android:id="@+id/tvTimePosted"
-            android:layout_width="0dp"
-            android:layout_height="29dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="Time Posted..."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDate"
+            android:layout_alignStart="@+id/ivHeart"
+            android:layout_alignLeft="@+id/ivHeart"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="1dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:autoLink="all"
+            android:fontFamily="sans-serif-light"
+            android:gravity="start"
+            android:text="Date here"
+            android:textAlignment="textStart"
+            android:textSize="14sp"
+            android:textStyle="italic"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/ivEventImage" />
+            card_view:layout_constraintTop_toTopOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
-
-
-
-
-
-
+        <TextView
+            android:id="@+id/tvFirstLast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/ivUserProfile"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/ivUserProfile"
+            android:layout_toRightOf="@+id/ivUserProfile"
+            android:text="First Last"
+            android:textSize="14sp"
+            tools:textColor="@color/colorPrimaryDark" />
+    </RelativeLayout>
 </android.support.v7.widget.CardView>
+

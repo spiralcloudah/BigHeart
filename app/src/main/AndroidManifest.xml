@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".FilterActivity"></activity>
+        <activity android:name=".FilterActivity" />
         <activity android:name=".ComposeActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".HomeActivity" />
@@ -34,7 +34,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBlqBLcO4u2GXQ8utsYRlsV55kmCavovfI"/>
+            android:value="AIzaSyBlqBLcO4u2GXQ8utsYRlsV55kmCavovfI" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
