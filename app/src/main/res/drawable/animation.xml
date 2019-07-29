@@ -5,6 +5,4 @@
         <item android:drawable="@drawable/hot_pink_heart" android:duration="200" />
         <item android:drawable="@drawable/heart_logo_vector" android:duration="200" />
         <item android:drawable="@drawable/hot_pink_heart" android:duration="200" />
-        <item android:drawable="@drawable/heart_logo_vector" android:duration="200" />
-        <item android:drawable="@drawable/hot_pink_heart" android:duration="200" />
     </animation-list>
