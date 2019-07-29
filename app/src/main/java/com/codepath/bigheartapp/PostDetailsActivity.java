@@ -67,7 +67,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvLocation.setText(post.getAddress());
 
         if(post.isLiked()) {
-            ivHeart.setImageResource(R.drawable.hot_pink_heart);
+            ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
         }
 
         if (post.getEventTitle() == null) {
@@ -87,13 +87,13 @@ public class PostDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(!post.isLiked()) {
                     post.likePost(ParseUser.getCurrentUser());
-                    ivHeart.setImageResource(R.drawable.hot_pink_heart);
+                    ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
 
                     post.saveInBackground();
 
                 } else {
                     post.unlikePost(ParseUser.getCurrentUser());
-                    ivHeart.setImageResource(R.drawable.heart_logo_vector);
+                    ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
 
                     post.saveInBackground();
                 }

@@ -130,7 +130,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             e.printStackTrace();
         }
         if(post.isLiked()) {
-            holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
+            holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
         }
 
        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
@@ -138,13 +138,13 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             public void onClick(View v) {
                 if(!post.isLiked()) {
                     post.likePost(ParseUser.getCurrentUser());
-                    holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
+                    holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
 
                     post.saveInBackground();
 
                 } else {
                     post.unlikePost(ParseUser.getCurrentUser());
-                    holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
+                    holder.ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
 
                     post.saveInBackground();
                 }
@@ -201,7 +201,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             }
 
             if(post.isLiked()) {
-                holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
+                holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
             }
 
             holder.ivHeart.setOnClickListener(new View.OnClickListener() {
@@ -209,13 +209,13 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 public void onClick(View v) {
                     if(!post.isLiked()) {
                         post.likePost(ParseUser.getCurrentUser());
-                        holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
+                        holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
 
                         post.saveInBackground();
 
                     } else {
                         post.unlikePost(ParseUser.getCurrentUser());
-                        holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
+                        holder.ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
 
                         post.saveInBackground();
                     }

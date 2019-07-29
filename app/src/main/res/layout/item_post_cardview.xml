@@ -106,14 +106,14 @@
 
         <ImageView
             android:id="@+id/ivHeart"
-            android:layout_width="32dp"
+            android:layout_width="34.9dp"
             android:layout_height="32dp"
             android:layout_below="@+id/ivImage"
             android:layout_alignStart="@+id/ivImage"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:scaleType="fitStart"
-            app:srcCompat="@drawable/heart_logo_vector" />
+            android:background="@drawable/heart_logo_vector"
+            android:scaleType="fitStart" />
 
         <TextView
             android:id="@+id/tvDate"
