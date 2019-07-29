@@ -1,5 +1,6 @@
 package com.codepath.bigheartapp;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -89,11 +90,21 @@ public class PostDetailsActivity extends AppCompatActivity {
                     post.likePost(ParseUser.getCurrentUser());
                     ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
 
+                    ivHeart.setBackgroundResource(R.drawable.animation);
+                    AnimationDrawable heartStart;
+                    heartStart = (AnimationDrawable) ivHeart.getBackground();
+                    heartStart.start();
+
                     post.saveInBackground();
 
                 } else {
                     post.unlikePost(ParseUser.getCurrentUser());
                     ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
+
+                    ivHeart.setBackgroundResource(R.drawable.animationstop);
+                    AnimationDrawable heartStop;
+                    heartStop = (AnimationDrawable) ivHeart.getBackground();
+                    heartStop.start();
 
                     post.saveInBackground();
                 }

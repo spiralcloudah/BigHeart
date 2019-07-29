@@ -1,6 +1,7 @@
 package com.codepath.bigheartapp;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,8 +18,6 @@ import com.codepath.bigheartapp.model.Post;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
-
-import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -129,22 +128,34 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         if(post.isLiked()) {
             holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
         }
 
        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 if(!post.isLiked()) {
                     post.likePost(ParseUser.getCurrentUser());
                     holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
 
+                    holder.ivHeart.setBackgroundResource(R.drawable.animation);
+                    AnimationDrawable heartStart;
+                    heartStart = (AnimationDrawable) holder.ivHeart.getBackground();
+                    heartStart.start();
+
                     post.saveInBackground();
 
                 } else {
                     post.unlikePost(ParseUser.getCurrentUser());
                     holder.ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
+
+                    holder.ivHeart.setBackgroundResource(R.drawable.animationstop);
+                    AnimationDrawable heartStop;
+                    heartStop = (AnimationDrawable) holder.ivHeart.getBackground();
+                    heartStop.start();
 
                     post.saveInBackground();
                 }
@@ -211,11 +222,21 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                         post.likePost(ParseUser.getCurrentUser());
                         holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
 
+                        holder.ivHeart.setBackgroundResource(R.drawable.animation);
+                        AnimationDrawable heartStart;
+                        heartStart = (AnimationDrawable) holder.ivHeart.getBackground();
+                        heartStart.start();
+
                         post.saveInBackground();
 
                     } else {
                         post.unlikePost(ParseUser.getCurrentUser());
                         holder.ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
+
+                        holder.ivHeart.setBackgroundResource(R.drawable.animationstop);
+                        AnimationDrawable heartStop;
+                        heartStop = (AnimationDrawable) holder.ivHeart.getBackground();
+                        heartStop.start();
 
                         post.saveInBackground();
                     }
@@ -358,9 +379,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         public TextView tvTimePosted;
         public TextView tvAddress;
 
-
-
-
         public EventViewHolder(View itemView) {
             super(itemView);
             //images
@@ -380,8 +398,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             tvMonth = (TextView) itemView.findViewById(R.id.tvMonth);
             tvDay = (TextView) itemView.findViewById(R.id.tvDay);
             tvYear = (TextView) itemView.findViewById(R.id.tvYear);
-
-
 
             itemView.setOnClickListener(this);
         }
