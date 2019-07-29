@@ -90,6 +90,7 @@ public class PostDetailsActivity extends AppCompatActivity {
                     post.likePost(ParseUser.getCurrentUser());
                     ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
 
+                    // create an animation
                     ivHeart.setBackgroundResource(R.drawable.animation);
                     AnimationDrawable heartStart;
                     heartStart = (AnimationDrawable) ivHeart.getBackground();
@@ -101,6 +102,7 @@ public class PostDetailsActivity extends AppCompatActivity {
                     post.unlikePost(ParseUser.getCurrentUser());
                     ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
 
+                    // create an animation
                     ivHeart.setBackgroundResource(R.drawable.animationstop);
                     AnimationDrawable heartStop;
                     heartStop = (AnimationDrawable) ivHeart.getBackground();
