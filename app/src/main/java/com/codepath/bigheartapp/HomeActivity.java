@@ -21,31 +21,37 @@ import java.io.Serializable;
 
 public class HomeActivity extends AppCompatActivity {
 
+    // Create the variables for fragments and request code
     public HomeFragment homeFragment;
     public MapsFragment mapsFragment;
     public ProfileFragment profileFragment;
-
     public EventFragment eventFragment;
     private final int REQUEST_CODE = 20;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
+        // Inflate the menu; this adds items to the action bar if it is present
         getMenuInflater().inflate(R.menu.menu_toolbar, menu);
         return true;
     }
 
     public void toCompose(MenuItem menuItem) {
+
+        // Creates a new intent switching from Home Activity to Compose Activity
         Intent toCompose = new Intent(HomeActivity.this, ComposeActivity.class);
         startActivityForResult(toCompose, REQUEST_CODE);
     }
 
     public void showDetailsFor(Serializable post) {
-        // create intent for the new activity
+
+        // Create a new intent for the Post Activity
         Intent intent = new Intent(this, PostDetailsActivity.class);
-        // serialize the post using parceler, use its short name as a key
+
+        // Serialize the post using parceler; use its short name as a key
         intent.putExtra(Post.class.getSimpleName(), (Serializable) post);
-        // show the activity
+
+        // Show the activity
         startActivityForResult(intent,123);
     }
 
@@ -56,22 +62,22 @@ public class HomeActivity extends AppCompatActivity {
 
         // Find the toolbar view inside the activity layout
         Toolbar toolbar = findViewById(R.id.tbMain);
-        // Sets the Toolbar to act as the ActionBar for this Activity window.
-        // Make sure the toolbar exists in the activity and is not null
+
+        // Sets the Toolbar to act as the ActionBar for this Activity window
         setSupportActionBar(toolbar);
 
-
+        // Creates new fragments
         homeFragment = new HomeFragment();
         mapsFragment = new MapsFragment();
         profileFragment = new ProfileFragment();
-
         eventFragment = new EventFragment();
 
+        // Sets the action bar to the corresponding ID
         setSupportActionBar((Toolbar) findViewById(R.id.tbMain));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        // Setup the fragment manager and bottom naviagtion view
         final FragmentManager fragmentManager = getSupportFragmentManager();
-
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
         // handle navigation selection
@@ -94,6 +100,7 @@ public class HomeActivity extends AppCompatActivity {
                                 fragment = eventFragment;
                                 break;
 
+                                // default to home fragment
                                 default:
                                 fragment = homeFragment;
                                 break;
@@ -102,8 +109,8 @@ public class HomeActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+
         // Set default selection
         bottomNavigationView.setSelectedItemId(R.id.miHome);
     }
-
 }
