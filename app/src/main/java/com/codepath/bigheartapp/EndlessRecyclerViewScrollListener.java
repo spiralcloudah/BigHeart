@@ -69,6 +69,7 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
                 this.loading = true;
             }
         }
+
         /**
          * If it’s still loading, check to see if the dataset count has changed
          * If so, conclude it has finished loading and update the current page number
