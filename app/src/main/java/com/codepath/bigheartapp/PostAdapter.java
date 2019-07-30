@@ -245,9 +245,9 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 e.printStackTrace();
             }
             if(post.isLiked()) {
-                holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
+                holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
             } else {
-                holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
+                holder.ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
             }
         if(post.isBookmarked()) {
 
