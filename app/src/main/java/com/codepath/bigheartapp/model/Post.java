@@ -12,6 +12,7 @@ import org.json.JSONException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 @ParseClassName("Post")
 public class Post extends ParseObject implements Serializable {
@@ -106,11 +107,11 @@ public class Post extends ParseObject implements Serializable {
     }
 
     //Likes
-    public JSONArray getLikes() {
-        return getJSONArray(KEY_LIKED_BY);
+    public List getLikes() {
+        return getList(KEY_LIKED_BY);
     }
 
-    public int getNumLikes() { return getLikes().length(); }
+    public int getNumLikes() { return getLikes().size(); }
 
     public void likePost(ParseUser user) {
         add(KEY_LIKED_BY, user);
@@ -123,14 +124,14 @@ public class Post extends ParseObject implements Serializable {
     }
 
     public boolean isLiked() {
-        JSONArray a = getLikes();
+        List<ParseUser> a = getLikes();
         if(a != null) {
-            for (int i = 0; i < a.length(); i++) {
+            for (int i = 0; i < a.size(); i++) {
                 try {
-                    if (a.getJSONObject(i).getString("objectId").equals(ParseUser.getCurrentUser().getObjectId())) {
+                    if (a.get(i).getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
                         return true;
                     }
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

@@ -40,6 +40,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -230,7 +231,7 @@ public class ComposeActivity extends AppCompatActivity {
                     // address = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("formatted_address").toString();
 
                     // since async API call Post object must me created within the onSuccess function to ba able to access lat and lng data.
-                    Post newPost = new Post();
+                    final Post newPost = new Post();
 
                     // set values to post object
                     newPost.setDescription(description);
@@ -268,6 +269,9 @@ public class ComposeActivity extends AppCompatActivity {
                                     Toast.makeText(ComposeActivity.this, "Successfully posted event!", Toast.LENGTH_SHORT).show();
                                 else
                                     Toast.makeText(ComposeActivity.this, "Successfully posted!", Toast.LENGTH_SHORT).show();
+                                Intent backHome = new Intent();
+                                backHome.putExtra(Post.class.getSimpleName(), (Serializable) newPost);
+                                setResult(RESULT_OK, backHome);
                                 finish();
                             } else {
                                 if(isEvent)

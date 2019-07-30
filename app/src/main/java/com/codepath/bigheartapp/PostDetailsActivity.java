@@ -47,7 +47,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvUser = (TextView) findViewById(R.id.tvUser);
         tvUser2 = (TextView) findViewById(R.id.tvUser2);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
-        ivHeart = (ImageView) findViewById(R.id.ivHeart);
+        ivHeart = (ImageView) findViewById(R.id.ivDetailsHeart);
         tvDate = (TextView) findViewById(R.id.tvDate);
         tvMonth = (TextView) findViewById(R.id.tvMonth);
         tvDay = (TextView) findViewById(R.id.tvDay);

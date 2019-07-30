@@ -1,7 +1,9 @@
 package com.codepath.bigheartapp.Fragments;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.codepath.bigheartapp.EndlessRecyclerViewScrollListener;
+import com.codepath.bigheartapp.HomeActivity;
 import com.codepath.bigheartapp.PostAdapter;
 import com.codepath.bigheartapp.R;
 import com.codepath.bigheartapp.model.Post;
@@ -21,13 +24,15 @@ import com.parse.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 public class HomeFragment extends Fragment {
     // Store a member variable for the listener
     private EndlessRecyclerViewScrollListener scrollListener;
 
-    ArrayList<Post> posts;
-    public RecyclerView rvPost;
-    PostAdapter adapter;
+    public static ArrayList<Post> posts;
+    public static RecyclerView rvPost;
+    public static PostAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
 
     @Override
@@ -118,6 +123,11 @@ public class HomeFragment extends Fragment {
                 swipeContainer.setRefreshing(false);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
     }
 
     //put space between cardviews
