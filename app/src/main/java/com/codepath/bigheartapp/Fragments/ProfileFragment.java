@@ -9,9 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -42,9 +40,6 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,22 +52,18 @@ import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
 
-    // Store a member variable for the listener
+    // Store variables to use in the event fragment
     private EndlessRecyclerViewScrollListener scrollListener;
     private SwipeRefreshLayout swipeContainer;
     Button logoutBtn;
     ImageView ivCurrentProfile;
     TextView tvCurrentUser;
     TabLayout tabLayout;
-    int whichFragment=1;
-
-    public final static int PICK_PHOTO_CODE = 1046;
+    int whichFragment = 1;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
     File photoFile;
-
     String currentPath;
     ParseFile parseFile;
-
     ArrayList<Post> posts;
     public RecyclerView rvPostView;
     PostAdapter adapter;
@@ -90,99 +81,73 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        // Sets variables to corresponding xml layouts
         logoutBtn = view.findViewById(R.id.btnLogout);
         ivCurrentProfile = view.findViewById(R.id.ivCurrentProfile);
-        final String currentUser = ParseUser.getCurrentUser().getUsername(); // this will now be null
+
+        // Get the current user's username and display it
+        final String currentUser = ParseUser.getCurrentUser().getUsername();
         System.out.println("The current user is "+ currentUser);
         tabLayout = view.findViewById(R.id.tabLayout);
         tvCurrentUser = (TextView) view.findViewById(R.id.tvCurrentUser);
         tvCurrentUser.setText(currentUser);
 
-
+        // Set the profile picture for the current user
         ParseFile p = ParseUser.getCurrentUser().getParseFile("profilePicture");
         if(p != null) {
             Glide.with(getContext())
                     .load(p.getUrl())
+
+                    // Profile picture will be shown with a circle border rather than a rectangle
                     .bitmapTransform(new CropCircleTransformation(getContext()))
                     .into(ivCurrentProfile);
         }
 
+        // Only current user's posts are shown in profile fragment
         rvPostView= view.findViewById(R.id.rvUserPosts);
 
+        // Set the onClickListener for the logout button
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { logoutUser(v); }
         });
-//        ivCurrentProfile.setOnClickListener(new View.OnClickListener() {
-        //           @Override
-        //           public void onClick(View v) {
-        //               Activity activity = (Activity) ProfileFragment.this.getActivity();
 
-        //               Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        //               File mediaStorage = null;
-        //               try {
-        //                  mediaStorage = getTempImageFile(getContext());
-        //              } catch (IOException e) {
-        ////                  e.printStackTrace();
-        //              }
-        //              // Create the storage directory if it does not exist
-        //             if (!mediaStorage.exists() && !mediaStorage.mkdirs()){
-        //                  Log.d(APP_TAG, "failed to create directory");
-        //              }
-
-        //             String path = mediaStorage.getAbsolutePath();
-        //             Uri uri = FileProvider.getUriForFile(activity, "com.codepath.parsetagram", mediaStorage);
-        //             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-
-        //             photoFile = new File(path);
-        //
-        //            startActivityForResult(intent,
-        //                     CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-        //         }
-        //     });
-
+        // Set variables to current user's stats
         posts = new ArrayList<>();
-
         adapter = new PostAdapter(posts, whichFragment);
         rvPostView = (RecyclerView) view.findViewById(R.id.rvUserPosts);
-
         rvPostView.setAdapter(adapter);
 
         // Configure the RecyclerView
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-
         rvPostView.setLayoutManager(linearLayoutManager);
 
         // Retain an instance so that you can call `resetState()` for fresh searches
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-
                 view.post(new Runnable() {
                     @Override
-                    public void run() {
-                        // should have something to load more posts...
-                    }
+                    public void run() {}
                 });
             }
         };
-        // Adds the scroll listener to RecyclerView
+
+        // Adds the scroll listener and item decoration to RecyclerView
         rvPostView.addOnScrollListener(scrollListener);
-
         rvPostView.addItemDecoration(new ProfileFragment.VerticalSpaceItemDecoration(12));
-
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 // To keep animation for 4 seconds
                 posts.clear();
                 adapter.clear();
                 loadTopPosts();
-
             }
         });
 
@@ -194,46 +159,34 @@ public class ProfileFragment extends Fragment {
                 getResources().getColor(android.R.color.holo_red_light)
         );
 
+        // Set tab layout to switch between user posts and bookmarked events
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
-
         loadTopPosts();
-
-
         getConfiguration();
     }
 
-    public void getConfiguration() {
-    }
+    public void getConfiguration() {}
 
+    // Function to logout the current user
     public void logoutUser(View view) {
         Toast.makeText(getContext(), ParseUser.getCurrentUser().getUsername() + " is now logged out", Toast.LENGTH_LONG).show();
         ParseUser.logOut();
-        ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+
+        // Change activities back to the login screen
         Intent i = new Intent(getContext(), MainActivity.class);
         startActivity(i);
-    }
-
-    private static File getTempImageFile(Context context) throws IOException {
-        String currTime = getCurrentTimestamp();
-        String fileNamePrefix = "JPEG_" + currTime + "_";
-        String fileNameSuffix = ".jpg";
-        File directory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        return File.createTempFile(fileNamePrefix, fileNameSuffix, directory);
     }
 
     @Override
@@ -241,53 +194,17 @@ public class ProfileFragment extends Fragment {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
 
+                // Set the current user's profile picture
                 currentPath = photoFile.getPath();
                 Bitmap bitmap = BitmapFactory.decodeFile(currentPath);
                 ivCurrentProfile.setImageBitmap(bitmap);
                 final BitmapDrawable ob = new BitmapDrawable(getResources(), bitmap);
                 ivCurrentProfile.setBackgroundDrawable(ob);
-
                 parseFile = new ParseFile(photoFile);
-
                 ParseUser.getCurrentUser().put("profilePic", parseFile);
                 ParseUser.getCurrentUser().saveInBackground();
-
-//                parseFile.saveInBackground(new SaveCallback() {
-//                    @Override
-//                    public void done(ParseException e) {
-//                        if (e == null){
-//                            String s = parseFile.getUrl();
-//                            Drawable draw = LoadImageFromWebOperations(s);
-//                            ibProfilePic.setBackgroundDrawable(ob);
-//                        //    ibProfilePic.saveInBackground();
-//
-//                        } else {
-//                            e.printStackTrace();
-//                            Toast.makeText(getContext(),"Could not save Profile Pic",Toast.LENGTH_LONG).show();
-//                            String s = "Failed: " + e.getMessage() + " ... ";
-//                            Log.d("ProfileFragment",s);
-//
-//                        }
-//                    }
-//                });
-
             }
-
         }
-    }
-
-    private Drawable LoadImageFromWebOperations(String save) {
-        try {
-            InputStream is = (InputStream) new URL(save).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
-            return d;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public static String getCurrentTimestamp() {
-        return new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
     }
 
     public void loadTopPosts(){
@@ -296,12 +213,12 @@ public class ProfileFragment extends Fragment {
                 .getTop()
                 .withUser();
 
+        // Only load the current user's posts
         postsQuery.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
-
         postsQuery.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> objects, ParseException e) {
-                if (e==null){
+                if (e == null){
                     Post post = new Post();
                     System.out.println("Success!");
                     for (int i = 0;i<objects.size(); i++){
@@ -313,10 +230,8 @@ public class ProfileFragment extends Fragment {
                         } catch (ParseException e1) {
                             e1.printStackTrace();
                         }
-
                         posts.add(0,objects.get(i));
                         adapter.notifyItemInserted(posts.size() - 1);
-
                     }
                 } else {
                     e.printStackTrace();
@@ -329,12 +244,13 @@ public class ProfileFragment extends Fragment {
     //put space between cardviews
     public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
 
+        // Specify a final variable for space between cardviews
         private final int verticalSpaceHeight;
 
+        // function to set the space height
         public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
             this.verticalSpaceHeight = verticalSpaceHeight;
         }
-
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
                                    RecyclerView.State state) {

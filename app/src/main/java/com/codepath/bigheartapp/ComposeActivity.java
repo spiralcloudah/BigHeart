@@ -51,7 +51,9 @@ import static com.codepath.bigheartapp.PostDetailsActivity.ACTION;
 import static java.lang.Double.parseDouble;
 
 public class ComposeActivity extends AppCompatActivity {
+
     // instantiate layout properties...
+
     private Button btnPost;
     private EditText etDescription;
     private ImageView ivPicture;
@@ -62,36 +64,37 @@ public class ComposeActivity extends AppCompatActivity {
     private EditText etEventTitle;
     private Button btnTimePicker;
 
-    //for date picker
+    // Set the date and time picker listeners
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private TimePickerDialog.OnTimeSetListener timeSetListener;
 
-    //instantiate vars for image capture
+    // Instantiate vars for image capture
     public final String APP_TAG = "Big<3";
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "photo.jpg";
-    public boolean isEvent = false;
     File photoFile;
+
+    // Default post is not an event
+    public boolean isEvent = false;
 
     // API key and URL information..
     // TODO - store in a more secure place!
     private String API_KEY = "AIzaSyBlqBLcO4u2GXQ8utsYRlsV55kmCavovfI";
     private String BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
 
-    // instantiate vars that will store retrieved lat and long coordinates
+    // Instantiate vars that will store retrieved lat and long coordinates
     public String lat;
     public String lng;
     public String day;
     public String time;
     public int ampm;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose);
 
-        //create pointers to layout id values
+        // Create pointers to layout id values
         ivPicture = findViewById(R.id.ivPicture);
         etDescription = findViewById(R.id.etDescription);
         btnPost = findViewById(R.id.btnPost);
@@ -102,7 +105,7 @@ public class ComposeActivity extends AppCompatActivity {
         etEventTitle = findViewById(R.id.etEventTitle);
         btnTimePicker = findViewById(R.id.btnTimeChooser);
 
-        //simple function that reveals extra input fields if post is an event.
+        // Function that reveals extra input fields if post is an event
         switchEvent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -120,6 +123,7 @@ public class ComposeActivity extends AppCompatActivity {
             }
         });
 
+        // onClickListener to launch camera when button is clicked
         btnAddPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,47 +131,61 @@ public class ComposeActivity extends AppCompatActivity {
             }
         });
 
+        // onClickListener to post a post when button is clicked
         btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // create final strings to be passed into database
+
+                // Create final strings to be passed into database
                 final String description = etDescription.getText().toString();
                 final ParseUser user = ParseUser.getCurrentUser();
                 final String eventTitle = etEventTitle.getText().toString();
                 final String location = etLocation.getText().toString().replace(" ","+");
                 final String address = etLocation.getText().toString();
 
-                if(address.equals("")) {
+                    // If there is no address provided...
+                if (address.equals("")) {
                     Toast.makeText(getApplicationContext(), "Must select a location!", Toast.LENGTH_LONG).show();
+
+                    // If there is no date provided...
                 } else if(isEvent && day == null) {
                     Toast.makeText(getApplicationContext(), "Must select a date!", Toast.LENGTH_LONG).show();
+
+                    // If there is no time provided...
                 } else if(isEvent && time == null) {
                     Toast.makeText(getApplicationContext(), "Must specify a time!", Toast.LENGTH_LONG).show();
+
+                    // If there is no event title provided...
                 } else if(isEvent && eventTitle.equals("")) {
                     Toast.makeText(getApplicationContext(), "Must give event a title!", Toast.LENGTH_LONG).show();
                 } else {
+
                     // run function that calls to API and creates post
                     // TODO - (Gene) is this bad code writing? Could i break this function up into 2?
                     createPostWithCoords(description, user, day, time, location, eventTitle, address);
                 }
-
             }
         });
 
+        // Set the onClickListener for the date picker
         btnDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();
+
+                // Set variables for the date
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+                // Create a new date picker dialog
                 DatePickerDialog dialog = new DatePickerDialog(ComposeActivity.this,
                         dateSetListener, year, month, day);
                 dialog.show();
             }
         });
 
+        // Set the new date to the one selected
         dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @SuppressLint("NewApi")
             @Override
@@ -177,20 +195,25 @@ public class ComposeActivity extends AppCompatActivity {
             }
         };
 
+        // Set the onClickListener for the time picker
         btnTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();
+
+                // Set variables for the time
                 int hour = calendar.get(Calendar.HOUR_OF_DAY);
                 int minute = calendar.get(Calendar.MINUTE);
                 ampm = calendar.get(Calendar.AM_PM);
 
+                // Create a new time picker dialog
                 TimePickerDialog dialog = new TimePickerDialog(ComposeActivity.this, timeSetListener,
                         hour, minute, DateFormat.is24HourFormat(ComposeActivity.this));
                 dialog.show();
             }
         });
 
+        // Set the new time to the one selected
         timeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -205,11 +228,11 @@ public class ComposeActivity extends AppCompatActivity {
                 btnTimePicker.setText(time);
             }
         };
-
     }
 
-
     private void createPostWithCoords(final String description, final ParseUser user, final String day, final String time, final String location, final String eventTitle, final String address) {
+
+        // Set up the client and params
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("address", location );
@@ -219,17 +242,15 @@ public class ComposeActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     Log.d("ComposeActivity", "Request Success!");
+
                     // retrieve json lat and long coordinates
                     lat = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("geometry")
                             .getJSONObject("location").get("lat").toString();
-
-
                     lng = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("geometry")
                             .getJSONObject("location").get("lng").toString();
 
                     // TODO - for some reason, retrieving the formatted address has an infinite/veryy long runtime. For now i will  just have the String location be what the user inputs.
                     // address = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("formatted_address").toString();
-
                     // since async API call Post object must me created within the onSuccess function to ba able to access lat and lng data.
                     final Post newPost = new Post();
 
@@ -237,7 +258,6 @@ public class ComposeActivity extends AppCompatActivity {
                     newPost.setDescription(description);
                     newPost.setUser(user);
                     newPost.setAddress(address);
-
                     newPost.setIsEvent(isEvent);
 
                     // if post is an event, then date information will be updated in Parse DB
@@ -287,50 +307,41 @@ public class ComposeActivity extends AppCompatActivity {
                 }
 
             }
-
-
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("ComposeActivity", "Request Failure.");
                 throwable.printStackTrace();
             }
-
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 Log.d("ComposeActivity", "Request Success!");
                 throwable.printStackTrace();
             }
-
-
         });
-
     }
 
-
+    // Function to launch a camera for picture taking
     public void onLaunchCamera() {
+
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
         // Create a File reference to access to future access
         photoFile = getPhotoFileUri(photoFileName);
-
-        // wrap File object into a content provider
-        // required for API >= 24
-        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
         Uri fileProvider = FileProvider.getUriForFile(ComposeActivity.this, "com.codepath.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
-        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
-        // So as long as the result is not null, it's safe to use the intent.
+        // Check to see if intent is null
         if (intent.resolveActivity(ComposeActivity.this.getPackageManager()) != null) {
+
             // Start the image capture intent to take photo
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
     }
 
     public File getPhotoFileUri(String fileName) {
+
         // Get safe storage directory for photos
-        // Use `getExternalFilesDir` on Context to access package-specific directories.
-        // This way, we don't need to request external read/write runtime permissions.
         File mediaStorageDir = new File(ComposeActivity.this.getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
 
         // Create the storage directory if it does not exist
@@ -340,7 +351,6 @@ public class ComposeActivity extends AppCompatActivity {
 
         // Return the file target for the photo based on filename
         File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
-
         return file;
     }
 
@@ -348,16 +358,18 @@ public class ComposeActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                // by this point we have the camera photo on disk
+
+                // camera photo on disk set to the bitmap
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+
                 // Load the taken image into a preview
                 ivPicture.setImageBitmap(takenImage);
                 ivPicture.setVisibility(View.VISIBLE);
 
-            } else { // Result was a failure
+                // Result was a failure
+            } else {
                 Toast.makeText(ComposeActivity.this, "No picture taken!", Toast.LENGTH_LONG).show();
             }
         }
     }
-
 }

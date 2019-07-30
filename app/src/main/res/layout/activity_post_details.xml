@@ -149,14 +149,14 @@
 
     <ImageView
         android:id="@+id/ivDetailsHeart"
-        android:layout_width="32dp"
+        android:layout_width="34.9dp"
         android:layout_height="32dp"
         android:layout_below="@+id/ivImage"
         android:layout_alignStart="@+id/ivImage"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:scaleType="fitStart"
-        app:srcCompat="@drawable/heart_logo_vector" />
+        android:background="@drawable/heart_logo_vector"
+        android:scaleType="centerInside" />
 
     <TextView
         android:id="@+id/tvDate"
@@ -180,5 +180,18 @@
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ibBookmark"
+        android:layout_width="20dp"
+        android:layout_height="25dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="7dp"
+        android:background="@drawable/save"
+        android:visibility="visible" />
 
 </RelativeLayout>
