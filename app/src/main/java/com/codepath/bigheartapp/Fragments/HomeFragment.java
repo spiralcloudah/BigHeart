@@ -34,9 +34,9 @@ public class HomeFragment extends Fragment {
 
     // Store variables to use in the home fragment
     private EndlessRecyclerViewScrollListener scrollListener;
-    ArrayList<Post> posts;
-    public RecyclerView rvPost;
-    PostAdapter adapter;
+    public static ArrayList<Post> posts;
+    public static RecyclerView rvPost;
+    public static PostAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
 
     @Override

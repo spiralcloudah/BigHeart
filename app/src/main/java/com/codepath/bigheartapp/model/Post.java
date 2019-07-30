@@ -102,7 +102,7 @@ public class Post extends ParseObject implements Serializable {
     }
 
     // Get the number of likes
-    public int getNumLikes() { return getLikes().length(); }
+    public int getNumLikes() { return getLikes().size(); }
 
     // Check to see whether a post is liked
     public boolean isLiked() {
