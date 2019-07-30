@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // Set the username and password to the ones entered by the user; login user
                 final String username = etUsername.getText().toString();
                 final String password = etPassword.getText().toString();
@@ -73,17 +72,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void done(ParseUser user, ParseException e) {
                 if ( e == null ) {
-
-                    // If Login is successful, notify user and bring user to Home Activity
-                    Log.d("MainActivity", "Login Success!");
+                    // If Login is successful, bring user to Home Activity
                     Intent toHome = new Intent(MainActivity.this, HomeActivity.class);
                     startActivity(toHome);
                     finish();
                 } else {
-
                     // If Login failed, notify user
-                    Log.d("MainActivity", "Login Failed :/ ");
-                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Invalid username or password", Toast.LENGTH_LONG).show();
                 }
             }
         });

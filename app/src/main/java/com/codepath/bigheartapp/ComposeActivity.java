@@ -40,17 +40,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
 
+import static com.codepath.bigheartapp.PostDetailsActivity.ACTION;
 import static java.lang.Double.parseDouble;
 
 public class ComposeActivity extends AppCompatActivity {
 
-    // Instantiate layout properties
+    // instantiate layout properties...
+
     private Button btnPost;
     private EditText etDescription;
     private ImageView ivPicture;
@@ -249,7 +252,7 @@ public class ComposeActivity extends AppCompatActivity {
                     // TODO - for some reason, retrieving the formatted address has an infinite/veryy long runtime. For now i will  just have the String location be what the user inputs.
                     // address = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("formatted_address").toString();
                     // since async API call Post object must me created within the onSuccess function to ba able to access lat and lng data.
-                    Post newPost = new Post();
+                    final Post newPost = new Post();
 
                     // set values to post object
                     newPost.setDescription(description);
@@ -286,6 +289,9 @@ public class ComposeActivity extends AppCompatActivity {
                                     Toast.makeText(ComposeActivity.this, "Successfully posted event!", Toast.LENGTH_SHORT).show();
                                 else
                                     Toast.makeText(ComposeActivity.this, "Successfully posted!", Toast.LENGTH_SHORT).show();
+                                Intent backHome = new Intent();
+                                backHome.putExtra(Post.class.getSimpleName(), (Serializable) newPost);
+                                setResult(RESULT_OK, backHome);
                                 finish();
                             } else {
                                 if(isEvent)

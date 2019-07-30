@@ -126,9 +126,9 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             e.printStackTrace();
         }
         if(post.isLiked()) {
-
-            // Set the heart image to filled if a post is already liked
             holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
+        } else {
+            holder.ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
         }
         if(post.isBookmarked()) {
 
@@ -245,9 +245,9 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 e.printStackTrace();
             }
             if(post.isLiked()) {
-
-                // Set the heart image to filled if a post is already liked
-                holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
+                holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
+            } else {
+                holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
             }
         if(post.isBookmarked()) {
 

@@ -1,7 +1,10 @@
 package com.codepath.bigheartapp.Fragments;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
@@ -24,9 +27,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.codepath.bigheartapp.ComposeActivity;
 import com.codepath.bigheartapp.EndlessRecyclerViewScrollListener;
 import com.codepath.bigheartapp.MainActivity;
 import com.codepath.bigheartapp.PostAdapter;
+import com.codepath.bigheartapp.PostDetailsActivity;
 import com.codepath.bigheartapp.R;
 import com.codepath.bigheartapp.model.Post;
 import com.parse.FindCallback;
@@ -41,6 +46,9 @@ import java.util.Date;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
 
@@ -63,6 +71,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Register for the particular broadcast based on ACTION string
+        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
+        getActivity().registerReceiver(detailsChangedReceiver, filter);
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
@@ -169,7 +181,7 @@ public class ProfileFragment extends Fragment {
 
     // Function to logout the current user
     public void logoutUser(View view) {
-        Toast.makeText(getContext(), ParseUser.getCurrentUser().getUsername() + " is now logged out.", Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), ParseUser.getCurrentUser().getUsername() + " is now logged out", Toast.LENGTH_LONG).show();
         ParseUser.logOut();
 
         // Change activities back to the login screen
@@ -245,4 +257,39 @@ public class ProfileFragment extends Fragment {
             outRect.top = verticalSpaceHeight;
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Unregister the listener when the application is paused
+        getActivity().unregisterReceiver(detailsChangedReceiver);
+    }
+
+    // Define the callback for what to do when data is received
+    private BroadcastReceiver detailsChangedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            int resultCode = intent.getIntExtra(getString(R.string.result_code), RESULT_CANCELED);
+
+            if (resultCode == RESULT_OK) {
+
+                Post postChanged = (Post) intent.getSerializableExtra(Post.class.getSimpleName());
+                int indexOfChange = -1;
+                for(int i = 0; i < posts.size(); i++) {
+                    if(posts.get(i).hasSameId(postChanged)) {
+                        indexOfChange = i;
+                        break;
+                    }
+                }
+                if(indexOfChange != -1) {
+                    posts.set(indexOfChange, postChanged);
+                    adapter.notifyItemChanged(indexOfChange);
+                } else {
+                    Toast.makeText(getContext(), "An error occurred", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }
+    };
 }

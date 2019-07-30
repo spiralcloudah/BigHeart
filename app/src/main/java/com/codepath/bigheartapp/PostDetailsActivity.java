@@ -1,5 +1,6 @@
 package com.codepath.bigheartapp;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,11 +17,15 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import java.io.Serializable;
+
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class PostDetailsActivity extends AppCompatActivity {
+    public static final String ACTION = "com.codepath.bigheartapp";
+    public static final String WHICH_RECEIVER = "details";
 
-    // The post to display
+    // the post to display
     Post post;
 
     // The view and button objects
@@ -50,7 +55,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvUser = (TextView) findViewById(R.id.tvUser);
         tvUser2 = (TextView) findViewById(R.id.tvUser2);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
-        ivHeart = (ImageView) findViewById(R.id.ivHeart);
+        ivHeart = (ImageView) findViewById(R.id.ivDetailsHeart);
         ibBookmark = (ImageButton) findViewById(R.id.ibBookmark);
         tvDate = (TextView) findViewById(R.id.tvDate);
         tvMonth = (TextView) findViewById(R.id.tvMonth);
@@ -161,7 +166,7 @@ public class PostDetailsActivity extends AppCompatActivity {
 
         // Set the image for the post
         ParseFile photo = post.getImage();
-        if(photo != null) {
+        if (photo != null) {
             Glide.with(PostDetailsActivity.this)
                     .load(photo.getUrl())
                     .bitmapTransform(new CenterCrop(PostDetailsActivity.this))
@@ -185,11 +190,24 @@ public class PostDetailsActivity extends AppCompatActivity {
 
         // If not null, set the user profile picture
         ParseFile p = post.getUser().getParseFile("profilePicture");
-        if( p != null) {
+
+
+        if (p != null) {
             Glide.with(this)
                     .load(p.getUrl())
                     .bitmapTransform(new CropCircleTransformation(PostDetailsActivity.this))
                     .into(ivProfilePic);
         }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        Intent backHome = new Intent();
+        backHome.setAction(ACTION);
+        backHome.putExtra(Post.class.getSimpleName(), (Serializable) post);
+        backHome.putExtra(getString(R.string.result_code), RESULT_OK);
+        sendBroadcast(backHome);
+        super.onBackPressed();
     }
 }
