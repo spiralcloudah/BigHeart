@@ -1,10 +1,12 @@
 package com.codepath.bigheartapp;
 
 import android.graphics.drawable.AnimationDrawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,6 +36,7 @@ public class PostDetailsActivity extends AppCompatActivity {
     TextView tvDescription;
     TextView tvDate;
     ImageView ivHeart;
+    ImageButton ibBookmark;
     TextView tvTitle;
     TextView tvLocation;
 
@@ -49,6 +52,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvUser2 = (TextView) findViewById(R.id.tvUser2);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
         ivHeart = (ImageView) findViewById(R.id.ivHeart);
+        ibBookmark = (ImageButton) findViewById(R.id.ibBookmark);
         tvDate = (TextView) findViewById(R.id.tvDate);
         tvMonth = (TextView) findViewById(R.id.tvMonth);
         tvDay = (TextView) findViewById(R.id.tvDay);
@@ -69,6 +73,14 @@ public class PostDetailsActivity extends AppCompatActivity {
 
         if(post.isLiked()) {
             ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
+        }
+
+        if (post.getIsEvent() == false) {
+            ibBookmark.setVisibility(View.GONE);
+        }
+
+        if(post.isBookmarked()) {
+            ibBookmark.setBackgroundResource(R.drawable.save_filled);
         }
 
         if (post.getEventTitle() == null) {
@@ -107,6 +119,25 @@ public class PostDetailsActivity extends AppCompatActivity {
                     AnimationDrawable heartStop;
                     heartStop = (AnimationDrawable) ivHeart.getBackground();
                     heartStop.start();
+
+                    post.saveInBackground();
+                }
+            }
+        });
+
+        ibBookmark.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if(!post.isBookmarked()) {
+                    post.bookmarkPost(ParseUser.getCurrentUser());
+                    ibBookmark.setBackgroundResource(R.drawable.save_filled);
+
+                    post.saveInBackground();
+
+                } else {
+                    post.unbookmarkPost(ParseUser.getCurrentUser());
+                    ibBookmark.setBackgroundResource(R.drawable.save);
 
                     post.saveInBackground();
                 }

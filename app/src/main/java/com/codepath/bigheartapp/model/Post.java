@@ -28,7 +28,7 @@ public class Post extends ParseObject implements Serializable {
     public static final String KEY_LIKED_BY = "hearts";
     public static final String KEY_EVENT_TITLE = "eventTitle";
     public static final String KEY_ADDRESS = "address";
-    public static final String KEY_BOOKMARKED = "bookmarks";
+    public static final String KEY_BOOKMARKED = "interested";
 
     public void setEventTitle(String title) {
         put(KEY_EVENT_TITLE, title);

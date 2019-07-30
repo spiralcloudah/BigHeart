@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -133,6 +134,10 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
         }
 
+        if(post.isBookmarked()) {
+            holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
+        }
+
        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -156,6 +161,25 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     AnimationDrawable heartStop;
                     heartStop = (AnimationDrawable) holder.ivHeart.getBackground();
                     heartStop.start();
+
+                    post.saveInBackground();
+                }
+            }
+        });
+
+        holder.ibBookmark.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if(!post.isBookmarked()) {
+                    post.bookmarkPost(ParseUser.getCurrentUser());
+                    holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
+
+                    post.saveInBackground();
+
+                } else {
+                    post.unbookmarkPost(ParseUser.getCurrentUser());
+                    holder.ibBookmark.setBackgroundResource(R.drawable.save);
 
                     post.saveInBackground();
                 }
@@ -215,6 +239,10 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
             }
 
+        if(post.isBookmarked()) {
+            holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
+        }
+
             holder.ivHeart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -242,6 +270,25 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     }
                 }
             });
+
+        holder.ibBookmark.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if(!post.isBookmarked()) {
+                    post.bookmarkPost(ParseUser.getCurrentUser());
+                    holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
+
+                    post.saveInBackground();
+
+                } else {
+                    post.unbookmarkPost(ParseUser.getCurrentUser());
+                    holder.ibBookmark.setBackgroundResource(R.drawable.save);
+
+                    post.saveInBackground();
+                }
+            }
+        });
 
             ParseFile p = post.getUser().getParseFile("profilePicture");
             if (p != null) {
@@ -330,6 +377,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         public TextView tvDesc;
         public TextView tvDate;
         public ImageView ivHeart;
+        public ImageButton ibBookmark;
         public TextView tvLocation;
 
 
@@ -343,6 +391,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
             ivProfilePic = (ImageView) itemView.findViewById(R.id.ivProfilePic);
             ivHeart = (ImageView) itemView.findViewById(R.id.ivHeart);
+            ibBookmark = (ImageButton) itemView.findViewById(R.id.ibBookmark);
             tvLocation = (TextView) itemView.findViewById(R.id.tvLocation);
 
             itemView.setOnClickListener(this);
@@ -371,6 +420,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         public TextView tvEventDesc;
         public TextView tvEventTitle;
         public ImageView ivHeart;
+        public ImageButton ibBookmark;
         public TextView tvMonth;
         public TextView tvDay;
         public TextView tvYear;
@@ -395,6 +445,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             tvAddress = itemView.findViewById(R.id.tvAddress);
 
             ivHeart = (ImageView) itemView.findViewById(R.id.ivHeart);
+            ibBookmark = (ImageButton) itemView.findViewById(R.id.ibBookmark);
             tvMonth = (TextView) itemView.findViewById(R.id.tvMonth);
             tvDay = (TextView) itemView.findViewById(R.id.tvDay);
             tvYear = (TextView) itemView.findViewById(R.id.tvYear);
