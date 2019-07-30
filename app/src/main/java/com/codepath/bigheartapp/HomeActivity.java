@@ -26,6 +26,7 @@ public class HomeActivity extends AppCompatActivity {
     public HomeFragment homeFragment;
     public MapsFragment mapsFragment;
     public ProfileFragment profileFragment;
+    private boolean change_fragment=false;
 
     public EventFragment eventFragment;
     public static final int COMPOSE_REQUEST_CODE = 20;
@@ -116,10 +117,15 @@ public class HomeActivity extends AppCompatActivity {
             HomeFragment.posts.add(0, (Post) data.getSerializableExtra(Post.class.getSimpleName()));
             HomeFragment.adapter.notifyItemInserted(0);
             HomeFragment.rvPost.scrollToPosition(0);
-        } else if(requestCode == HomeActivity.DETAILS_REQUEST_CODE) {
-            Toast.makeText(getApplicationContext(), "Details", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(getApplicationContext(), "An error occurred", Toast.LENGTH_LONG).show();
+            change_fragment = true;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(change_fragment) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeFragment()).commit();
         }
     }
 }

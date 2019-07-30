@@ -1,5 +1,6 @@
 package com.codepath.bigheartapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,11 +15,15 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import java.io.Serializable;
+
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class PostDetailsActivity extends AppCompatActivity {
+    public static final String ACTION = "com.codepath.bigheartapp";
+    public static final String WHICH_RECEIVER = "details";
 
-    // the movie to display
+    // the post to display
     Post post;
 
     // the view objects
@@ -66,7 +71,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvTitle.setText(post.getEventTitle());
         tvLocation.setText(post.getAddress());
 
-        if(post.isLiked()) {
+        if (post.isLiked()) {
             ivHeart.setImageResource(R.drawable.hot_pink_heart);
         }
 
@@ -82,10 +87,11 @@ public class PostDetailsActivity extends AppCompatActivity {
             tvLocation.setVisibility(View.VISIBLE);
         }
 
+
         ivHeart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!post.isLiked()) {
+                if (!post.isLiked()) {
                     post.likePost(ParseUser.getCurrentUser());
                     ivHeart.setImageResource(R.drawable.hot_pink_heart);
 
@@ -101,7 +107,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         });
 
         ParseFile photo = post.getImage();
-        if(photo != null) {
+        if (photo != null) {
             Glide.with(PostDetailsActivity.this)
                     .load(photo.getUrl())
                     .bitmapTransform(new CenterCrop(PostDetailsActivity.this))
@@ -119,11 +125,21 @@ public class PostDetailsActivity extends AppCompatActivity {
 
         ParseFile p = post.getUser().getParseFile("profilePicture");
 
-        if(p != null) {
+        if (p != null) {
             Glide.with(this)
                     .load(p.getUrl())
                     .bitmapTransform(new CropCircleTransformation(PostDetailsActivity.this))
                     .into(ivProfilePic);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent backHome = new Intent();
+        backHome.setAction(ACTION);
+        backHome.putExtra(Post.class.getSimpleName(), (Serializable) post);
+        backHome.putExtra(getString(R.string.result_code), RESULT_OK);
+        sendBroadcast(backHome);
+        super.onBackPressed();
     }
 }

@@ -1,9 +1,11 @@
 package com.codepath.bigheartapp.Fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,9 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.codepath.bigheartapp.ComposeActivity;
 import com.codepath.bigheartapp.EndlessRecyclerViewScrollListener;
-import com.codepath.bigheartapp.HomeActivity;
 import com.codepath.bigheartapp.PostAdapter;
+import com.codepath.bigheartapp.PostDetailsActivity;
 import com.codepath.bigheartapp.R;
 import com.codepath.bigheartapp.model.Post;
 import com.parse.FindCallback;
@@ -24,6 +27,7 @@ import com.parse.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 public class HomeFragment extends Fragment {
@@ -38,6 +42,13 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // Register for the particular broadcast based on ACTION string
+        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
+        getActivity().registerReceiver(detailsChangedReceiver, filter);
+
+
+
 
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
@@ -145,4 +156,38 @@ public class HomeFragment extends Fragment {
             outRect.top = verticalSpaceHeight;
         }
     }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Unregister the listener when the application is paused
+        getActivity().unregisterReceiver(detailsChangedReceiver);
+    }
+
+    // Define the callback for what to do when data is received
+    private BroadcastReceiver detailsChangedReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+
+            int resultCode = intent.getIntExtra(getString(R.string.result_code), RESULT_CANCELED);
+
+            if (resultCode == RESULT_OK) {
+                Post postChanged = (Post) intent.getSerializableExtra(Post.class.getSimpleName());
+                int indexOfChange = -1;
+                for (int i = 0; i < posts.size(); i++) {
+                    if (posts.get(i).hasSameId(postChanged)) {
+                        indexOfChange = i;
+                        break;
+                    }
+                }
+                if (indexOfChange != -1) {
+                    posts.set(indexOfChange, postChanged);
+                    adapter.notifyItemChanged(indexOfChange);
+                } else {
+                    Toast.makeText(getContext(), "An error occurred", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }
+    };
 }

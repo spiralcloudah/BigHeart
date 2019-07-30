@@ -47,10 +47,10 @@ import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
 
+import static com.codepath.bigheartapp.PostDetailsActivity.ACTION;
 import static java.lang.Double.parseDouble;
 
 public class ComposeActivity extends AppCompatActivity {
-
     // instantiate layout properties...
     private Button btnPost;
     private EditText etDescription;

@@ -131,6 +131,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         }
         if(post.isLiked()) {
             holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
+        } else {
+            holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
         }
 
        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
@@ -202,6 +204,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
             if(post.isLiked()) {
                 holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
+            } else {
+                holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
             }
 
             holder.ivHeart.setOnClickListener(new View.OnClickListener() {
