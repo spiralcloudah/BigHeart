@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.parse.Parse.getApplicationContext;
 
 public class EventFragment extends Fragment {
 
@@ -107,7 +106,6 @@ public class EventFragment extends Fragment {
                 startActivityForResult(toFilterActivity, REQUEST_CODE);
             }
         });
-
         loadTopPosts();
         return rootView;
     }

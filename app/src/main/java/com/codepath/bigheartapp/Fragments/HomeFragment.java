@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
-    // Store a member variable for the listener
-    private EndlessRecyclerViewScrollListener scrollListener;
 
+    // Store variables to use in the home fragment
+    private EndlessRecyclerViewScrollListener scrollListener;
     ArrayList<Post> posts;
     public RecyclerView rvPost;
     PostAdapter adapter;
@@ -37,11 +37,10 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // Set created variables to new elements or corresponding layouts
         posts = new ArrayList<>();
-
         adapter = new PostAdapter(posts, 0);
         rvPost = (RecyclerView) rootView.findViewById(R.id.rvPost);
-
         rvPost.setLayoutManager(new LinearLayoutManager(getContext()));
         rvPost.setAdapter(adapter);
 
@@ -53,27 +52,23 @@ public class HomeFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-
                 view.post(new Runnable() {
                     @Override
-                    public void run() {
-                        //not quite sure if we need this?
-                    }
+                    public void run() {}
                 });
             }
         };
-        // Adds the scroll listener to RecyclerView
+
+        // Adds the scroll listener and item decoration to RecyclerView
         rvPost.addOnScrollListener(scrollListener);
-
         rvPost.addItemDecoration(new VerticalSpaceItemDecoration(12));
-
-
-
         swipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
+
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 // To keep animation for 4 seconds
                 posts.clear();
                 adapter.clear();
@@ -88,21 +83,15 @@ public class HomeFragment extends Fragment {
                 getResources().getColor(android.R.color.holo_orange_light),
                 getResources().getColor(android.R.color.holo_red_light)
         );
-
-
-
         loadTopPosts();
-
-
         return rootView;
-
     }
 
+    // load the latest posts
     public void loadTopPosts(){
         final Post.Query postQuery = new Post.Query();
         postQuery.getTop().withUser();
         postQuery.addDescendingOrder(Post.KEY_DATE);
-
         postQuery.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> objects, ParseException e) {
@@ -123,12 +112,13 @@ public class HomeFragment extends Fragment {
     //put space between cardviews
     public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
 
+        // Specify a final variable for space between cardviews
         private final int verticalSpaceHeight;
 
+        // function to set the space height
         public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
             this.verticalSpaceHeight = verticalSpaceHeight;
         }
-
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
                                    RecyclerView.State state) {
