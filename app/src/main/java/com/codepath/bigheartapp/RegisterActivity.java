@@ -203,6 +203,7 @@ public class RegisterActivity extends AppCompatActivity {
                 // Set the profile picture to the image taken
                 ivProfilePic.setImageBitmap(takenImage);
             } else {
+
                 // Result was a failure; notify user
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_LONG).show();
             }
