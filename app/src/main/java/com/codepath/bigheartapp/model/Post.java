@@ -164,9 +164,30 @@ public class Post extends ParseObject implements Serializable {
     }
 
     public JSONArray getBookmarked() {
-        ParseUser currentUser = new ParseUser();
-        currentUser = ParseUser.getCurrentUser();
+        ParseUser currentUser = ParseUser.getCurrentUser();
         return currentUser.getJSONArray(KEY_BOOKMARKED);
+    }
+
+    public void removeBookmark (Post post) {
+        ParseUser user = ParseUser.getCurrentUser();
+        String rmId = post.getEventId();
+
+        JSONArray bookmarks = user.getJSONArray(KEY_BOOKMARKED);
+        JSONArray newbookmarks = new JSONArray();
+
+        for (int i = 0; i < bookmarks.length(); i++ ) {
+
+            try {
+                if (rmId != bookmarks.get(i).toString()) {
+                    newbookmarks.put(bookmarks.get(i).toString());
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+      user.put(KEY_BOOKMARKED, newbookmarks);
+      user.saveInBackground();
     }
 
         // Get the number of bookmarked events
