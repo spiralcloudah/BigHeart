@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.codepath.bigheartapp.R;
+import com.codepath.bigheartapp.helpers.FragmentHelper;
 import com.codepath.bigheartapp.model.Post;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,27 +38,29 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
+public class MapsFragment extends Fragment implements OnMapReadyCallback, FragmentHelper.BaseFragment {
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback {
-
+    // Set variables for the map fragment
     GoogleMap mGoogleMap;
     MapView mapView;
     View view;
     Location mCurrentLocation;
     private final int MY_LOCATION_REQUEST_CODE = 130;
+
+    // Set variable to connect to parse database
     private final static String KEY_LOCATION = "location";
 
-
     //required empty constructor
-    public MapsFragment() {
-    }
+    public MapsFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        // Defines the xml file for the fragment
+
+        // Inflates and defines the xml file for the fragment
         view = inflater.inflate(R.layout.fragment_maps, parent, false);
         return view;
     }
@@ -66,32 +70,33 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
 
         mapView = (MapView) view.findViewById(R.id.mapView);
+
+        // Checks if mapView is null; if mapView exists, creates the view
         if (mapView != null) {
             mapView.onCreate(null);
             mapView.onResume();
             mapView.getMapAsync(this);
         }
 
+        // Set Google API key
         if (TextUtils.isEmpty(getResources().getString(R.string.google_maps_api_key))) {
             throw new IllegalStateException("You forgot to supply a Google Maps API key");
         }
 
         if (savedInstanceState != null && savedInstanceState.keySet().contains(KEY_LOCATION)) {
-            // Since KEY_LOCATION was found in the Bundle, we can be sure that mCurrentLocation
-            // is not null.
+
+            // KEY_LOCATION was found in the Bundle, so mCurrentLocation is not null
             mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
         }
-
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
-
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
+        // finds the location of user
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
             getMyLocation();
@@ -99,14 +104,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_LOCATION_REQUEST_CODE);
         }
 
+        // markers are drawn at the location specified by the user
         drawMarkers(mGoogleMap);
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
         getActivity().onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             getMyLocation();
@@ -115,11 +119,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-
+    // Function to find the location set by the user
     @SuppressWarnings({"MissingPermission"})
     void getMyLocation() {
         mGoogleMap.setMyLocationEnabled(true);
-
         FusedLocationProviderClient locationClient = getFusedLocationProviderClient(getContext());
         locationClient.getLastLocation()
                 .addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -138,7 +141,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                         e.printStackTrace();
                     }
                 });
-
     }
 
     public void moveCamera() {
@@ -152,67 +154,64 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void onLocationChanged(Location location) {
-        // GPS may be turned off
+
+        // GPS may be turned off; nothing happens
         if (location == null) {
             return;
         }
 
+        // If not null, then set current location to changed location
         mCurrentLocation = location;
     }
 
     public void drawMarkers(final GoogleMap mGoogleMap) {
+        FragmentHelper fragmentHelper = new FragmentHelper(getPostQuery());
+        fragmentHelper.fetchPosts(this);
+    }
 
+    @Override
+    public void onFetchSuccess(List<Post> objects, int i) {
+        try {
+            // Sets the latitude and longitude of the posts' locations
+            Double latitude = objects.get(i).getLocation().getLatitude();
+            Double longitude = objects.get(i).getLocation().getLongitude();
+            LatLng pos = new LatLng(latitude,longitude);
+            if (objects.get(i).getIsEvent()) {
+                mGoogleMap.addMarker(new MarkerOptions()
+                        .position(pos)
+                        .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
+
+                        // Events have a blue icon
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                        .snippet(objects.get(i).getDescription()));
+            } else {
+                mGoogleMap.addMarker(new MarkerOptions()
+                        .position(pos)
+                        .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
+
+                        // Regular posts have a pink icon
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
+                        .snippet(objects.get(i).getDescription()));
+            }
+        } catch (ParseException er ) {
+            er.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onFetchFailure() {
+        Toast.makeText(getContext(), "Failed to fetch markers", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public Post.Query getPostQuery() {
         // get current user
         ParseUser currentUser = ParseUser.getCurrentUser();
 
         // query for list of post objects unique to current user
         Post.Query postQuery = new Post.Query();
-
         postQuery.getTop().withUser();
-
         postQuery.whereEqualTo("userId",currentUser);
-
-        postQuery.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> objects, ParseException e) {
-                if (e == null) {
-                    Log.d("Maps Fragment", "Success!");
-                    for (int i = 0; i < objects.size(); i++) {
-                        try {
-                            Double latitude = objects.get(i).getLocation().getLatitude();
-                            Double longitude = objects.get(i).getLocation().getLongitude();
-                            LatLng pos = new LatLng(latitude,longitude);
-                            if (objects.get(i).getIsEvent()) {
-                                Marker marker = mGoogleMap.addMarker(new MarkerOptions()
-                                        .position(pos)
-                                        .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
-                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                                        .snippet(objects.get(i).getDescription()));
-                            } else {
-                                Marker marker = mGoogleMap.addMarker(new MarkerOptions()
-                                        .position(pos)
-                                        .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
-                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
-                                        .snippet(objects.get(i).getDescription()));
-
-                            }
-                        } catch (ParseException er ) {
-                            er.printStackTrace();
-                        }
-
-                    }
-                } else {
-                    Log.d("Maps Fragment", "Failure");
-                    e.printStackTrace();
-                }
-            }
-        });
-
-
-
+        return postQuery;
     }
-
-
-
 }
-

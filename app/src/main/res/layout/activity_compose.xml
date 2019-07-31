@@ -36,6 +36,8 @@
         android:background="?attr/colorControlHighlight"
         android:text="Post"
         android:textColor="?attr/colorButtonNormal"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnAddImage" />
 
@@ -81,6 +83,8 @@
         android:background="?attr/colorControlHighlight"
         android:text="Add Picture"
         android:textColor="?attr/colorButtonNormal"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="@+id/switchEvent"
         app:layout_constraintTop_toBottomOf="@+id/etEventTitle" />
 
@@ -101,6 +105,8 @@
         android:textColor="@color/colorPrimaryText"
         android:textColorHint="@color/colorTextHint"
         android:visibility="gone"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         app:layout_constraintEnd_toStartOf="@+id/btnTimeChooser"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -155,6 +161,8 @@
         android:textColorHint="@color/colorTextHint"
         android:textColorLink="@color/colorTextHint"
         android:visibility="gone"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnDateChooser"

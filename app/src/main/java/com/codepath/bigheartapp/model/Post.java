@@ -12,27 +12,25 @@ import org.json.JSONException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 @ParseClassName("Post")
 public class Post extends ParseObject implements Serializable {
+
+    // Set unchangeable variables to specified columns in the parse database
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_IMAGE = "image";
     public static final String KEY_LOCATION = "location";
     public static final String KEY_USER = "userId";
     public static final String KEY_DATE = "createdAt";
     public static final String KEY_IS_EVENT = "isEvent";
-
-    public static final String KEY_MONTH = "month";
     public static final String KEY_DAY = "day";
-    public static final String KEY_YEAR = "year";
-
-
     public static final String KEY_TIME = "time";
     public static final String KEY_LIKED_BY = "hearts";
     public static final String KEY_EVENT_TITLE = "eventTitle";
     public static final String KEY_ADDRESS = "address";
     public static final String KEY_BOOKMARKED = "bookmarked";
-    public static final String KEY_POST_ID = "objectId";
+   
 
     public String getEventId() {
         return getObjectId();
@@ -46,116 +44,90 @@ public class Post extends ParseObject implements Serializable {
         return getString(KEY_EVENT_TITLE);
     }
 
+
+    // Configure description
     public String getDescription() {
         return getString(KEY_DESCRIPTION);
     }
-
     public void setDescription(String description) {
         put(KEY_DESCRIPTION, description);
     }
 
-    public boolean getIsEvent() {
-        return getBoolean(KEY_IS_EVENT);
-    }
-
-    public void setIsEvent(boolean isEvent) {
-        put(KEY_IS_EVENT, isEvent);
-    }
-
-    public ParseGeoPoint getLocation() {
-        return getParseGeoPoint(KEY_LOCATION);
-    }
-
-    public void setLocation(ParseGeoPoint location) {
-        put(KEY_LOCATION, location);
-    }
-
+    // Configure image
     public ParseFile getImage() {
         return getParseFile(KEY_IMAGE);
     }
-
     public void setImage(ParseFile image){
         put(KEY_IMAGE, image);
     }
 
+    // Configure location
+    public ParseGeoPoint getLocation() {
+        return getParseGeoPoint(KEY_LOCATION);
+    }
+    public void setLocation(ParseGeoPoint location) {
+        put(KEY_LOCATION, location);
+    }
+
+    // Configure user
     public ParseUser getUser() {
         return getParseUser(KEY_USER);
     }
-
     public void setUser(ParseUser user){
         put(KEY_USER, user);
     }
 
-
-
-
-    public String getAddress() {
-        return getString(KEY_ADDRESS);
+    // Configure post/event status
+    public boolean getIsEvent() {
+        return getBoolean(KEY_IS_EVENT);
+    }
+    public void setIsEvent(boolean isEvent) {
+        put(KEY_IS_EVENT, isEvent);
     }
 
-    public void setAddress(String address) {
-        put(KEY_ADDRESS, address);
-    }
-
-    //Date columns
-    public String getMonth() {
-        return getString(KEY_MONTH);
-    }
-
-    public void setMonth(String month) {
-        put(KEY_MONTH, month);
-    }
-
+    // Configure day
     public String getDay() {
         return getString(KEY_DAY);
     }
-
     public void setDay(String day) {
         put(KEY_DAY, day);
     }
 
-    public String getYear() {
-        return getString(KEY_YEAR);
-    }
-
-    public void setYear(String year) {
-        put(KEY_YEAR, year);
-    }
-
+    // Configure time
     public String getTime() {
         return getString(KEY_TIME);
     }
-
     public void setTime(String time) {
         put(KEY_TIME, time);
     }
 
-    //Likes
-    public JSONArray getLikes() {
-        return getJSONArray(KEY_LIKED_BY);
+    //Configure likes/hearts
+    public List getLikes() {
+        return getList(KEY_LIKED_BY);
     }
-
-    public int getNumLikes() { return getLikes().length(); }
 
     public void likePost(ParseUser user) {
         add(KEY_LIKED_BY, user);
     }
-
     public void unlikePost(ParseUser user) {
         ArrayList<ParseUser> a = new ArrayList<>();
         a.add(user);
         removeAll(KEY_LIKED_BY, a);
     }
 
+    // Get the number of likes
+    public int getNumLikes() { return getLikes().size(); }
+
+    // Check to see whether a post is liked
     public boolean isLiked() {
-        JSONArray a = getLikes();
+        List<ParseUser> a = getLikes();
         if(a != null) {
-            for (int i = 0; i < a.length(); i++) {
+            for (int i = 0; i < a.size(); i++) {
                 try {
-                    if (a.getJSONObject(i).getString("objectId").equals(ParseUser.getCurrentUser().getObjectId())) {
+                    if (a.get(i).getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
                         return true;
                     }
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -163,19 +135,33 @@ public class Post extends ParseObject implements Serializable {
         return false;
     }
 
-    //Bookmarks
-    public JSONArray getBookmarked() {
-        return getJSONArray(KEY_BOOKMARKED);
+    // Configure event title
+    public void setEventTitle(String title) {
+        put(KEY_EVENT_TITLE, title);
+    }
+    public String getEventTitle() {
+        return getString(KEY_EVENT_TITLE);
     }
 
-    public int getNumBookmarks() { return getBookmarked().length(); }
+    // Configure address
+    public String getAddress() {
+        return getString(KEY_ADDRESS);
+    }
+    public void setAddress(String address) {
+        put(KEY_ADDRESS, address);
+    }
 
     public void bookmarkPost(String postId) {
         ParseUser currentUser = ParseUser.getCurrentUser();
         currentUser.addUnique(KEY_BOOKMARKED, postId);
         currentUser.saveInBackground();
+    // Configure bookmarks
+    public JSONArray getBookmarked() {
+        return getJSONArray(KEY_BOOKMARKED);
     }
-
+    public void bookmarkPost(ParseUser user) {
+        add(KEY_BOOKMARKED, user);
+    }
     public void unbookmarkPost(ParseUser user) {
         ArrayList<ParseUser> bookmarks  = new ArrayList<>();
         bookmarks.add(user);
@@ -198,18 +184,19 @@ public class Post extends ParseObject implements Serializable {
 //        return false;
 //    }
 
-    //Querying
-    public static class Query extends ParseQuery<Post> {
+    // Get the number of bookmarked events
+    public int getNumBookmarks() { return getBookmarked().length(); }
 
+
+    // Querying for posts
+    public static class Query extends ParseQuery<Post> {
         public Query() {
             super(Post.class);
         }
-
         public Query getTop() {
             setLimit(20);
             return this;
         }
-
         public Query withUser() {
             include("user");
             return this;

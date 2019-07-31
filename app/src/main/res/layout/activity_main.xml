@@ -44,6 +44,8 @@
         android:background="?attr/colorControlHighlight"
         android:text="Login"
         android:textColor="?attr/colorButtonNormal"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         tools:clickable="true" />
 
     <Button
@@ -55,6 +57,8 @@
         android:background="?attr/colorControlHighlight"
         android:text="Dont have an account? Sign Up"
         android:textColor="?attr/colorButtonNormal"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         tools:clickable="true"
         android:layout_alignParentLeft="true" />
 

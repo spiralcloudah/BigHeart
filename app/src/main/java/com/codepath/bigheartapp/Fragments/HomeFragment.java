@@ -1,6 +1,6 @@
 package com.codepath.bigheartapp.Fragments;
 
-import android.graphics.Rect;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,38 +12,30 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.codepath.bigheartapp.EndlessRecyclerViewScrollListener;
-import com.codepath.bigheartapp.PostAdapter;
+import com.codepath.bigheartapp.PostDetailsActivity;
 import com.codepath.bigheartapp.R;
+import com.codepath.bigheartapp.helpers.FragmentHelper;
 import com.codepath.bigheartapp.model.Post;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.parse.Parse.getApplicationContext;
+public class HomeFragment extends Fragment implements FragmentHelper.BaseFragment {
 
-public class HomeFragment extends Fragment {
-    // Store a member variable for the listener
+    // Store variables to use in the home fragment
     private EndlessRecyclerViewScrollListener scrollListener;
-
-    ArrayList<Post> posts;
-    public RecyclerView rvPost;
-    PostAdapter adapter;
+    public static RecyclerView rvPost;
     private SwipeRefreshLayout swipeContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        posts = new ArrayList<>();
 
-        adapter = new PostAdapter(posts, 0);
         rvPost = (RecyclerView) rootView.findViewById(R.id.rvPost);
-
         rvPost.setLayoutManager(new LinearLayoutManager(getContext()));
         rvPost.setAdapter(adapter);
 
@@ -55,29 +47,24 @@ public class HomeFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-
                 view.post(new Runnable() {
                     @Override
-                    public void run() {
-                        //not quite sure if we need this?
-                    }
+                    public void run() {}
                 });
             }
         };
-        // Adds the scroll listener to RecyclerView
+
+        // Adds the scroll listener and item decoration to RecyclerView
         rvPost.addOnScrollListener(scrollListener);
-
         rvPost.addItemDecoration(new VerticalSpaceItemDecoration(12));
-
-
-
+        rvPost.addItemDecoration(new HorizontalSpaceItemDecoration(6));
         swipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
+
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code here
-                Toast.makeText(getApplicationContext(), "Refreshed!", Toast.LENGTH_LONG).show();
+
                 // To keep animation for 4 seconds
                 posts.clear();
                 adapter.clear();
@@ -94,49 +81,50 @@ public class HomeFragment extends Fragment {
         );
 
 
-
         loadTopPosts();
-
-
         return rootView;
-
     }
 
+    // load the latest posts
     public void loadTopPosts(){
+        adapter.clear();
+        FragmentHelper fragmentHelper = new FragmentHelper(getPostQuery());
+        fragmentHelper.fetchPosts(this);
+        swipeContainer.setRefreshing(false);
+    }
+
+    @Override
+    public Post.Query getPostQuery() {
         final Post.Query postQuery = new Post.Query();
         postQuery.getTop().withUser();
         postQuery.addDescendingOrder(Post.KEY_DATE);
-
-        postQuery.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> objects, ParseException e) {
-                if(e == null) {
-                    adapter.clear();
-                    for(int i = 0; i < objects.size(); i++) {
-                        posts.add(objects.get(i));
-                        adapter.notifyItemInserted(posts.size() - 1);
-                    }
-                } else {
-                    Toast.makeText(getContext(), "Failed to query posts", Toast.LENGTH_SHORT).show();
-                }
-                swipeContainer.setRefreshing(false);
-            }
-        });
+        return postQuery;
     }
 
-    //put space between cardviews
-    public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
+    @Override
+    public void onFetchSuccess(List<Post> objects, int i) {
+        posts.add(objects.get(i));
+        adapter.notifyItemInserted(posts.size() - 1);
+    }
 
-        private final int verticalSpaceHeight;
+    @Override
+    public void onFetchFailure() {
+        Toast.makeText(getContext(), "Failed to query posts", Toast.LENGTH_LONG).show();
+        swipeContainer.setRefreshing(false);
+    }
 
-        public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
-            this.verticalSpaceHeight = verticalSpaceHeight;
-        }
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Register for the particular broadcast based on ACTION string
+        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
+        getActivity().registerReceiver(detailsChangedReceiver, filter);
+    }
 
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
-                                   RecyclerView.State state) {
-            outRect.bottom = verticalSpaceHeight;
-        }
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Unregister the listener when the application is paused
+        getActivity().unregisterReceiver(detailsChangedReceiver);
     }
 }
