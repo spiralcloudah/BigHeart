@@ -352,6 +352,9 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     // Gets the number of posts
     @Override
     public int getItemCount() {
+        if (mFilteredPosts == null) {
+            return 0;
+        }
         return mFilteredPosts.size();
     }
 

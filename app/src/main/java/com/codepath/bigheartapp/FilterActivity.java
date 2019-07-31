@@ -11,7 +11,6 @@ import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.codepath.bigheartapp.model.Post;
@@ -23,7 +22,6 @@ import java.util.Date;
 public class FilterActivity extends AppCompatActivity {
 
     // Create strings and buttons for filtering
-
     Button btnFilter;
     private Button btnDatePicker;
     private Button btnTimePicker;
