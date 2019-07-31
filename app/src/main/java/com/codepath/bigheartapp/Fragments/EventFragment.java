@@ -1,11 +1,9 @@
 package com.codepath.bigheartapp.Fragments;
 
 import android.app.SearchManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,30 +18,25 @@ import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.codepath.bigheartapp.ComposeActivity;
 import com.codepath.bigheartapp.EndlessRecyclerViewScrollListener;
 import com.codepath.bigheartapp.FilterActivity;
-import com.codepath.bigheartapp.PostAdapter;
 import com.codepath.bigheartapp.PostDetailsActivity;
 import com.codepath.bigheartapp.R;
+import com.codepath.bigheartapp.helpers.FragmentHelper;
 import com.codepath.bigheartapp.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
-public class EventFragment extends Fragment {
+public class EventFragment extends Fragment implements FragmentHelper.BaseFragment {
 
     // Store variables to use in the event fragment
     private EndlessRecyclerViewScrollListener scrollListener;
-    ArrayList<Post> posts;
     public RecyclerView rvEventPosts;
     SearchView searchEvents;
-    PostAdapter adapter;
     ImageButton ibFilter;
     private SwipeRefreshLayout swipeContainer;
     private final int REQUEST_CODE = 120;
@@ -60,8 +53,6 @@ public class EventFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_event, container, false);
 
         // Set created variables to new elements or corresponding layouts
-        posts = new ArrayList<>();
-        adapter = new PostAdapter(posts, 0);
         rvEventPosts = (RecyclerView) rootView.findViewById(R.id.rvEventPosts);
         searchEvents = (SearchView) rootView.findViewById(R.id.searchEvents);
         ibFilter = (ImageButton) rootView.findViewById(R.id.ibFilter);
@@ -115,6 +106,8 @@ public class EventFragment extends Fragment {
                 startActivityForResult(toFilterActivity, REQUEST_CODE);
             }
         });
+
+
         loadTopPosts();
         return rootView;
     }
@@ -148,28 +141,20 @@ public class EventFragment extends Fragment {
     }
 
     public void loadTopPosts(){
+        adapter.clear();
+        FragmentHelper fragmentHelper = new FragmentHelper(getPostQuery());
+        fragmentHelper.fetchPosts(this);
+        swipeContainer.setRefreshing(false);
+    }
+
+    @Override
+    public Post.Query getPostQuery() {
         final Post.Query postQuery = new Post.Query();
         postQuery.getTop().withUser();
         postQuery.addDescendingOrder(Post.KEY_DATE);
-
         // Only loads posts that are events
         postQuery.whereEqualTo(Post.KEY_IS_EVENT, true);
-
-        postQuery.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> objects, ParseException e) {
-                if(e == null) {
-                    adapter.clear();
-                    for(int i = 0; i < objects.size(); i++) {
-                        posts.add(objects.get(i));
-                        adapter.notifyItemInserted(posts.size() - 1);
-                    }
-                } else {
-                    Toast.makeText(getContext(), "Failed to query posts", Toast.LENGTH_LONG).show();
-                }
-                swipeContainer.setRefreshing(false);
-            }
-        });
+        return postQuery;
     }
 
     @Override
@@ -202,23 +187,18 @@ public class EventFragment extends Fragment {
 
     }
 
-    //put space between cardviews
-    public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
-
-        // Specify a final variable for space between cardviews
-        private final int verticalSpaceHeight;
-
-        // function to set the space height
-        public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
-            this.verticalSpaceHeight = verticalSpaceHeight;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
-                                   RecyclerView.State state) {
-            outRect.top = verticalSpaceHeight;
-        }
+    @Override
+    public void onFetchSuccess(List<Post> objects, int i) {
+        posts.add(objects.get(i));
+        adapter.notifyItemInserted(posts.size() - 1);
     }
+
+    @Override
+    public void onFetchFailure() {
+        Toast.makeText(getContext(), "Failed to query posts", Toast.LENGTH_LONG).show();
+        swipeContainer.setRefreshing(false);
+    }
+
 
     @Override
     public void onDestroy() {
@@ -228,30 +208,4 @@ public class EventFragment extends Fragment {
     }
 
     // Define the callback for what to do when data is received
-    private BroadcastReceiver detailsChangedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            int resultCode = intent.getIntExtra(getString(R.string.result_code), RESULT_CANCELED);
-
-            if (resultCode == RESULT_OK) {
-
-                Post postChanged = (Post) intent.getSerializableExtra(Post.class.getSimpleName());
-                int indexOfChange = -1;
-                for(int i = 0; i < posts.size(); i++) {
-                    if(posts.get(i).hasSameId(postChanged)) {
-                        indexOfChange = i;
-                        break;
-                    }
-                }
-                if(indexOfChange != -1) {
-                    posts.set(indexOfChange, postChanged);
-                    adapter.notifyItemChanged(indexOfChange);
-                } else {
-                    Toast.makeText(getContext(), "An error occurred", Toast.LENGTH_LONG).show();
-                }
-
-            }
-        }
-    };
 }
