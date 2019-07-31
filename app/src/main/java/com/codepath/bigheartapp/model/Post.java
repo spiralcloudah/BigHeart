@@ -31,7 +31,12 @@ public class Post extends ParseObject implements Serializable {
     public static final String KEY_LIKED_BY = "hearts";
     public static final String KEY_EVENT_TITLE = "eventTitle";
     public static final String KEY_ADDRESS = "address";
-    public static final String KEY_BOOKMARKED = "bookmarks";
+    public static final String KEY_BOOKMARKED = "bookmarked";
+    public static final String KEY_POST_ID = "objectId";
+
+    public String getEventId() {
+        return getObjectId();
+    }
 
     public void setEventTitle(String title) {
         put(KEY_EVENT_TITLE, title);
@@ -165,31 +170,33 @@ public class Post extends ParseObject implements Serializable {
 
     public int getNumBookmarks() { return getBookmarked().length(); }
 
-    public void bookmarkPost(ParseUser user) {
-        add(KEY_BOOKMARKED, user);
+    public void bookmarkPost(String postId) {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        currentUser.addUnique(KEY_BOOKMARKED, postId);
+        currentUser.saveInBackground();
     }
 
     public void unbookmarkPost(ParseUser user) {
-        ArrayList<ParseUser> a = new ArrayList<>();
-        a.add(user);
-        removeAll(KEY_BOOKMARKED, a);
+        ArrayList<ParseUser> bookmarks  = new ArrayList<>();
+        bookmarks.add(user);
+        removeAll(KEY_BOOKMARKED, bookmarks);
     }
 
-    public boolean isBookmarked() {
-        JSONArray a = getBookmarked();
-        if(a != null) {
-            for (int i = 0; i < a.length(); i++) {
-                try {
-                    if (a.getJSONObject(i).getString("objectId").equals(ParseUser.getCurrentUser().getObjectId())) {
-                        return true;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return false;
-    }
+//    public boolean isBookmarked(Post post) {
+//        JSONArray bookmarks = getBookmarked();
+//        if(bookmarks != null) {
+//            for (int i = 0; i < bookmarks.length(); i++) {
+//                try {
+//                    if (bookmarks.getJSONObject(i).getString("objectId").equals(post.getObjectId())) {
+//                        return true;
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//        return false;
+//    }
 
     //Querying
     public static class Query extends ParseQuery<Post> {

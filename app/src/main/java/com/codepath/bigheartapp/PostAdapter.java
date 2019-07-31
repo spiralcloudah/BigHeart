@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -29,6 +30,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     private List<Post> mPosts;
     private List<Post> mFilteredPosts;
+    private List<Post> mBookmarkedEvents;
     Context context;
     int whichFragment;
     final int TYPE_POST = 101;
@@ -127,6 +129,13 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+          holder.btnBookmark.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                      post.bookmarkPost(post.getEventId());
+              }
+          });
 
 //        if(post.isLiked()) {
 //            holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
@@ -348,6 +357,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         public TextView tvDateOfEvent;
         public TextView tvTimePosted;
         public TextView tvAddress;
+        public Button btnBookmark;
 
 
 
@@ -366,6 +376,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             tvDateOfEvent = itemView.findViewById(R.id.tvDate);
             tvTimePosted = itemView.findViewById(R.id.tvTimePosted);
             tvAddress = itemView.findViewById(R.id.tvAddress);
+
+            btnBookmark = itemView.findViewById(R.id.btnBookmark);
 
             ivHeart = (ImageView) itemView.findViewById(R.id.ivHeart);
             tvMonth = (TextView) itemView.findViewById(R.id.tvMonth);

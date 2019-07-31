@@ -13,23 +13,19 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.bigheartapp.EndlessRecyclerViewScrollListener;
 import com.codepath.bigheartapp.MainActivity;
-import com.codepath.bigheartapp.PostAdapter;
+import com.codepath.bigheartapp.ProfilePagesAdapter;
 import com.codepath.bigheartapp.R;
 import com.codepath.bigheartapp.model.Post;
 import com.parse.FindCallback;
@@ -42,13 +38,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-
-import static com.parse.Parse.getApplicationContext;
 
 public class ProfileFragment extends Fragment {
 
@@ -58,7 +51,8 @@ public class ProfileFragment extends Fragment {
     Button logoutBtn;
     ImageView ivCurrentProfile;
     TextView tvCurrentUser;
-    TabLayout tabLayout;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
     int whichFragment=1;
 
     public final static int PICK_PHOTO_CODE = 1046;
@@ -68,13 +62,24 @@ public class ProfileFragment extends Fragment {
     String currentPath;
     ParseFile parseFile;
 
-    ArrayList<Post> posts;
-    public RecyclerView rvPostView;
-    PostAdapter adapter;
+//    ArrayList<Post> posts;
+//    public RecyclerView rvPostView;
+//    PostAdapter adapter;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // Get the ViewPager and set it's PagerAdapter so that it can display items
+        //viewPager = container.findViewById(R.id.viewpager);
+        // tabLayout = container.findViewById(R.id.tabLayout);
+        // profileAdapter = new ProfilePagesAdapter(getFragmentManager());
+
+        //profileAdapter.AddFragment(new NestedPostsFragment (), "Posts ");
+       // profileAdapter.AddFragment(new NestedBookmarksFragment (), "Bookmarks");
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
@@ -85,7 +90,6 @@ public class ProfileFragment extends Fragment {
         ivCurrentProfile = view.findViewById(R.id.ivCurrentProfile);
         String currentUser = ParseUser.getCurrentUser().getUsername(); // this will now be null
         System.out.println("The current user is "+ currentUser);
-        tabLayout = view.findViewById(R.id.tabLayout);
         tvCurrentUser = (TextView) view.findViewById(R.id.tvCurrentUser);
         tvCurrentUser.setText(currentUser);
 
@@ -98,7 +102,17 @@ public class ProfileFragment extends Fragment {
                     .into(ivCurrentProfile);
         }
 
-        rvPostView= view.findViewById(R.id.rvUserPosts);
+        tabLayout = view.findViewById(R.id.tabLayout);
+
+        // gets view pager and sets its PageAdapter so it can display items
+        viewPager = view.findViewById(R.id.vpContainer);
+        viewPager.setAdapter(new ProfilePagesAdapter(getChildFragmentManager(), getContext()));
+
+        //give TabLayout the ViewPager
+        tabLayout.setupWithViewPager(viewPager);
+
+
+
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,77 +149,90 @@ public class ProfileFragment extends Fragment {
         //         }
         //     });
 
-        posts = new ArrayList<>();
+//        posts = new ArrayList<>();
+//
+//        adapter = new PostAdapter(posts, whichFragment);
+//        //rvPostView = (RecyclerView) view.findViewById(R.id.rvUserPosts);
+//
+//        rvPostView.setAdapter(adapter);
+//
+//        // Configure the RecyclerView
+//
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+//
+//        rvPostView.setLayoutManager(linearLayoutManager);
+//
+//        // Retain an instance so that you can call `resetState()` for fresh searches
+//        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+//            @Override
+//            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+//
+//                view.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // should have something to load more posts...
+//                    }
+//                });
+//            }
+//        };
+//        // Adds the scroll listener to RecyclerView
+//        rvPostView.addOnScrollListener(scrollListener);
 
-        adapter = new PostAdapter(posts, whichFragment);
-        rvPostView = (RecyclerView) view.findViewById(R.id.rvUserPosts);
 
-        rvPostView.setAdapter(adapter);
+//        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+//        // Setup refresh listener which triggers new data loading
+//        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                // Your code here
+//                Toast.makeText(getApplicationContext(), "Refreshed!", Toast.LENGTH_LONG).show();
+//                // To keep animation for 4 seconds
+//                posts.clear();
+//                adapter.clear();
+//                loadTopPosts();
+//
+//            }
+//        });
 
-        // Configure the RecyclerView
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-
-        rvPostView.setLayoutManager(linearLayoutManager);
-
-        // Retain an instance so that you can call `resetState()` for fresh searches
-        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-
-                view.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // should have something to load more posts...
-                    }
-                });
-            }
-        };
-        // Adds the scroll listener to RecyclerView
-        rvPostView.addOnScrollListener(scrollListener);
+//        // Scheme colors for animation
+//        swipeContainer.setColorSchemeColors(
+//                getResources().getColor(android.R.color.holo_blue_bright),
+//                getResources().getColor(android.R.color.holo_green_light),
+//                getResources().getColor(android.R.color.holo_orange_light),
+//                getResources().getColor(android.R.color.holo_red_light)
+//        );
 
 
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
-        // Setup refresh listener which triggers new data loading
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Your code here
-                Toast.makeText(getApplicationContext(), "Refreshed!", Toast.LENGTH_LONG).show();
-                // To keep animation for 4 seconds
-                posts.clear();
-                adapter.clear();
-                loadTopPosts();
+//        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+//            @Override
+//            public void onTabSelected(TabLayout.Tab tab) {
+//
+//                switch (tab.getPosition()) {
+//                    case 0:
+//                    //    loadTopPosts();
+//                        break;
+//                    case 1:
+//                    //    loadBookmarkedEvents();
+//                        break;
+//
+//
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onTabUnselected(TabLayout.Tab tab) {
+//
+//            }
+//
+//            @Override
+//            public void onTabReselected(TabLayout.Tab tab) {
+//
+//            }
+//        });
 
-            }
-        });
-
-        // Scheme colors for animation
-        swipeContainer.setColorSchemeColors(
-                getResources().getColor(android.R.color.holo_blue_bright),
-                getResources().getColor(android.R.color.holo_green_light),
-                getResources().getColor(android.R.color.holo_orange_light),
-                getResources().getColor(android.R.color.holo_red_light)
-        );
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-        loadTopPosts();
+       // loadTopPosts();
 
 
         getConfiguration();
@@ -217,10 +244,11 @@ public class ProfileFragment extends Fragment {
     public void logoutUser(View view) {
 
         ParseUser.logOut();
-        ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-        System.out.println("The current user is "+ currentUser);
+        ParseUser currentUser = null; // this will now be null
+        // System.out.println("The current user is "+ currentUser);
         Intent i = new Intent(getContext(), MainActivity.class);
         startActivity(i);
+
     }
 
     private static File getTempImageFile(Context context) throws IOException {
@@ -300,26 +328,24 @@ public class ProfileFragment extends Fragment {
                     Post post = new Post();
                     System.out.println("Success!");
                     for (int i = 0;i<objects.size(); i++){
-                        try {
-                            Log.d("FeedActivity", "Post ["+i+"] = "
-                                    + objects.get(i).getDescription()
-                                    + "\n username = " + objects.get(i).getUser().fetchIfNeeded().getUsername()
-                                    + " o k ");
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
-                        }
+//                        try {
+//                            Log.d("FeedActivity", "Post ["+i+"] = "
+//                                    + objects.get(i).getDescription()
+//                                    + "\n username = " + objects.get(i).getUser().fetchIfNeeded().getUsername()
+//                                    + " o k ");
+//                        } catch (ParseException e1) {
+//                            e1.printStackTrace();
+//                        }
 
-                        posts.add(0,objects.get(i));
-                        adapter.notifyItemInserted(posts.size() - 1);
+                       // posts.add(0,objects.get(i));
+                       // adapter.notifyItemInserted(posts.size() - 1);
 
                     }
                 } else {
                     e.printStackTrace();
                 }
-                swipeContainer.setRefreshing(false);
+//                swipeContainer.setRefreshing(false);
             }
         });
     }
-
-
 }
