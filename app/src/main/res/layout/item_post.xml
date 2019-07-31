@@ -104,7 +104,7 @@
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/tvMonth"
+        android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvLocation"
@@ -138,12 +138,12 @@
         android:id="@+id/tvDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/tvMonth"
+        android:layout_alignTop="@+id/tvDate"
         android:layout_marginStart="47dp"
         android:layout_marginLeft="56dp"
         android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/tvMonth"
-        android:layout_toRightOf="@+id/tvMonth"
+        android:layout_toEndOf="@+id/tvDate"
+        android:layout_toRightOf="@+id/tvDate"
         android:text="Day"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="16sp"
@@ -179,7 +179,7 @@
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvMonth"
+        android:layout_below="@+id/tvDate"
         android:layout_alignStart="@+id/ivHeart"
         android:layout_alignLeft="@+id/ivHeart"
         android:layout_alignParentEnd="true"

@@ -182,7 +182,16 @@ public class EventFragment extends Fragment {
             postQuery.getTop().withUser();
             postQuery.addDescendingOrder(Post.KEY_DATE);
             postQuery.whereEqualTo(Post.KEY_IS_EVENT, true);
-            postQuery.whereEqualTo(Post.KEY_DAY, data.getStringExtra(Post.KEY_DAY));
+
+            // Do not take day into account in the filter if it is null
+            if (data.getStringExtra(Post.KEY_DAY) != null) {
+                postQuery.whereEqualTo(Post.KEY_DAY, data.getStringExtra(Post.KEY_DAY));
+            }
+
+            // Do not take time into account in the filter if it is null
+            if (data.getStringExtra(Post.KEY_TIME) != null) {
+                postQuery.whereEqualTo(Post.KEY_TIME, data.getStringExtra(Post.KEY_TIME));
+            }
             postQuery.findInBackground(new FindCallback<Post>() {
                 @Override
                 public void done(List<Post> objects, ParseException e) {
