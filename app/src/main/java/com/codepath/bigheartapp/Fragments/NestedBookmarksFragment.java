@@ -55,7 +55,7 @@ public class NestedBookmarksFragment extends Fragment {
 
         bookmarksArrayList = new ArrayList<>();
 
-        bookmarksAdapter = new PostAdapter(bookmarksArrayList, 2);
+        bookmarksAdapter = new PostAdapter(bookmarksArrayList);
 
         rvUserBookmarks.setAdapter(bookmarksAdapter);
 
