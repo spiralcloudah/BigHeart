@@ -32,15 +32,13 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     private List<Post> mPosts;
     private List<Post> mFilteredPosts;
     Context context;
-    int whichFragment;
     final int TYPE_POST = 101;
     final int TYPE_EVENT = 102;
 
     // Pass in the post array
-    public PostAdapter(List<Post> posts, int whichFragment) {
+    public PostAdapter(List<Post> posts) {
         mPosts = posts;
         mFilteredPosts = posts;
-        this.whichFragment = whichFragment;
     }
 
     // Clear all elements of the recycler

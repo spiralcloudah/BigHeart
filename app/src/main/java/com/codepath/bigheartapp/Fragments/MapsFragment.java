@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.codepath.bigheartapp.R;
+import com.codepath.bigheartapp.helpers.FragmentHelper;
 import com.codepath.bigheartapp.model.Post;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -40,7 +42,7 @@ import java.util.Set;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback {
+public class MapsFragment extends Fragment implements OnMapReadyCallback, FragmentHelper.BaseFragment {
 
     // Set variables for the map fragment
     GoogleMap mGoogleMap;
@@ -163,7 +165,46 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void drawMarkers(final GoogleMap mGoogleMap) {
+        FragmentHelper fragmentHelper = new FragmentHelper(getPostQuery());
+        fragmentHelper.fetchPosts(this);
+    }
 
+    @Override
+    public void onFetchSuccess(List<Post> objects, int i) {
+        try {
+            // Sets the latitude and longitude of the posts' locations
+            Double latitude = objects.get(i).getLocation().getLatitude();
+            Double longitude = objects.get(i).getLocation().getLongitude();
+            LatLng pos = new LatLng(latitude,longitude);
+            if (objects.get(i).getIsEvent()) {
+                mGoogleMap.addMarker(new MarkerOptions()
+                        .position(pos)
+                        .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
+
+                        // Events have a blue icon
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                        .snippet(objects.get(i).getDescription()));
+            } else {
+                mGoogleMap.addMarker(new MarkerOptions()
+                        .position(pos)
+                        .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
+
+                        // Regular posts have a pink icon
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
+                        .snippet(objects.get(i).getDescription()));
+            }
+        } catch (ParseException er ) {
+            er.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onFetchFailure() {
+        Toast.makeText(getContext(), "Failed to fetch markers", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public Post.Query getPostQuery() {
         // get current user
         ParseUser currentUser = ParseUser.getCurrentUser();
 
@@ -171,45 +212,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         Post.Query postQuery = new Post.Query();
         postQuery.getTop().withUser();
         postQuery.whereEqualTo("userId",currentUser);
-        postQuery.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> objects, ParseException e) {
-                if (e == null) {
-                    Log.d("Maps Fragment", "Success!");
-                    for (int i = 0; i < objects.size(); i++) {
-                        try {
-
-                            // Sets the latitude and longitude of the posts' locations
-                            Double latitude = objects.get(i).getLocation().getLatitude();
-                            Double longitude = objects.get(i).getLocation().getLongitude();
-                            LatLng pos = new LatLng(latitude,longitude);
-                            if (objects.get(i).getIsEvent()) {
-                                Marker marker = mGoogleMap.addMarker(new MarkerOptions()
-                                        .position(pos)
-                                        .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
-
-                                        // Events have a blue icon
-                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                                        .snippet(objects.get(i).getDescription()));
-                            } else {
-                                Marker marker = mGoogleMap.addMarker(new MarkerOptions()
-                                        .position(pos)
-                                        .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
-
-                                        // Regular posts have a pink icon
-                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
-                                        .snippet(objects.get(i).getDescription()));
-                            }
-                        } catch (ParseException er ) {
-                            er.printStackTrace();
-                        }
-
-                    }
-                } else {
-                    Log.d("Maps Fragment", "Failure");
-                    e.printStackTrace();
-                }
-            }
-        });
+        return postQuery;
     }
 }
