@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
@@ -130,11 +129,11 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         } else {
             holder.ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
         }
-//        if(post.isBookmarked()) {
-//
-//            // Set the bookmark image to filled if a post is already bookmarked
-//            holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
-//        }
+        if(post.isBookmarked(post)) {
+
+            // Set the bookmark image to filled if a post is already bookmarked
+            holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
+        }
 
         // onClickListener for the heart image button
        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
