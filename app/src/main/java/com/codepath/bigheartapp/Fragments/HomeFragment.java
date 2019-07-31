@@ -30,10 +30,6 @@ public class HomeFragment extends Fragment implements FragmentHelper.BaseFragmen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Register for the particular broadcast based on ACTION string
-        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
-        getActivity().registerReceiver(detailsChangedReceiver, filter);
-
 
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
@@ -117,12 +113,18 @@ public class HomeFragment extends Fragment implements FragmentHelper.BaseFragmen
         swipeContainer.setRefreshing(false);
     }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Register for the particular broadcast based on ACTION string
+        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
+        getActivity().registerReceiver(detailsChangedReceiver, filter);
+    }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // Unregister the listener when the application is destroyed
+    public void onStop() {
+        super.onStop();
+        // Unregister the listener when the application is paused
         getActivity().unregisterReceiver(detailsChangedReceiver);
     }
 }

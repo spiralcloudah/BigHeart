@@ -55,9 +55,6 @@ public class ProfileFragment extends Fragment implements FragmentHelper.BaseFrag
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Register for the particular broadcast based on ACTION string
-        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
-        getActivity().registerReceiver(detailsChangedReceiver, filter);
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
@@ -216,10 +213,17 @@ public class ProfileFragment extends Fragment implements FragmentHelper.BaseFrag
         swipeContainer.setRefreshing(false);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Register for the particular broadcast based on ACTION string
+        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
+        getActivity().registerReceiver(detailsChangedReceiver, filter);
+    }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
         // Unregister the listener when the application is paused
         getActivity().unregisterReceiver(detailsChangedReceiver);
     }

@@ -125,6 +125,7 @@ public class HomeActivity extends AppCompatActivity {
             HomeFragment.rvPost.scrollToPosition(0);
             change_fragment = true;
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
