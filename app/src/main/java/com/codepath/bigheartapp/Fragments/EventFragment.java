@@ -103,7 +103,6 @@ public class EventFragment extends Fragment implements FragmentHelper.BaseFragme
             }
         });
 
-
         loadTopPosts();
         return rootView;
     }

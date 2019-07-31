@@ -29,7 +29,21 @@ public class Post extends ParseObject implements Serializable {
     public static final String KEY_LIKED_BY = "hearts";
     public static final String KEY_EVENT_TITLE = "eventTitle";
     public static final String KEY_ADDRESS = "address";
-    public static final String KEY_BOOKMARKED = "interested";
+    public static final String KEY_BOOKMARKED = "bookmarked";
+   
+
+    public String getEventId() {
+        return getObjectId();
+    }
+
+    public void setEventTitle(String title) {
+        put(KEY_EVENT_TITLE, title);
+    }
+
+    public String getEventTitle() {
+        return getString(KEY_EVENT_TITLE);
+    }
+
 
     // Configure description
     public String getDescription() {
@@ -137,6 +151,10 @@ public class Post extends ParseObject implements Serializable {
         put(KEY_ADDRESS, address);
     }
 
+    public void bookmarkPost(String postId) {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        currentUser.addUnique(KEY_BOOKMARKED, postId);
+        currentUser.saveInBackground();
     // Configure bookmarks
     public JSONArray getBookmarked() {
         return getJSONArray(KEY_BOOKMARKED);
@@ -145,30 +163,30 @@ public class Post extends ParseObject implements Serializable {
         add(KEY_BOOKMARKED, user);
     }
     public void unbookmarkPost(ParseUser user) {
-        ArrayList<ParseUser> a = new ArrayList<>();
-        a.add(user);
-        removeAll(KEY_BOOKMARKED, a);
+        ArrayList<ParseUser> bookmarks  = new ArrayList<>();
+        bookmarks.add(user);
+        removeAll(KEY_BOOKMARKED, bookmarks);
     }
+
+//    public boolean isBookmarked(Post post) {
+//        JSONArray bookmarks = getBookmarked();
+//        if(bookmarks != null) {
+//            for (int i = 0; i < bookmarks.length(); i++) {
+//                try {
+//                    if (bookmarks.getJSONObject(i).getString("objectId").equals(post.getObjectId())) {
+//                        return true;
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//        return false;
+//    }
 
     // Get the number of bookmarked events
     public int getNumBookmarks() { return getBookmarked().length(); }
 
-    // Check to see whether an event is bookmarked
-    public boolean isBookmarked() {
-        JSONArray a = getBookmarked();
-        if(a != null) {
-            for (int i = 0; i < a.length(); i++) {
-                try {
-                    if (a.getJSONObject(i).getString("objectId").equals(ParseUser.getCurrentUser().getObjectId())) {
-                        return true;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return false;
-    }
 
     // Querying for posts
     public static class Query extends ParseQuery<Post> {
