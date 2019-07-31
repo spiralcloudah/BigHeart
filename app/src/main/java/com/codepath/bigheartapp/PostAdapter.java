@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
@@ -31,16 +32,15 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     // Create variables needed in PostAdapter
     private List<Post> mPosts;
     private List<Post> mFilteredPosts;
+    private List<Post> mBookmarkedEvents;
     Context context;
-    int whichFragment;
     final int TYPE_POST = 101;
     final int TYPE_EVENT = 102;
 
     // Pass in the post array
-    public PostAdapter(List<Post> posts, int whichFragment) {
+    public PostAdapter(List<Post> posts) {
         mPosts = posts;
         mFilteredPosts = posts;
-        this.whichFragment = whichFragment;
     }
 
     // Clear all elements of the recycler
@@ -183,17 +183,36 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     // save the post as bookmarked
                     post.saveInBackground();
 
-                } else {
+          holder.btnBookmark.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                      post.bookmarkPost(post.getEventId());
+              }
+          });
 
-                    // If a post is already bookmarked, set the bookmark to unfilled
-                    post.unbookmarkPost(ParseUser.getCurrentUser());
-                    holder.ibBookmark.setBackgroundResource(R.drawable.save);
+//        if(post.isLiked()) {
+//            holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
+//        }
 
-                    // save the post as not bookmarked
-                    post.saveInBackground();
-                }
-            }
-        });
+//        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(!post.isLiked()) {
+//                    post.likePost(ParseUser.getCurrentUser());
+//                    holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
+//
+//                    post.saveInBackground();
+//
+//                } else {
+//                    post.unlikePost(ParseUser.getCurrentUser());
+//                    holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
+//
+//                    post.saveInBackground();
+//                }
+//            }
+//        });
+
+
 
         // Set the profile picture for the user
         ParseFile p = post.getUser().getParseFile("profilePicture");
@@ -454,6 +473,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         public TextView tvDateOfEvent;
         public TextView tvTimePosted;
         public TextView tvAddress;
+        public Button btnBookmark;
 
         public EventViewHolder(View itemView) {
             super(itemView);
@@ -469,6 +489,10 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             tvDateOfEvent = itemView.findViewById(R.id.tvDate);
             tvTimePosted = itemView.findViewById(R.id.tvTimePosted);
             tvAddress = itemView.findViewById(R.id.tvAddress);
+
+
+            btnBookmark = itemView.findViewById(R.id.btnBookmark);
+
             ivHeart = (ImageView) itemView.findViewById(R.id.ivHeart);
             ibBookmark = (ImageButton) itemView.findViewById(R.id.ibBookmark);
             tvMonth = (TextView) itemView.findViewById(R.id.tvMonth);
