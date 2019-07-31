@@ -122,7 +122,7 @@ public class HomeFragment extends Fragment implements FragmentHelper.BaseFragmen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // Unregister the listener when the application is paused
+        // Unregister the listener when the application is destroyed
         getActivity().unregisterReceiver(detailsChangedReceiver);
     }
 }
