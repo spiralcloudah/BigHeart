@@ -26,6 +26,8 @@ import com.codepath.bigheartapp.helpers.FragmentHelper;
 import com.codepath.bigheartapp.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -40,6 +42,7 @@ public class EventFragment extends Fragment implements FragmentHelper.BaseFragme
     ImageButton ibFilter;
     private SwipeRefreshLayout swipeContainer;
     private final int REQUEST_CODE = 120;
+    private final double MAX_DISTANCE = 10.0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -149,6 +152,13 @@ public class EventFragment extends Fragment implements FragmentHelper.BaseFragme
         postQuery.addDescendingOrder(Post.KEY_DATE);
         // Only loads posts that are events
         postQuery.whereEqualTo(Post.KEY_IS_EVENT, true);
+        if(MapsFragment.mCurrentLocation != null) {
+            ParseGeoPoint userLocation = new ParseGeoPoint(MapsFragment.mCurrentLocation.getLatitude(), MapsFragment.mCurrentLocation.getLongitude());
+            postQuery.whereWithinMiles(Post.KEY_LOCATION, userLocation, MAX_DISTANCE);
+            Toast.makeText(getContext(),"Showing events within " + MAX_DISTANCE + " miles of you", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getContext(),"Could not load user location", Toast.LENGTH_LONG).show();
+        }
         return postQuery;
     }
 

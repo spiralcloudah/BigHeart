@@ -48,7 +48,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Fragme
     GoogleMap mGoogleMap;
     MapView mapView;
     View view;
-    Location mCurrentLocation;
+    public static Location mCurrentLocation;
     private final int MY_LOCATION_REQUEST_CODE = 130;
 
     // Set variable to connect to parse database

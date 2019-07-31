@@ -130,11 +130,11 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         } else {
             holder.ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
         }
-        if(post.isBookmarked()) {
-
-            // Set the bookmark image to filled if a post is already bookmarked
-            holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
-        }
+//        if(post.isBookmarked()) {
+//
+//            // Set the bookmark image to filled if a post is already bookmarked
+//            holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
+//        }
 
         // onClickListener for the heart image button
        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
@@ -169,48 +169,34 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             }
         });
 
-        // onClickListener for the bookmark image button
         holder.ibBookmark.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if(!post.isBookmarked()) {
-
-                    // If a post is not yet bookmarked, set the bookmark to filled
-                    post.bookmarkPost(ParseUser.getCurrentUser());
-                    holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
-
-                    // save the post as bookmarked
-                    post.saveInBackground();
-
-          holder.btnBookmark.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
-                      post.bookmarkPost(post.getEventId());
+                  post.bookmarkPost(post.getEventId());
               }
-          });
+        });
 
 //        if(post.isLiked()) {
 //            holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
 //        }
 
-//        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(!post.isLiked()) {
-//                    post.likePost(ParseUser.getCurrentUser());
-//                    holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
-//
-//                    post.saveInBackground();
-//
-//                } else {
-//                    post.unlikePost(ParseUser.getCurrentUser());
-//                    holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
-//
-//                    post.saveInBackground();
-//                }
-//            }
-//        });
+        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!post.isLiked()) {
+                    post.likePost(ParseUser.getCurrentUser());
+                    holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
+
+                    post.saveInBackground();
+
+                } else {
+                    post.unlikePost(ParseUser.getCurrentUser());
+                    holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
+
+                    post.saveInBackground();
+                }
+            }
+        });
 
 
 
@@ -268,11 +254,11 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             } else {
                 holder.ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
             }
-        if(post.isBookmarked()) {
-
-            // Set the bookmark image to filled if a post is already bookmarked
-            holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
-        }
+//        if(post.isBookmarked()) {
+//
+//            // Set the bookmark image to filled if a post is already bookmarked
+//            holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
+//        }
 
         // onClickListener for the heart image button
             holder.ivHeart.setOnClickListener(new View.OnClickListener() {
@@ -311,23 +297,23 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
             @Override
             public void onClick(View v) {
-                if(!post.isBookmarked()) {
-
-                    // If a post is not yet bookmarked, set the bookmark to filled
-                    post.bookmarkPost(ParseUser.getCurrentUser());
-                    holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
-
-                    // save the post as bookmarked
-                    post.saveInBackground();
-                } else {
-
-                    // If a post is already bookmarked, set the bookmark to unfilled
-                    post.unbookmarkPost(ParseUser.getCurrentUser());
-                    holder.ibBookmark.setBackgroundResource(R.drawable.save);
-
-                    // save the post as not bookmarked
-                    post.saveInBackground();
-                }
+//                if(!post.isBookmarked()) {
+//
+//                    // If a post is not yet bookmarked, set the bookmark to filled
+//                    post.bookmarkPost(ParseUser.getCurrentUser());
+//                    holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
+//
+//                    // save the post as bookmarked
+//                    post.saveInBackground();
+//                } else {
+//
+//                    // If a post is already bookmarked, set the bookmark to unfilled
+//                    post.unbookmarkPost(ParseUser.getCurrentUser());
+//                    holder.ibBookmark.setBackgroundResource(R.drawable.save);
+//
+//                    // save the post as not bookmarked
+//                    post.saveInBackground();
+//                }
             }
         });
 
@@ -473,7 +459,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         public TextView tvDateOfEvent;
         public TextView tvTimePosted;
         public TextView tvAddress;
-        public Button btnBookmark;
 
         public EventViewHolder(View itemView) {
             super(itemView);
@@ -489,10 +474,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             tvDateOfEvent = itemView.findViewById(R.id.tvDate);
             tvTimePosted = itemView.findViewById(R.id.tvTimePosted);
             tvAddress = itemView.findViewById(R.id.tvAddress);
-
-
-            btnBookmark = itemView.findViewById(R.id.btnBookmark);
-
             ivHeart = (ImageView) itemView.findViewById(R.id.ivHeart);
             ibBookmark = (ImageButton) itemView.findViewById(R.id.ibBookmark);
             tvMonth = (TextView) itemView.findViewById(R.id.tvMonth);

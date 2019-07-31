@@ -63,7 +63,7 @@ public class NestedPostsFragment extends Fragment {
         //create new array list  for posts
         postArrayList = new ArrayList<>();
         // create adapter and link posts
-        postsAdapter = new PostAdapter(postArrayList, 1);
+        postsAdapter = new PostAdapter(postArrayList);
         rvUserPosts.setAdapter(postsAdapter);
 
 

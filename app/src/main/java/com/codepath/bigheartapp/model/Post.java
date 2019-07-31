@@ -115,8 +115,6 @@ public class Post extends ParseObject implements Serializable {
         removeAll(KEY_LIKED_BY, a);
     }
 
-    // Get the number of likes
-    public int getNumLikes() { return getLikes().size(); }
 
     // Check to see whether a post is liked
     public boolean isLiked() {
@@ -135,14 +133,6 @@ public class Post extends ParseObject implements Serializable {
         return false;
     }
 
-    // Configure event title
-    public void setEventTitle(String title) {
-        put(KEY_EVENT_TITLE, title);
-    }
-    public String getEventTitle() {
-        return getString(KEY_EVENT_TITLE);
-    }
-
     // Configure address
     public String getAddress() {
         return getString(KEY_ADDRESS);
@@ -155,17 +145,6 @@ public class Post extends ParseObject implements Serializable {
         ParseUser currentUser = ParseUser.getCurrentUser();
         currentUser.addUnique(KEY_BOOKMARKED, postId);
         currentUser.saveInBackground();
-    // Configure bookmarks
-    public JSONArray getBookmarked() {
-        return getJSONArray(KEY_BOOKMARKED);
-    }
-    public void bookmarkPost(ParseUser user) {
-        add(KEY_BOOKMARKED, user);
-    }
-    public void unbookmarkPost(ParseUser user) {
-        ArrayList<ParseUser> bookmarks  = new ArrayList<>();
-        bookmarks.add(user);
-        removeAll(KEY_BOOKMARKED, bookmarks);
     }
 
 //    public boolean isBookmarked(Post post) {
@@ -184,23 +163,27 @@ public class Post extends ParseObject implements Serializable {
 //        return false;
 //    }
 
-    // Get the number of bookmarked events
-    public int getNumBookmarks() { return getBookmarked().length(); }
+//        // Get the number of bookmarked events
+//        public int getNumBookmarks () {
+//            return getBookmarked().length();
+//        }
 
 
-    // Querying for posts
-    public static class Query extends ParseQuery<Post> {
-        public Query() {
-            super(Post.class);
-        }
-        public Query getTop() {
-            setLimit(20);
-            return this;
-        }
-        public Query withUser() {
-            include("user");
-            return this;
+        // Querying for posts
+        public static class Query extends ParseQuery<Post> {
+            public Query() {
+                super(Post.class);
+            }
+
+            public Query getTop() {
+                setLimit(20);
+                return this;
+            }
+
+            public Query withUser() {
+                include("user");
+                return this;
+            }
         }
     }
-}
 
