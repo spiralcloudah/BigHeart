@@ -32,12 +32,8 @@ public class NestedPostsFragment extends Fragment implements FragmentHelper.Base
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String POST_TYPE = "Post_Type";
     RecyclerView rvUserPosts;
-    RecyclerView rvBookies;
-    ArrayList<Post> bookiesArrayList;
     ArrayList<Post> postArrayList;
-    PostAdapter bookiesAdapter;
     PostAdapter postsAdapter;
-    public int postType;
 
     public static NestedPostsFragment newInstance(int page, int postType) {
         Bundle args = new Bundle();
