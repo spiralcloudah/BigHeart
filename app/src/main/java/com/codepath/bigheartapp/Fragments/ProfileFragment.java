@@ -39,15 +39,11 @@ public class ProfileFragment extends Fragment {
 
     // Store variables to use in the event fragment
 
-    private EndlessRecyclerViewScrollListener scrollListener;
-    private SwipeRefreshLayout swipeContainer;
     Button logoutBtn;
     ImageView ivCurrentProfile;
     TextView tvCurrentUser;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-
-    public final static int PICK_PHOTO_CODE = 1046;
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
     File photoFile;
@@ -108,48 +104,6 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) { logoutUser(v); }
         });
 
-//
-//        // Retain an instance so that you can call `resetState()` for fresh searches
-//        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-//
-//                view.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        // should have something to load more posts...
-//                    }
-//                });
-//            }
-//        };
-//        // Adds the scroll listener to RecyclerView
-//        rvPostView.addOnScrollListener(scrollListener);
-
-
-//        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
-//        // Setup refresh listener which triggers new data loading
-//        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                // Your code here
-//                Toast.makeText(getApplicationContext(), "Refreshed!", Toast.LENGTH_LONG).show();
-//                // To keep animation for 4 seconds
-//                posts.clear();
-//                adapter.clear();
-//                loadTopPosts();
-//
-//            }
-//        });
-
-//        // Scheme colors for animation
-//        swipeContainer.setColorSchemeColors(
-//                getResources().getColor(android.R.color.holo_blue_bright),
-//                getResources().getColor(android.R.color.holo_green_light),
-//                getResources().getColor(android.R.color.holo_orange_light),
-//                getResources().getColor(android.R.color.holo_red_light)
-//        );
-
-
     }
 
 
@@ -157,8 +111,6 @@ public class ProfileFragment extends Fragment {
     public void logoutUser(View view) {
         Toast.makeText(getContext(), ParseUser.getCurrentUser().getUsername() + " is now logged out", Toast.LENGTH_LONG).show();
         ParseUser.logOut();
-        ParseUser currentUser = null; // this will now be null
-        // System.out.println("The current user is "+ currentUser);
 
         // Change activities back to the login screen
         Intent i = new Intent(getContext(), MainActivity.class);
