@@ -105,7 +105,7 @@ public class ProfileFragment extends Fragment {
         }
 
         // Only current user's posts are shown in profile fragment
-        rvPostView= view.findViewById(R.id.rvUserPosts);
+        rvPostView = view.findViewById(R.id.rvUserPosts);
 
         // Set the onClickListener for the logout button
         logoutBtn.setOnClickListener(new View.OnClickListener() {
@@ -159,21 +159,25 @@ public class ProfileFragment extends Fragment {
                 getResources().getColor(android.R.color.holo_red_light)
         );
 
+        loadTopPosts();
+
         // Set tab layout to switch between user posts and bookmarked events
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                loadTopPosts();
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+                loadTopBookmarkPosts();
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+                loadTopPosts();
             }
         });
-        loadTopPosts();
         getConfiguration();
     }
 
@@ -241,6 +245,41 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    public void loadTopBookmarkPosts(){
+        final Post.Query postsQuery = new Post.Query();
+        postsQuery
+                .getTop()
+                .withUser();
+
+        // Only load the current user's posts
+        postsQuery.whereEqualTo(Post.KEY_BOOKMARKED, ParseUser.getCurrentUser());
+        postsQuery.whereNotEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+        postsQuery.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> objects, ParseException e) {
+                if (e == null){
+                    Post post = new Post();
+                    System.out.println("Success!");
+                    for (int i = 0;i<objects.size(); i++){
+                        try {
+                            Log.d("FeedActivity", "Post ["+i+"] = "
+                                    + objects.get(i).getDescription()
+                                    + "\n username = " + objects.get(i).getUser().fetchIfNeeded().getUsername()
+                                    + " o k ");
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                        posts.add(0,objects.get(i));
+                        adapter.notifyItemInserted(posts.size() - 1);
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+                swipeContainer.setRefreshing(false);
+            }
+        });
+    }
+
     //put space between cardviews
     public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
 
@@ -261,6 +300,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
         // Unregister the listener when the application is paused
         getActivity().unregisterReceiver(detailsChangedReceiver);
     }
