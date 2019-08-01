@@ -114,24 +114,6 @@ public class ProfileFragment extends Fragment {
         // Change activities back to the login screen
         Intent i = new Intent(getContext(), MainActivity.class);
         startActivity(i);
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-
-                // Set the current user's profile picture
-                currentPath = photoFile.getPath();
-                Bitmap bitmap = BitmapFactory.decodeFile(currentPath);
-                ivCurrentProfile.setImageBitmap(bitmap);
-                final BitmapDrawable ob = new BitmapDrawable(getResources(), bitmap);
-                ivCurrentProfile.setBackgroundDrawable(ob);
-                parseFile = new ParseFile(photoFile);
-                ParseUser.getCurrentUser().put("profilePic", parseFile);
-                ParseUser.getCurrentUser().saveInBackground();
-            }
-        }
+        getActivity().finish();
     }
 }

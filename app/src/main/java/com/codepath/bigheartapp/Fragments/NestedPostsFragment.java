@@ -1,7 +1,6 @@
 package com.codepath.bigheartapp.Fragments;
 
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -22,7 +21,9 @@ import com.codepath.bigheartapp.PostDetailsActivity;
 import com.codepath.bigheartapp.R;
 import com.codepath.bigheartapp.helpers.FetchResults;
 import com.codepath.bigheartapp.helpers.FragmentHelper;
+import com.codepath.bigheartapp.helpers.FragmentUpdated;
 import com.codepath.bigheartapp.helpers.HorizontalSpaceItemDecoration;
+import com.codepath.bigheartapp.helpers.PostBroadcastReceiver;
 import com.codepath.bigheartapp.helpers.VerticalSpaceItemDecoration;
 import com.codepath.bigheartapp.model.Post;
 import com.parse.FindCallback;
@@ -35,10 +36,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
-
-public class NestedPostsFragment extends Fragment implements FetchResults {
+public class NestedPostsFragment extends Fragment implements FetchResults, FragmentUpdated {
     private static final String TAG = "NestedPostsFragment";
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String POST_TYPE = "Post_Type";
@@ -47,6 +45,7 @@ public class NestedPostsFragment extends Fragment implements FetchResults {
     RecyclerView rvUserPosts;
     ArrayList<Post> postArrayList;
     PostAdapter postsAdapter;
+    private BroadcastReceiver detailsChangedReceiver;
 
     public static NestedPostsFragment newInstance(int page, int postType) {
         Bundle args = new Bundle();
@@ -57,21 +56,17 @@ public class NestedPostsFragment extends Fragment implements FetchResults {
         return fragment;
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         // inflates recycler view in viewpager
         View rootView = inflater.inflate(R.layout.nested_fragment_posts, container, false);
 
-        return rootView;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         // link variable to layout id
-        rvUserPosts = view.findViewById(R.id.rvNestPosts);
+        rvUserPosts = rootView.findViewById(R.id.rvNestPosts);
 
-        rvUserPosts.addItemDecoration(new VerticalSpaceItemDecoration(12));
+        rvUserPosts.addItemDecoration(new VerticalSpaceItemDecoration(6));
         rvUserPosts.addItemDecoration(new HorizontalSpaceItemDecoration(6));
 
         //create new array list  for posts
@@ -79,6 +74,16 @@ public class NestedPostsFragment extends Fragment implements FetchResults {
         // create adapter and link posts
         postsAdapter = new PostAdapter(postArrayList);
         rvUserPosts.setAdapter(postsAdapter);
+
+        detailsChangedReceiver = new PostBroadcastReceiver(this);
+        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
+        getActivity().registerReceiver(detailsChangedReceiver, filter);
+
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvUserPosts.setLayoutManager(linearLayoutManager);
@@ -177,7 +182,6 @@ public class NestedPostsFragment extends Fragment implements FetchResults {
         postsAdapter.clear();
         FragmentHelper fragmentHelper = new FragmentHelper(getPostQuery());
         fragmentHelper.fetchPosts(this);
-        swipeContainer.setRefreshing(false);
     }
 
     @Override
@@ -190,54 +194,41 @@ public class NestedPostsFragment extends Fragment implements FetchResults {
     }
 
     @Override
-    public void onFetchSuccess(List<Post> objects, int i) {
-        postArrayList.add(objects.get(i));
-        postsAdapter.notifyItemInserted(postArrayList.size() - 1);
+    public void onFetchSuccess(List<Post> objects) {
+        postArrayList.addAll(objects);
+        postsAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onFetchFailure() {
         Toast.makeText(getContext(), "Failed to query posts", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFetchFinish() {
         swipeContainer.setRefreshing(false);
     }
 
-    BroadcastReceiver detailsChangedReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-
-            int resultCode = intent.getIntExtra(context.getString(R.string.result_code), RESULT_CANCELED);
-
-            if (resultCode == RESULT_OK) {
-                Post postChanged = (Post) intent.getSerializableExtra(Post.class.getSimpleName());
-                int indexOfChange = -1;
-                for (int i = 0; i < postArrayList.size(); i++) {
-                    if (postArrayList.get(i).hasSameId(postChanged)) {
-                        indexOfChange = i;
-                        break;
-                    }
-                }
-                if (indexOfChange != -1) {
-                    postArrayList.set(indexOfChange, postChanged);
-                    postsAdapter.notifyItemChanged(indexOfChange);
-                } else {
-                    Toast.makeText(context, "An error occurred", Toast.LENGTH_LONG).show();
-                }
-
-            }
-        }
-    };
-
     @Override
-    public void onStart() {
-        super.onStart();
-        // Register for the particular broadcast based on ACTION string
-        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
-        getActivity().registerReceiver(detailsChangedReceiver, filter);
+    public void onDestroy() {
+        super.onDestroy();
+        // Unregister the listener when the application is paused
+        getActivity().unregisterReceiver(detailsChangedReceiver);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        // Unregister the listener when the application is paused
-        getActivity().unregisterReceiver(detailsChangedReceiver);
+    public void updatePosts(Intent intent) {
+        Post postChanged = (Post) intent.getSerializableExtra(Post.class.getSimpleName());
+        int indexOfChange = -1;
+        for (int i = 0; i < postArrayList.size(); i++) {
+            if (postArrayList.get(i).hasSameId(postChanged)) {
+                indexOfChange = i;
+                break;
+            }
+        }
+        if (indexOfChange != -1) {
+            postArrayList.set(indexOfChange, postChanged);
+            postsAdapter.notifyItemChanged(indexOfChange);
+        }
     }
 }

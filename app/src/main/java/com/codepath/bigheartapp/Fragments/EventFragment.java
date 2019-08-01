@@ -26,21 +26,21 @@ import com.codepath.bigheartapp.PostDetailsActivity;
 import com.codepath.bigheartapp.R;
 import com.codepath.bigheartapp.helpers.FetchResults;
 import com.codepath.bigheartapp.helpers.FragmentHelper;
+import com.codepath.bigheartapp.helpers.FragmentUpdated;
 import com.codepath.bigheartapp.helpers.HorizontalSpaceItemDecoration;
+import com.codepath.bigheartapp.helpers.PostBroadcastReceiver;
 import com.codepath.bigheartapp.helpers.VerticalSpaceItemDecoration;
 import com.codepath.bigheartapp.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
-public class EventFragment extends Fragment implements FetchResults {
+public class EventFragment extends Fragment implements FetchResults, FragmentUpdated {
 
     // Store variables to use in the event fragment
     private EndlessRecyclerViewScrollListener scrollListener;
@@ -52,6 +52,7 @@ public class EventFragment extends Fragment implements FetchResults {
     private PostAdapter adapter;
     private final int REQUEST_CODE = 120;
     private final double MAX_DISTANCE = 10.0;
+    private BroadcastReceiver detailsChangedReceiver;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,6 +63,11 @@ public class EventFragment extends Fragment implements FetchResults {
 
         posts = new ArrayList<>();
         adapter = new PostAdapter(posts);
+
+        detailsChangedReceiver = new PostBroadcastReceiver(this);
+        // Register for the particular broadcast based on ACTION string
+        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
+        getActivity().registerReceiver(detailsChangedReceiver, filter);
 
         // Set created variables to new elements or corresponding layouts
         rvEventPosts = (RecyclerView) rootView.findViewById(R.id.rvEventPosts);
@@ -87,7 +93,7 @@ public class EventFragment extends Fragment implements FetchResults {
 
         // Add the scroll listener and item decoration to recyclerview
         rvEventPosts.addOnScrollListener(scrollListener);
-        rvEventPosts.addItemDecoration(new VerticalSpaceItemDecoration(12));
+        rvEventPosts.addItemDecoration(new VerticalSpaceItemDecoration(6));
         rvEventPosts.addItemDecoration(new HorizontalSpaceItemDecoration(6));
         swipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
 
@@ -155,7 +161,6 @@ public class EventFragment extends Fragment implements FetchResults {
         adapter.clear();
         FragmentHelper fragmentHelper = new FragmentHelper(getPostQuery());
         fragmentHelper.fetchPosts(this);
-        swipeContainer.setRefreshing(false);
     }
 
     @Override
@@ -216,54 +221,41 @@ public class EventFragment extends Fragment implements FetchResults {
     }
 
     @Override
-    public void onFetchSuccess(List<Post> objects, int i) {
-        posts.add(objects.get(i));
-        adapter.notifyItemInserted(posts.size() - 1);
+    public void onFetchSuccess(List<Post> objects) {
+        posts.addAll(objects);
+        adapter.notifyDataSetChanged(); //or range inserted
     }
 
     @Override
     public void onFetchFailure() {
         Toast.makeText(getContext(), "Failed to query posts", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFetchFinish() {
         swipeContainer.setRefreshing(false);
     }
 
-    BroadcastReceiver detailsChangedReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-
-            int resultCode = intent.getIntExtra(context.getString(R.string.result_code), RESULT_CANCELED);
-
-            if (resultCode == RESULT_OK) {
-                Post postChanged = (Post) intent.getSerializableExtra(Post.class.getSimpleName());
-                int indexOfChange = -1;
-                for (int i = 0; i < posts.size(); i++) {
-                    if (posts.get(i).hasSameId(postChanged)) {
-                        indexOfChange = i;
-                        break;
-                    }
-                }
-                if (indexOfChange != -1) {
-                    posts.set(indexOfChange, postChanged);
-                    adapter.notifyItemChanged(indexOfChange);
-                } else {
-                    Toast.makeText(context, "An error occurred", Toast.LENGTH_LONG).show();
-                }
-
-            }
-        }
-    };
-
     @Override
-    public void onStart() {
-        super.onStart();
-        // Register for the particular broadcast based on ACTION string
-        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
-        getActivity().registerReceiver(detailsChangedReceiver, filter);
+    public void onDestroy() {
+        super.onDestroy();
+        // Unregister the listener when the application is paused
+        getActivity().unregisterReceiver(detailsChangedReceiver);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        // Unregister the listener when the application is paused
-        getActivity().unregisterReceiver(detailsChangedReceiver);
+    public void updatePosts(Intent intent) {
+        Post postChanged = (Post) intent.getSerializableExtra(Post.class.getSimpleName());
+        int indexOfChange = -1;
+        for (int i = 0; i < posts.size(); i++) {
+            if (posts.get(i).hasSameId(postChanged)) {
+                indexOfChange = i;
+                break;
+            }
+        }
+        if (indexOfChange != -1) {
+            posts.set(indexOfChange, postChanged);
+            adapter.notifyItemChanged(indexOfChange);
+        }
     }
 }
