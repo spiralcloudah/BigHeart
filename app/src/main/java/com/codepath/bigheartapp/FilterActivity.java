@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
+import android.widget.Spinner;
 
 import com.codepath.bigheartapp.model.Post;
 
@@ -25,6 +26,7 @@ public class FilterActivity extends AppCompatActivity {
     Button btnFilter;
     private Button btnDatePicker;
     private Button btnTimePicker;
+    private Spinner spDistance;
     public String day;
     public String time;
     public int ampm;
@@ -42,6 +44,7 @@ public class FilterActivity extends AppCompatActivity {
         btnFilter = (Button) findViewById(R.id.btnFilter);
         btnDatePicker = findViewById(R.id.btnDatePicker);
         btnTimePicker = findViewById(R.id.btnTimePicker);
+        spDistance = (Spinner) findViewById(R.id.spDistance);
 
         // Set the onClickListener for the date picker
         btnDatePicker.setOnClickListener(new View.OnClickListener() {
