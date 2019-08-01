@@ -4,12 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
-import com.codepath.bigheartapp.EndlessRecyclerViewScrollListener;
 import com.codepath.bigheartapp.PostAdapter;
 import com.codepath.bigheartapp.R;
 import com.codepath.bigheartapp.model.Post;
@@ -60,7 +58,7 @@ public class FragmentHelper {
         // put space between cardviews
         class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
 
-            // Specify a final variable for space between cardviews
+            // Specify a final variable for git  between cardviews
             private final int verticalSpaceHeight;
 
             // function to set the space height

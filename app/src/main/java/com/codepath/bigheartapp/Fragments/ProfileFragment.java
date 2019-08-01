@@ -2,7 +2,6 @@ package com.codepath.bigheartapp.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,9 +12,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,26 +23,12 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.codepath.bigheartapp.EndlessRecyclerViewScrollListener;
 import com.codepath.bigheartapp.MainActivity;
-
 import com.codepath.bigheartapp.ProfilePagesAdapter;
-
-import com.codepath.bigheartapp.PostDetailsActivity;
-
 import com.codepath.bigheartapp.R;
-import com.codepath.bigheartapp.helpers.FragmentHelper;
-import com.codepath.bigheartapp.model.Post;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.io.File;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -107,10 +89,13 @@ public class ProfileFragment extends Fragment {
 
 
         tabLayout = view.findViewById(R.id.tabLayout);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_bookmark_border_black_24dp);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_format_list_bulleted_black_24dp);
 
         // gets view pager and sets its PageAdapter so it can display items
         viewPager = view.findViewById(R.id.vpContainer);
         viewPager.setAdapter(new ProfilePagesAdapter(getChildFragmentManager(), getContext()));
+
 
         //give TabLayout the ViewPager
         tabLayout.setupWithViewPager(viewPager);
