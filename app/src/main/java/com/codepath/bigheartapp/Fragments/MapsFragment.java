@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,19 +26,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.util.List;
-import java.util.Set;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
@@ -176,25 +173,21 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, FetchR
             // Sets the latitude and longitude of the posts' locations
             Double latitude = objects.get(i).getLocation().getLatitude();
             Double longitude = objects.get(i).getLocation().getLongitude();
-            LatLng pos = new LatLng(latitude,longitude);
+            LatLng pos = new LatLng(latitude, longitude);
+            BitmapDescriptor coloredIcon;
             if (objects.get(i).getIsEvent()) {
-                mGoogleMap.addMarker(new MarkerOptions()
-                        .position(pos)
-                        .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
+                // Events have a blue icon
+                coloredIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
 
-                        // Events have a blue icon
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                        .snippet(objects.get(i).getDescription()));
             } else {
-                mGoogleMap.addMarker(new MarkerOptions()
-                        .position(pos)
-                        .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
-
-                        // Regular posts have a pink icon
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
-                        .snippet(objects.get(i).getDescription()));
+                coloredIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
             }
-        } catch (ParseException er ) {
+            mGoogleMap.addMarker(new MarkerOptions()
+                    .position(pos)
+                    .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
+                    .icon(coloredIcon)
+                    .snippet(objects.get(i).getDescription()));
+        } catch (ParseException er) {
             er.printStackTrace();
         }
     }
