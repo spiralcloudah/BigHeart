@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,7 +43,6 @@ public class HomeFragment extends Fragment implements FetchResults {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
 
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
@@ -154,16 +154,16 @@ public class HomeFragment extends Fragment implements FetchResults {
     };
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         // Register for the particular broadcast based on ACTION string
         IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
         getActivity().registerReceiver(detailsChangedReceiver, filter);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
         // Unregister the listener when the application is paused
         getActivity().unregisterReceiver(detailsChangedReceiver);
     }

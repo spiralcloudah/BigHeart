@@ -253,16 +253,16 @@ public class EventFragment extends Fragment implements FetchResults {
     };
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         // Register for the particular broadcast based on ACTION string
         IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
         getActivity().registerReceiver(detailsChangedReceiver, filter);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
         // Unregister the listener when the application is paused
         getActivity().unregisterReceiver(detailsChangedReceiver);
     }
