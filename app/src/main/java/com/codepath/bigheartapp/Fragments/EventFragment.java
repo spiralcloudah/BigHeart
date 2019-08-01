@@ -163,6 +163,7 @@ public class EventFragment extends Fragment implements FetchResults {
         final Post.Query postQuery = new Post.Query();
         postQuery.getTop().withUser();
         postQuery.addDescendingOrder(Post.KEY_DATE);
+
         // Only loads posts that are events
         postQuery.whereEqualTo(Post.KEY_IS_EVENT, true);
         if(MapsFragment.mCurrentLocation != null) {
