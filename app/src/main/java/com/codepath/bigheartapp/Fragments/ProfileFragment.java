@@ -64,7 +64,6 @@ public class ProfileFragment extends Fragment {
     TextView tvCurrentUser;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    int whichFragment=1;
 
     public final static int PICK_PHOTO_CODE = 1046;
 
@@ -76,14 +75,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        // Get the ViewPager and set it's PagerAdapter so that it can display items
-        //viewPager = container.findViewById(R.id.viewpager);
-        // tabLayout = container.findViewById(R.id.tabLayout);
-        // profileAdapter = new ProfilePagesAdapter(getFragmentManager());
-
-        //profileAdapter.AddFragment(new NestedPostsFragment (), "Posts ");
-       // profileAdapter.AddFragment(new NestedBookmarksFragment (), "Bookmarks");
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
