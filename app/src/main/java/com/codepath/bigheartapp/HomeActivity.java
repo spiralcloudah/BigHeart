@@ -27,8 +27,9 @@ public class HomeActivity extends AppCompatActivity {
     public HomeFragment homeFragment;
     public MapsFragment mapsFragment;
     public ProfileFragment profileFragment;
-    private boolean change_fragment=false;
     public EventFragment eventFragment;
+    private boolean change_fragment=false;
+    private BottomNavigationView bottomNavigationView;
     public static final int COMPOSE_REQUEST_CODE = 20;
     public static final int DETAILS_REQUEST_CODE = 31;
 
@@ -79,7 +80,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // Setup the fragment manager and bottom naviagtion view
         final FragmentManager fragmentManager = getSupportFragmentManager();
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
         // handle navigation selection
         bottomNavigationView.setOnNavigationItemSelectedListener(
@@ -132,6 +133,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onResume();
         if(change_fragment) {
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeFragment()).commit();
+            bottomNavigationView.setSelectedItemId(R.id.miHome);
         }
     }
 }

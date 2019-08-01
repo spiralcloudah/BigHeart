@@ -87,9 +87,9 @@ public class PostDetailsActivity extends AppCompatActivity {
         }
 
         // If a post is bookmarked, set the bookmark image to be filled
-        if(post.isBookmarked()) {
-            ibBookmark.setBackgroundResource(R.drawable.save_filled);
-        }
+//        if(post.isBookmarked()) {
+//            ibBookmark.setBackgroundResource(R.drawable.save_filled);
+//        }
 
         // Event title only visible for an event
         if (post.getEventTitle() == null) {
@@ -143,24 +143,24 @@ public class PostDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                if(!post.isBookmarked()) {
-
-                    // If a post is not yet bookmarked, set the bookmark to filled
-                    post.bookmarkPost(ParseUser.getCurrentUser());
-                    ibBookmark.setBackgroundResource(R.drawable.save_filled);
-
-                    // save the post as bookmarked
-                    post.saveInBackground();
-
-                } else {
-
-                    // If a post is already bookmarked, set the bookmark to unfilled
-                    post.unbookmarkPost(ParseUser.getCurrentUser());
-                    ibBookmark.setBackgroundResource(R.drawable.save);
-
-                    // save the post as not bookmarked
-                    post.saveInBackground();
-                }
+//                if(!post.isBookmarked()) {
+//
+//                    // If a post is not yet bookmarked, set the bookmark to filled
+//                    post.bookmarkPost(ParseUser.getCurrentUser());
+//                    ibBookmark.setBackgroundResource(R.drawable.save_filled);
+//
+//                    // save the post as bookmarked
+//                    post.saveInBackground();
+//
+//                } else {
+//
+//                    // If a post is already bookmarked, set the bookmark to unfilled
+//                    post.unbookmarkPost(ParseUser.getCurrentUser());
+//                    ibBookmark.setBackgroundResource(R.drawable.save);
+//
+//                    // save the post as not bookmarked
+//                    post.saveInBackground();
+//                }
             }
         });
 

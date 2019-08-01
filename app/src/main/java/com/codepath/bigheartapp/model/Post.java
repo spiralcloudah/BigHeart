@@ -29,7 +29,21 @@ public class Post extends ParseObject implements Serializable {
     public static final String KEY_LIKED_BY = "hearts";
     public static final String KEY_EVENT_TITLE = "eventTitle";
     public static final String KEY_ADDRESS = "address";
-    public static final String KEY_BOOKMARKED = "interested";
+    public static final String KEY_BOOKMARKED = "bookmarked";
+   
+
+    public String getEventId() {
+        return getObjectId();
+    }
+
+    public void setEventTitle(String title) {
+        put(KEY_EVENT_TITLE, title);
+    }
+
+    public String getEventTitle() {
+        return getString(KEY_EVENT_TITLE);
+    }
+
 
     // Configure description
     public String getDescription() {
@@ -101,8 +115,6 @@ public class Post extends ParseObject implements Serializable {
         removeAll(KEY_LIKED_BY, a);
     }
 
-    // Get the number of likes
-    public int getNumLikes() { return getLikes().size(); }
 
     // Check to see whether a post is liked
     public boolean isLiked() {
@@ -121,14 +133,6 @@ public class Post extends ParseObject implements Serializable {
         return false;
     }
 
-    // Configure event title
-    public void setEventTitle(String title) {
-        put(KEY_EVENT_TITLE, title);
-    }
-    public String getEventTitle() {
-        return getString(KEY_EVENT_TITLE);
-    }
-
     // Configure address
     public String getAddress() {
         return getString(KEY_ADDRESS);
@@ -137,29 +141,18 @@ public class Post extends ParseObject implements Serializable {
         put(KEY_ADDRESS, address);
     }
 
-    // Configure bookmarks
-    public JSONArray getBookmarked() {
-        return getJSONArray(KEY_BOOKMARKED);
-    }
-    public void bookmarkPost(ParseUser user) {
-        add(KEY_BOOKMARKED, user);
-    }
-    public void unbookmarkPost(ParseUser user) {
-        ArrayList<ParseUser> a = new ArrayList<>();
-        a.add(user);
-        removeAll(KEY_BOOKMARKED, a);
+    public void bookmarkPost(String postId) {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        currentUser.addUnique(KEY_BOOKMARKED, postId);
+        currentUser.saveInBackground();
     }
 
-    // Get the number of bookmarked events
-    public int getNumBookmarks() { return getBookmarked().length(); }
-
-    // Check to see whether an event is bookmarked
-    public boolean isBookmarked() {
-        JSONArray a = getBookmarked();
-        if(a != null) {
-            for (int i = 0; i < a.length(); i++) {
+    public boolean isBookmarked(Post post) {
+        JSONArray bookmarks = getBookmarked();
+        if(bookmarks != null) {
+            for (int i = 0; i < bookmarks.length(); i++) {
                 try {
-                    if (a.getJSONObject(i).getString("objectId").equals(ParseUser.getCurrentUser().getObjectId())) {
+                    if (bookmarks.get(i).toString().equals(post.getObjectId())) {
                         return true;
                     }
                 } catch (JSONException e) {
@@ -170,19 +163,54 @@ public class Post extends ParseObject implements Serializable {
         return false;
     }
 
-    // Querying for posts
-    public static class Query extends ParseQuery<Post> {
-        public Query() {
-            super(Post.class);
+    public JSONArray getBookmarked() {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        return currentUser.getJSONArray(KEY_BOOKMARKED);
+    }
+
+    public void removeBookmark (Post post) {
+        ParseUser user = ParseUser.getCurrentUser();
+        String rmId = post.getEventId();
+
+        JSONArray bookmarks = user.getJSONArray(KEY_BOOKMARKED);
+        JSONArray newbookmarks = new JSONArray();
+
+        for (int i = 0; i < bookmarks.length(); i++ ) {
+
+            try {
+                if (!rmId.equals(bookmarks.get(i).toString())) {
+                    newbookmarks.put(bookmarks.get(i).toString());
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
-        public Query getTop() {
-            setLimit(20);
-            return this;
+      user.put(KEY_BOOKMARKED, newbookmarks);
+      user.saveInBackground();
+    }
+
+        // Get the number of bookmarked events
+        public int getNumBookmarks () {
+            return getBookmarked().length();
         }
-        public Query withUser() {
-            include("user");
-            return this;
+
+
+        // Querying for posts
+        public static class Query extends ParseQuery<Post> {
+            public Query() {
+                super(Post.class);
+            }
+
+            public Query getTop() {
+                setLimit(20);
+                return this;
+            }
+
+            public Query withUser() {
+                include("user");
+                return this;
+            }
         }
     }
-}
 
