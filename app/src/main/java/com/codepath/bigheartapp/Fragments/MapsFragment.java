@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.codepath.bigheartapp.R;
+import com.codepath.bigheartapp.helpers.FetchResults;
 import com.codepath.bigheartapp.helpers.FragmentHelper;
 import com.codepath.bigheartapp.model.Post;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -42,7 +43,7 @@ import java.util.Set;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback, FragmentHelper.BaseFragment {
+public class MapsFragment extends Fragment implements OnMapReadyCallback, FetchResults {
 
     // Set variables for the map fragment
     GoogleMap mGoogleMap;
