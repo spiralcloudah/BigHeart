@@ -23,6 +23,7 @@ import com.codepath.bigheartapp.R;
 import com.codepath.bigheartapp.helpers.FetchResults;
 import com.codepath.bigheartapp.helpers.FragmentHelper;
 import com.codepath.bigheartapp.helpers.HorizontalSpaceItemDecoration;
+import com.codepath.bigheartapp.helpers.PostBroadcastReceiver;
 import com.codepath.bigheartapp.helpers.VerticalSpaceItemDecoration;
 import com.codepath.bigheartapp.model.Post;
 import com.parse.FindCallback;
@@ -47,6 +48,7 @@ public class NestedPostsFragment extends Fragment implements FetchResults {
     RecyclerView rvUserPosts;
     ArrayList<Post> postArrayList;
     PostAdapter postsAdapter;
+    private BroadcastReceiver detailsChangedReceiver;
 
     public static NestedPostsFragment newInstance(int page, int postType) {
         Bundle args = new Bundle();
@@ -64,13 +66,8 @@ public class NestedPostsFragment extends Fragment implements FetchResults {
         // inflates recycler view in viewpager
         View rootView = inflater.inflate(R.layout.nested_fragment_posts, container, false);
 
-        return rootView;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         // link variable to layout id
-        rvUserPosts = view.findViewById(R.id.rvNestPosts);
+        rvUserPosts = rootView.findViewById(R.id.rvNestPosts);
 
         rvUserPosts.addItemDecoration(new VerticalSpaceItemDecoration(12));
         rvUserPosts.addItemDecoration(new HorizontalSpaceItemDecoration(6));
@@ -80,6 +77,16 @@ public class NestedPostsFragment extends Fragment implements FetchResults {
         // create adapter and link posts
         postsAdapter = new PostAdapter(postArrayList);
         rvUserPosts.setAdapter(postsAdapter);
+
+        detailsChangedReceiver = new PostBroadcastReceiver(postArrayList, postsAdapter);
+        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
+        getActivity().registerReceiver(detailsChangedReceiver, filter);
+
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvUserPosts.setLayoutManager(linearLayoutManager);
@@ -202,38 +209,13 @@ public class NestedPostsFragment extends Fragment implements FetchResults {
         swipeContainer.setRefreshing(false);
     }
 
-    BroadcastReceiver detailsChangedReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-
-            int resultCode = intent.getIntExtra(context.getString(R.string.result_code), RESULT_CANCELED);
-
-            if (resultCode == RESULT_OK) {
-                Post postChanged = (Post) intent.getSerializableExtra(Post.class.getSimpleName());
-                int indexOfChange = -1;
-                for (int i = 0; i < postArrayList.size(); i++) {
-                    if (postArrayList.get(i).hasSameId(postChanged)) {
-                        indexOfChange = i;
-                        break;
-                    }
-                }
-                if (indexOfChange != -1) {
-                    postArrayList.set(indexOfChange, postChanged);
-                    postsAdapter.notifyItemChanged(indexOfChange);
-                } else {
-                    Toast.makeText(context, "An error occurred", Toast.LENGTH_LONG).show();
-                }
-
-            }
-        }
-    };
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Register for the particular broadcast based on ACTION string
-        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
-        getActivity().registerReceiver(detailsChangedReceiver, filter);
-    }
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        // Register for the particular broadcast based on ACTION string
+//        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
+//        getActivity().registerReceiver(detailsChangedReceiver, filter);
+//    }
 
     @Override
     public void onDestroy() {

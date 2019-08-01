@@ -157,14 +157,14 @@ public class Post extends ParseObject implements Serializable {
     }
 
     public boolean isBookmarked(Post post) {
-        JSONArray bookmarks = getBookmarked();
+        List<String> bookmarks = getBookmarked();
         if (bookmarks != null) {
-            for (int i = 0; i < bookmarks.length(); i++) {
+            for (int i = 0; i < bookmarks.size(); i++) {
                 try {
-                    if (bookmarks.get(i).toString().equals(post.getObjectId())) {
+                    if (bookmarks.get(i).equals(post.getObjectId())) {
                         return true;
                     }
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -172,26 +172,26 @@ public class Post extends ParseObject implements Serializable {
         return false;
     }
 
-    public JSONArray getBookmarked() {
+    public List<String> getBookmarked() {
         ParseUser currentUser = ParseUser.getCurrentUser();
-        return currentUser.getJSONArray(KEY_BOOKMARKED);
+        return currentUser.getList(KEY_BOOKMARKED);
     }
 
     public void removeBookmark(Post post) {
         ParseUser user = ParseUser.getCurrentUser();
         String rmId = post.getEventId();
 
-        JSONArray bookmarks = user.getJSONArray(KEY_BOOKMARKED);
+        List<String> bookmarks = user.getList(KEY_BOOKMARKED);
         //JSONArray newbookmarks = new JSONArray();
 
-        for (int i = 0; i < bookmarks.length(); i++) {
+        for (int i = 0; i < bookmarks.size(); i++) {
 
             try {
-                if (!rmId.equals(bookmarks.get(i).toString())) {
+                if (rmId.equals(bookmarks.get(i))) {
                     bookmarks.remove(i);
                     //newbookmarks.put(bookmarks.get(i).toString());
                 }
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -202,7 +202,7 @@ public class Post extends ParseObject implements Serializable {
 
     // Get the number of bookmarked events
     public int getNumBookmarks() {
-        return getBookmarked().length();
+        return getBookmarked().size();
     }
 
 

@@ -22,6 +22,7 @@ import com.codepath.bigheartapp.R;
 import com.codepath.bigheartapp.helpers.FetchResults;
 import com.codepath.bigheartapp.helpers.FragmentHelper;
 import com.codepath.bigheartapp.helpers.HorizontalSpaceItemDecoration;
+import com.codepath.bigheartapp.helpers.PostBroadcastReceiver;
 import com.codepath.bigheartapp.helpers.VerticalSpaceItemDecoration;
 import com.codepath.bigheartapp.model.Post;
 
@@ -39,6 +40,7 @@ public class HomeFragment extends Fragment implements FetchResults {
     private SwipeRefreshLayout swipeContainer;
     public static ArrayList<Post> posts;
     public static PostAdapter adapter;
+    private BroadcastReceiver detailsChangedReceiver;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,6 +51,11 @@ public class HomeFragment extends Fragment implements FetchResults {
 
         posts = new ArrayList<>();
         adapter = new PostAdapter(posts);
+
+        detailsChangedReceiver = new PostBroadcastReceiver(posts, adapter);
+        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
+        getActivity().registerReceiver(detailsChangedReceiver, filter);
+
 
         rvPost = (RecyclerView) rootView.findViewById(R.id.rvPost);
         rvPost.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -128,38 +135,13 @@ public class HomeFragment extends Fragment implements FetchResults {
         swipeContainer.setRefreshing(false);
     }
 
-    BroadcastReceiver detailsChangedReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-
-            int resultCode = intent.getIntExtra(context.getString(R.string.result_code), RESULT_CANCELED);
-
-            if (resultCode == RESULT_OK) {
-                Post postChanged = (Post) intent.getSerializableExtra(Post.class.getSimpleName());
-                int indexOfChange = -1;
-                for (int i = 0; i < posts.size(); i++) {
-                    if (posts.get(i).hasSameId(postChanged)) {
-                        indexOfChange = i;
-                        break;
-                    }
-                }
-                if (indexOfChange != -1) {
-                    posts.set(indexOfChange, postChanged);
-                    adapter.notifyItemChanged(indexOfChange);
-                } else {
-                    Toast.makeText(context, "An error occurred", Toast.LENGTH_LONG).show();
-                }
-
-            }
-        }
-    };
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Register for the particular broadcast based on ACTION string
-        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
-        getActivity().registerReceiver(detailsChangedReceiver, filter);
-    }
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        // Register for the particular broadcast based on ACTION string
+//        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
+//        getActivity().registerReceiver(detailsChangedReceiver, filter);
+//    }
 
     @Override
     public void onDestroy() {
