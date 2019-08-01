@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.codepath.bigheartapp.EndlessRecyclerViewScrollListener;
 import com.codepath.bigheartapp.MainActivity;
 import com.codepath.bigheartapp.ProfilePagesAdapter;
 import com.codepath.bigheartapp.R;
@@ -85,8 +83,7 @@ public class ProfileFragment extends Fragment {
 
 
         tabLayout = view.findViewById(R.id.tabLayout);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_bookmark_border_black_24dp);
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_format_list_bulleted_black_24dp);
+
 
         // gets view pager and sets its PageAdapter so it can display items
         viewPager = view.findViewById(R.id.vpContainer);
@@ -95,6 +92,8 @@ public class ProfileFragment extends Fragment {
 
         //give TabLayout the ViewPager
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_bookmark_border_black_24dp);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_format_list_bulleted_black_24dp);
 
 
         // Set the onClickListener for the logout button

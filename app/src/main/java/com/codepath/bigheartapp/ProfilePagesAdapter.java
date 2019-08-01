@@ -33,7 +33,8 @@ public class ProfilePagesAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         // Generate title based on item position
-        return tabTitles[position];
+        //returning null to just show icons
+        return null;
     }
 
     // function that constructs and adds elements to tab bar..
