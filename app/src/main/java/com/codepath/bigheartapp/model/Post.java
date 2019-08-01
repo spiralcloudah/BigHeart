@@ -178,7 +178,7 @@ public class Post extends ParseObject implements Serializable {
         for (int i = 0; i < bookmarks.length(); i++ ) {
 
             try {
-                if (rmId != bookmarks.get(i).toString()) {
+                if (!rmId.equals(bookmarks.get(i).toString())) {
                     newbookmarks.put(bookmarks.get(i).toString());
                 }
             } catch (JSONException e) {
