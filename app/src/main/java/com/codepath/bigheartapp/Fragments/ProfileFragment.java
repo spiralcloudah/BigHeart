@@ -114,6 +114,7 @@ public class ProfileFragment extends Fragment implements FragmentHelper.BaseFrag
         }
 
 
+
         tabLayout = view.findViewById(R.id.tabLayout);
 
         // gets view pager and sets its PageAdapter so it can display items
@@ -124,11 +125,10 @@ public class ProfileFragment extends Fragment implements FragmentHelper.BaseFrag
         tabLayout.setupWithViewPager(viewPager);
 
 
-
-
         // Set the onClickListener for the logout button
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
+
             public void onClick(View v) { logoutUser(v); }
         });
 //        ivCurrentProfile.setOnClickListener(new View.OnClickListener() {
@@ -295,11 +295,13 @@ public class ProfileFragment extends Fragment implements FragmentHelper.BaseFrag
         return postQuery;
     }
 
+
     @Override
     public void onFetchSuccess(List<Post> objects, int i) {
         posts.add(objects.get(i));
         adapter.notifyItemInserted(posts.size() - 1);
     }
+
 
 
     @Override

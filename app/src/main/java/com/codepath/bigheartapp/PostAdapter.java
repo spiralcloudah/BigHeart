@@ -321,6 +321,9 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     // Gets the number of posts
     @Override
     public int getItemCount() {
+        if (mFilteredPosts == null) {
+            return 0;
+        }
         return mFilteredPosts.size();
     }
 
@@ -441,7 +444,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             tvAddress = itemView.findViewById(R.id.tvAddress);
             ivHeart = (ImageView) itemView.findViewById(R.id.ivHeart);
             ibBookmark = (ImageButton) itemView.findViewById(R.id.ibBookmark);
-            tvMonth = (TextView) itemView.findViewById(R.id.tvMonth);
+            tvMonth = (TextView) itemView.findViewById(R.id.tvDate);
             tvDay = (TextView) itemView.findViewById(R.id.tvDay);
             tvYear = (TextView) itemView.findViewById(R.id.tvYear);
 

@@ -186,7 +186,7 @@
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvMonth"
+        android:layout_below="@+id/tvDate"
         android:layout_alignStart="@+id/ivHeart"
         android:layout_alignLeft="@+id/ivHeart"
         android:layout_alignParentEnd="true"
