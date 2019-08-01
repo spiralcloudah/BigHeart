@@ -131,47 +131,7 @@ public class ProfileFragment extends Fragment implements FragmentHelper.BaseFrag
 
             public void onClick(View v) { logoutUser(v); }
         });
-//        ivCurrentProfile.setOnClickListener(new View.OnClickListener() {
-        //           @Override
-        //           public void onClick(View v) {
-        //               Activity activity = (Activity) ProfileFragment.this.getActivity();
 
-        //               Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        //               File mediaStorage = null;
-        //               try {
-        //                  mediaStorage = getTempImageFile(getContext());
-        //              } catch (IOException e) {
-        ////                  e.printStackTrace();
-        //              }
-        //              // Create the storage directory if it does not exist
-        //             if (!mediaStorage.exists() && !mediaStorage.mkdirs()){
-        //                  Log.d(APP_TAG, "failed to create directory");
-        //              }
-
-        //             String path = mediaStorage.getAbsolutePath();
-        //             Uri uri = FileProvider.getUriForFile(activity, "com.codepath.parsetagram", mediaStorage);
-        //             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-
-        //             photoFile = new File(path);
-        //
-        //            startActivityForResult(intent,
-        //                     CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-        //         }
-        //     });
-
-//        posts = new ArrayList<>();
-//
-//        adapter = new PostAdapter(posts, whichFragment);
-//        //rvPostView = (RecyclerView) view.findViewById(R.id.rvUserPosts);
-//
-//        rvPostView.setAdapter(adapter);
-//
-//        // Configure the RecyclerView
-//
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-//
-//        rvPostView.setLayoutManager(linearLayoutManager);
 //
 //        // Retain an instance so that you can call `resetState()` for fresh searches
 //        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
@@ -213,37 +173,6 @@ public class ProfileFragment extends Fragment implements FragmentHelper.BaseFrag
 //                getResources().getColor(android.R.color.holo_red_light)
 //        );
 
-
-//        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//
-//                switch (tab.getPosition()) {
-//                    case 0:
-//                    //    loadTopPosts();
-//                        break;
-//                    case 1:
-//                    //    loadBookmarkedEvents();
-//                        break;
-//
-//
-//                }
-//
-//
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//            }
-//        });
-
-       // loadTopPosts();
 
     }
 
