@@ -103,7 +103,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, FetchR
         }
 
         // markers are drawn at the location specified by the user
-        drawMarkers(mGoogleMap);
+        drawMarkers();
     }
 
     @Override
@@ -129,7 +129,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, FetchR
                         if (location != null) {
                             onLocationChanged(location);
                             moveCamera();
-                        }
+                    }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -162,39 +162,46 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, FetchR
         mCurrentLocation = location;
     }
 
-    public void drawMarkers(final GoogleMap mGoogleMap) {
+    public void drawMarkers() {
         FragmentHelper fragmentHelper = new FragmentHelper(getPostQuery());
         fragmentHelper.fetchPosts(this);
     }
 
     @Override
-    public void onFetchSuccess(List<Post> objects, int i) {
-        try {
-            // Sets the latitude and longitude of the posts' locations
-            Double latitude = objects.get(i).getLocation().getLatitude();
-            Double longitude = objects.get(i).getLocation().getLongitude();
-            LatLng pos = new LatLng(latitude, longitude);
-            BitmapDescriptor coloredIcon;
-            if (objects.get(i).getIsEvent()) {
-                // Events have a blue icon
-                coloredIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+    public void onFetchSuccess(List<Post> objects) {
+        for (int i = 0; i < objects.size(); i++) {
+            try {
+                // Sets the latitude and longitude of the posts' locations
+                Double latitude = objects.get(i).getLocation().getLatitude();
+                Double longitude = objects.get(i).getLocation().getLongitude();
+                LatLng pos = new LatLng(latitude, longitude);
+                BitmapDescriptor coloredIcon;
+                if (objects.get(i).getIsEvent()) {
+                    // Events have a blue icon
+                    coloredIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
 
-            } else {
-                coloredIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
+                } else {
+                    coloredIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
+                }
+                mGoogleMap.addMarker(new MarkerOptions()
+                        .position(pos)
+                        .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
+                        .icon(coloredIcon)
+                        .snippet(objects.get(i).getDescription()));
+            } catch (ParseException er) {
+                er.printStackTrace();
             }
-            mGoogleMap.addMarker(new MarkerOptions()
-                    .position(pos)
-                    .title(objects.get(i).getUser().fetchIfNeeded().getUsername())
-                    .icon(coloredIcon)
-                    .snippet(objects.get(i).getDescription()));
-        } catch (ParseException er) {
-            er.printStackTrace();
         }
     }
 
     @Override
     public void onFetchFailure() {
         Toast.makeText(getContext(), "Failed to fetch markers", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFetchFinish() {
+
     }
 
     @Override

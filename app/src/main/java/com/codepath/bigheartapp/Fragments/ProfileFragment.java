@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.codepath.bigheartapp.EndlessRecyclerViewScrollListener;
 import com.codepath.bigheartapp.MainActivity;
 import com.codepath.bigheartapp.ProfilePagesAdapter;
 import com.codepath.bigheartapp.R;
@@ -115,24 +113,6 @@ public class ProfileFragment extends Fragment {
         // Change activities back to the login screen
         Intent i = new Intent(getContext(), MainActivity.class);
         startActivity(i);
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-
-                // Set the current user's profile picture
-                currentPath = photoFile.getPath();
-                Bitmap bitmap = BitmapFactory.decodeFile(currentPath);
-                ivCurrentProfile.setImageBitmap(bitmap);
-                final BitmapDrawable ob = new BitmapDrawable(getResources(), bitmap);
-                ivCurrentProfile.setBackgroundDrawable(ob);
-                parseFile = new ParseFile(photoFile);
-                ParseUser.getCurrentUser().put("profilePic", parseFile);
-                ParseUser.getCurrentUser().saveInBackground();
-            }
-        }
+        getActivity().finish();
     }
 }

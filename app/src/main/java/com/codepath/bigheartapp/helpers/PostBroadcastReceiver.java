@@ -3,25 +3,18 @@ package com.codepath.bigheartapp.helpers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
-import com.codepath.bigheartapp.PostAdapter;
 import com.codepath.bigheartapp.R;
-import com.codepath.bigheartapp.model.Post;
-
-import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 public class PostBroadcastReceiver extends BroadcastReceiver {
 
-    ArrayList<Post> posts;
-    PostAdapter adapter;
+    FragmentUpdated fragmentUpdated;
 
-    public PostBroadcastReceiver(ArrayList<Post> fragPosts, PostAdapter fragAdapter) {
-        posts = fragPosts;
-        adapter = fragAdapter;
+    public PostBroadcastReceiver(FragmentUpdated fragUpdated) {
+        fragmentUpdated = fragUpdated;
     }
 
     @Override
@@ -29,21 +22,7 @@ public class PostBroadcastReceiver extends BroadcastReceiver {
         int resultCode = intent.getIntExtra(context.getString(R.string.result_code), RESULT_CANCELED);
 
         if (resultCode == RESULT_OK) {
-            Post postChanged = (Post) intent.getSerializableExtra(Post.class.getSimpleName());
-            int indexOfChange = -1;
-            for (int i = 0; i < posts.size(); i++) {
-                if (posts.get(i).hasSameId(postChanged)) {
-                    indexOfChange = i;
-                    break;
-                }
-            }
-            if (indexOfChange != -1) {
-                posts.set(indexOfChange, postChanged);
-                adapter.notifyItemChanged(indexOfChange);
-            } else {
-                Toast.makeText(context, "An error occurred", Toast.LENGTH_LONG).show();
-            }
-
+            fragmentUpdated.updatePosts(intent);
         }
     }
 }

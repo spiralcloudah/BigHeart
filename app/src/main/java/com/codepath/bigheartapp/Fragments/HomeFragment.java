@@ -1,11 +1,9 @@
 package com.codepath.bigheartapp.Fragments;
 
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,16 +21,14 @@ import com.codepath.bigheartapp.helpers.FetchResults;
 import com.codepath.bigheartapp.helpers.FragmentHelper;
 import com.codepath.bigheartapp.helpers.HorizontalSpaceItemDecoration;
 import com.codepath.bigheartapp.helpers.PostBroadcastReceiver;
+import com.codepath.bigheartapp.helpers.FragmentUpdated;
 import com.codepath.bigheartapp.helpers.VerticalSpaceItemDecoration;
 import com.codepath.bigheartapp.model.Post;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
-
-public class HomeFragment extends Fragment implements FetchResults {
+public class HomeFragment extends Fragment implements FetchResults, FragmentUpdated {
 
     // Store variables to use in the home fragment
     private EndlessRecyclerViewScrollListener scrollListener;
@@ -52,7 +48,7 @@ public class HomeFragment extends Fragment implements FetchResults {
         posts = new ArrayList<>();
         adapter = new PostAdapter(posts);
 
-        detailsChangedReceiver = new PostBroadcastReceiver(posts, adapter);
+        detailsChangedReceiver = new PostBroadcastReceiver(this); //new interface
         IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
         getActivity().registerReceiver(detailsChangedReceiver, filter);
 
@@ -78,7 +74,7 @@ public class HomeFragment extends Fragment implements FetchResults {
 
         // Adds the scroll listener and item decoration to RecyclerView
         rvPost.addOnScrollListener(scrollListener);
-        rvPost.addItemDecoration(new VerticalSpaceItemDecoration(12));
+        rvPost.addItemDecoration(new VerticalSpaceItemDecoration(6));
         rvPost.addItemDecoration(new HorizontalSpaceItemDecoration(6));
         swipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
 
@@ -112,7 +108,6 @@ public class HomeFragment extends Fragment implements FetchResults {
         adapter.clear();
         FragmentHelper fragmentHelper = new FragmentHelper(getPostQuery());
         fragmentHelper.fetchPosts(this);
-        swipeContainer.setRefreshing(false);
     }
 
     @Override
@@ -124,29 +119,41 @@ public class HomeFragment extends Fragment implements FetchResults {
     }
 
     @Override
-    public void onFetchSuccess(List<Post> objects, int i) {
-        posts.add(objects.get(i));
-        adapter.notifyItemInserted(posts.size() - 1);
+    public void onFetchSuccess(List<Post> objects) {
+        posts.addAll(objects);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onFetchFailure() {
         Toast.makeText(getContext(), "Failed to query posts", Toast.LENGTH_LONG).show();
-        swipeContainer.setRefreshing(false);
     }
 
-//    @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        // Register for the particular broadcast based on ACTION string
-//        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
-//        getActivity().registerReceiver(detailsChangedReceiver, filter);
-//    }
+    @Override
+    public void onFetchFinish() {
+        swipeContainer.setRefreshing(false);
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         // Unregister the listener when the application is paused
         getActivity().unregisterReceiver(detailsChangedReceiver);
+    }
+
+    @Override
+    public void updatePosts(Intent intent) {
+        Post postChanged = (Post) intent.getSerializableExtra(Post.class.getSimpleName());
+        int indexOfChange = -1;
+        for (int i = 0; i < posts.size(); i++) {
+            if (posts.get(i).hasSameId(postChanged)) {
+                indexOfChange = i;
+                break;
+            }
+        }
+        if (indexOfChange != -1) {
+            posts.set(indexOfChange, postChanged);
+            adapter.notifyItemChanged(indexOfChange);
+        }
     }
 }
