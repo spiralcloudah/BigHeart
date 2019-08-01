@@ -52,9 +52,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, FetchR
     // Set variable to connect to parse database
     private final static String KEY_LOCATION = "location";
 
-    //required empty constructor
-    public MapsFragment() {}
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 
