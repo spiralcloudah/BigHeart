@@ -1,5 +1,6 @@
 package com.codepath.bigheartapp.Fragments;
 
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,9 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.codepath.bigheartapp.PostAdapter;
+import com.codepath.bigheartapp.PostDetailsActivity;
 import com.codepath.bigheartapp.R;
+import com.codepath.bigheartapp.helpers.FragmentHelper;
 import com.codepath.bigheartapp.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -23,7 +27,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NestedPostsFragment extends Fragment {
+public class NestedPostsFragment extends Fragment implements FragmentHelper.BaseFragment {
     private static final String TAG = "NestedPostsFragment";
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String POST_TYPE = "Post_Type";
@@ -50,7 +54,6 @@ public class NestedPostsFragment extends Fragment {
         // inflates recycler view in viewpager
         View rootView = inflater.inflate(R.layout.nested_fragment_posts, container, false);
 
-
         return rootView;
     }
 
@@ -59,6 +62,8 @@ public class NestedPostsFragment extends Fragment {
         // link variable to layout id
         rvUserPosts = view.findViewById(R.id.rvNestPosts);
 
+        rvUserPosts.addItemDecoration(new VerticalSpaceItemDecoration(12));
+        rvUserPosts.addItemDecoration(new HorizontalSpaceItemDecoration(6));
 
         //create new array list  for posts
         postArrayList = new ArrayList<>();
@@ -77,41 +82,6 @@ public class NestedPostsFragment extends Fragment {
             loadBookmarkedEvents();
 
         }
-    }
-
-    public void loadTopPosts(){
-        final Post.Query postsQuery = new Post.Query();
-        postsQuery
-                .getTop()
-                .withUser();
-
-        postsQuery.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
-
-        postsQuery.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> objects, ParseException e) {
-                if (e==null){
-                    Post post = new Post();
-                    System.out.println("Success!");
-                    for (int i = 0;i<objects.size(); i++){
-//                        try {
-//                            Log.d("FeedActivity", "Post ["+i+"] = "
-//                                    + objects.get(i).getDescription()
-//                                    + "\n username = " + objects.get(i).getUser().fetchIfNeeded().getUsername()
-//                                    + " o k ");
-//                        } catch (ParseException e1) {
-//                            e1.printStackTrace();
-//                        }
-
-                        postArrayList.add(0,objects.get(i));
-                        postsAdapter.notifyItemInserted(postArrayList.size() - 1);
-
-                    }
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     // function that reloads recycler view on case of bookmarks selected
@@ -146,4 +116,49 @@ public class NestedPostsFragment extends Fragment {
         });
     }
 
+    public void loadTopPosts(){
+        postsAdapter.clear();
+        FragmentHelper fragmentHelper = new FragmentHelper(getPostQuery());
+        fragmentHelper.fetchPosts(this);
+//        swipeContainer.setRefreshing(false);
+    }
+
+    @Override
+    public Post.Query getPostQuery() {
+        final Post.Query postQuery = new Post.Query();
+        postQuery.getTop().withUser();
+        // Only load the current user's posts
+        postQuery.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+        return postQuery;
+    }
+
+
+    @Override
+    public void onFetchSuccess(List<Post> objects, int i) {
+        postArrayList.add(objects.get(i));
+        postsAdapter.notifyItemInserted(posts.size() - 1);
+    }
+
+
+
+    @Override
+    public void onFetchFailure() {
+        Toast.makeText(getContext(), "Failed to query posts", Toast.LENGTH_LONG).show();
+//        swipeContainer.setRefreshing(false);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Register for the particular broadcast based on ACTION string
+        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
+        getActivity().registerReceiver(detailsChangedReceiver, filter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Unregister the listener when the application is paused
+        getActivity().unregisterReceiver(detailsChangedReceiver);
+    }
 }

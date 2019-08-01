@@ -53,7 +53,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 
 
-public class ProfileFragment extends Fragment implements FragmentHelper.BaseFragment {
+public class ProfileFragment extends Fragment {
 
     // Store variables to use in the event fragment
 
@@ -207,51 +207,4 @@ public class ProfileFragment extends Fragment implements FragmentHelper.BaseFrag
             }
         }
     }
-
-    public void loadTopPosts(){
-        adapter.clear();
-        FragmentHelper fragmentHelper = new FragmentHelper(getPostQuery());
-        fragmentHelper.fetchPosts(this);
-        swipeContainer.setRefreshing(false);
-    }
-
-    @Override
-    public Post.Query getPostQuery() {
-        final Post.Query postQuery = new Post.Query();
-        postQuery.getTop().withUser();
-        // Only load the current user's posts
-        postQuery.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
-        return postQuery;
-    }
-
-
-    @Override
-    public void onFetchSuccess(List<Post> objects, int i) {
-        posts.add(objects.get(i));
-        adapter.notifyItemInserted(posts.size() - 1);
-    }
-
-
-
-    @Override
-    public void onFetchFailure() {
-        Toast.makeText(getContext(), "Failed to query posts", Toast.LENGTH_LONG).show();
-        swipeContainer.setRefreshing(false);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Register for the particular broadcast based on ACTION string
-        IntentFilter filter = new IntentFilter(PostDetailsActivity.ACTION);
-        getActivity().registerReceiver(detailsChangedReceiver, filter);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        // Unregister the listener when the application is paused
-        getActivity().unregisterReceiver(detailsChangedReceiver);
-    }
-
 }
