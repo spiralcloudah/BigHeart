@@ -58,7 +58,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         ivHeart = (ImageView) findViewById(R.id.ivDetailsHeart);
         ibBookmark = (ImageButton) findViewById(R.id.ibBookmark);
         tvDate = (TextView) findViewById(R.id.tvDate);
-        tvMonth = (TextView) findViewById(R.id.tvMonth);
+        tvMonth = (TextView) findViewById(R.id.tvDate);
         tvDay = (TextView) findViewById(R.id.tvDay);
         tvYear = (TextView) findViewById(R.id.tvYear);
         tvTime = (TextView) findViewById(R.id.tvTime);

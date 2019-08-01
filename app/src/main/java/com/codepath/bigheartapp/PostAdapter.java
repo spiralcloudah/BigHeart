@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
@@ -71,7 +70,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
                 // Default view is a regular post
                 View otherView = inflater.inflate(R.layout.item_post_cardview, parent, false);
-                viewHolder = new PostViewHolder(otherView){
+                viewHolder = new PostViewHolder(otherView) {
                 };
                 break;
         }
@@ -103,7 +102,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 configureEventViewHolder(eventViewHolder, position);
                 break;
 
-                // Default call is a function specific to a regular post
+            // Default call is a function specific to a regular post
             default:
                 PostViewHolder vh = (PostViewHolder) holder;
                 configurePostViewHolder(vh, position);
@@ -115,7 +114,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     public void configureEventViewHolder(final EventViewHolder holder, int position) {
         final Post post = mFilteredPosts.get(position);
         try {
-
             // Set the IDs for the views in post
             holder.tvTimePosted.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
             holder.tvUsertag.setText("@" + post.getUser().fetchIfNeeded().getUsername());
@@ -125,23 +123,25 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if(post.isLiked()) {
+
+        if (post.isLiked()) {
             holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
         } else {
             holder.ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
         }
-//        if(post.isBookmarked()) {
-//
-//            // Set the bookmark image to filled if a post is already bookmarked
-//            holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
-//        }
+
+
+        if (post.isBookmarked(post)) {
+            // Set the bookmark image to filled if a post is already bookmarked
+            holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
+        }
 
         // onClickListener for the heart image button
-       holder.ivHeart.setOnClickListener(new View.OnClickListener() {
+        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if(!post.isLiked()) {
+                if (!post.isLiked()) {
 
                     // If a post is not yet liked, start the animation and set the heart to filled
                     post.likePost(ParseUser.getCurrentUser());
@@ -169,35 +169,31 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             }
         });
 
+
+        // onClickListener for the bookmark image button
         holder.ibBookmark.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                  post.bookmarkPost(post.getEventId());
-              }
-        });
 
-//        if(post.isLiked()) {
-//            holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
-//        }
-
-        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!post.isLiked()) {
-                    post.likePost(ParseUser.getCurrentUser());
-                    holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
+                if(!post.isBookmarked(post)) {
 
+                    // If a post is not yet bookmarked, set the bookmark to filled
+                    post.bookmarkPost(post.getEventId());
+                    holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
+
+                    // save the post as bookmarked
                     post.saveInBackground();
-
                 } else {
-                    post.unlikePost(ParseUser.getCurrentUser());
-                    holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
 
+                    // If a post is already bookmarked, set the bookmark to unfilled
+                    post.removeBookmark(post);
+                    holder.ibBookmark.setBackgroundResource(R.drawable.save);
+
+                    // save the post as not bookmarked
                     post.saveInBackground();
                 }
             }
         });
-
 
 
         // Set the profile picture for the user
@@ -215,7 +211,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
         // Set the event description
         holder.tvEventDesc.setText(post.getDescription());
-        if (!(post.getImage() == null)){
+        if (!(post.getImage() == null)) {
 
             // Set the image to be posted
             Glide.with(context)
@@ -227,8 +223,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             // Set the visibility of the event image to GONE if no picture is taken
             holder.ivEventImage.setVisibility(View.GONE);
         }
-        if (!(post.getDay() == null)){
-
+        if (!(post.getDay() == null)) {
             // Set the date, time, and event title if a date is given by user
             holder.tvDateOfEvent.setText(post.getDay());
             holder.tvTime.setText(post.getTime());
@@ -237,115 +232,84 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     // Configure the post
-    public void configurePostViewHolder(final PostViewHolder holder, int position){
-            final Post post = mFilteredPosts.get(position);
-            try {
+    public void configurePostViewHolder(final PostViewHolder holder, int position) {
+        final Post post = mFilteredPosts.get(position);
+        try {
 
-                // Set the IDs for the views in post
-                holder.tvDate.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
-                holder.tvLocation.setText(post.getAddress());
-                holder.tvUserName2.setText(post.getUser().fetchIfNeeded().getUsername());
-                holder.tvUserName.setText(post.getUser().fetchIfNeeded().getUsername());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            if(post.isLiked()) {
-                holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
-            } else {
-                holder.ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
-            }
-//        if(post.isBookmarked()) {
-//
-//            // Set the bookmark image to filled if a post is already bookmarked
-//            holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
-//        }
+            // Set the IDs for the views in post
+            holder.tvDate.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
+            holder.tvLocation.setText(post.getAddress());
+            holder.tvUserName2.setText(post.getUser().fetchIfNeeded().getUsername());
+            holder.tvUserName.setText(post.getUser().fetchIfNeeded().getUsername());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (post.isLiked()) {
+            holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
+        } else {
+            holder.ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
+        }
 
         // onClickListener for the heart image button
-            holder.ivHeart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(!post.isLiked()) {
-
-                        // If a post is not yet liked, start the animation and set the heart to filled
-                        post.likePost(ParseUser.getCurrentUser());
-                        holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
-                        holder.ivHeart.setBackgroundResource(R.drawable.animation);
-                        AnimationDrawable heartStart;
-                        heartStart = (AnimationDrawable) holder.ivHeart.getBackground();
-                        heartStart.start();
-
-                        // save the post as liked
-                        post.saveInBackground();
-                    } else {
-
-                        // If a post is already liked, start the animation and set the heart to unfilled
-                        post.unlikePost(ParseUser.getCurrentUser());
-                        holder.ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
-                        holder.ivHeart.setBackgroundResource(R.drawable.animationstop);
-                        AnimationDrawable heartStop;
-                        heartStop = (AnimationDrawable) holder.ivHeart.getBackground();
-                        heartStop.start();
-
-                        // save the post as not liked
-                        post.saveInBackground();
-                    }
-                }
-            });
-
-        // onClickListener for the bookmark image button
-        holder.ibBookmark.setOnClickListener(new View.OnClickListener() {
-
+        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if(!post.isBookmarked()) {
-//
-//                    // If a post is not yet bookmarked, set the bookmark to filled
-//                    post.bookmarkPost(ParseUser.getCurrentUser());
-//                    holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
-//
-//                    // save the post as bookmarked
-//                    post.saveInBackground();
-//                } else {
-//
-//                    // If a post is already bookmarked, set the bookmark to unfilled
-//                    post.unbookmarkPost(ParseUser.getCurrentUser());
-//                    holder.ibBookmark.setBackgroundResource(R.drawable.save);
-//
-//                    // save the post as not bookmarked
-//                    post.saveInBackground();
-//                }
+                if (!post.isLiked()) {
+
+                    // If a post is not yet liked, start the animation and set the heart to filled
+                    post.likePost(ParseUser.getCurrentUser());
+                    holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
+                    holder.ivHeart.setBackgroundResource(R.drawable.animation);
+                    AnimationDrawable heartStart;
+                    heartStart = (AnimationDrawable) holder.ivHeart.getBackground();
+                    heartStart.start();
+
+                    // save the post as liked
+                    post.saveInBackground();
+                } else {
+
+                    // If a post is already liked, start the animation and set the heart to unfilled
+                    post.unlikePost(ParseUser.getCurrentUser());
+                    holder.ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
+                    holder.ivHeart.setBackgroundResource(R.drawable.animationstop);
+                    AnimationDrawable heartStop;
+                    heartStop = (AnimationDrawable) holder.ivHeart.getBackground();
+                    heartStop.start();
+
+                    // save the post as not liked
+                    post.saveInBackground();
+                }
             }
         });
 
         // Set the profile picture for the user
-            ParseFile p = post.getUser().getParseFile("profilePicture");
-            if (p != null) {
-                Glide.with(context)
-                        .load(p.getUrl())
-                        .bitmapTransform(new CropCircleTransformation(context))
-                        .into(holder.ivProfilePic);
-            } else {
+        ParseFile p = post.getUser().getParseFile("profilePicture");
+        if (p != null) {
+            Glide.with(context)
+                    .load(p.getUrl())
+                    .bitmapTransform(new CropCircleTransformation(context))
+                    .into(holder.ivProfilePic);
+        } else {
 
-                // Default image in case user does not have a profile image
-                holder.ivProfilePic.setImageResource(R.drawable.profile);
-            }
+            // Default image in case user does not have a profile image
+            holder.ivProfilePic.setImageResource(R.drawable.profile);
+        }
 
-            // Set the description for the post
-            holder.tvDesc.setText(post.getDescription());
-            if (!(post.getImage() == null)){
+        // Set the description for the post
+        holder.tvDesc.setText(post.getDescription());
+        if (!(post.getImage() == null)) {
+            // Set the image to be posted
+            Glide.with(context)
+                    .load(post.getImage().getUrl())
+                    .bitmapTransform(new CenterCrop(context))
+                    .into(holder.ivImage);
+        } else {
+            // Set the visibility of the post image to GONE if no picture is taken
+            holder.ivImage.setVisibility(View.GONE);
+        }
 
-                // Set the image to be posted
-                Glide.with(context)
-                        .load(post.getImage().getUrl())
-                        .bitmapTransform(new CenterCrop(context))
-                        .into(holder.ivImage);
-            } else {
-
-                // Set the visibility of the post image to GONE if no picture is taken
-                holder.ivImage.setVisibility(View.GONE);
-            }
-
-        if (!(post.getAddress() == null)){
+        if (!(post.getAddress() == null)) {
             holder.tvLocation.setVisibility(View.VISIBLE);
         } else {
 
@@ -357,6 +321,9 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     // Gets the number of posts
     @Override
     public int getItemCount() {
+        if (mFilteredPosts == null) {
+            return 0;
+        }
         return mFilteredPosts.size();
     }
 
@@ -384,6 +351,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 filterResults.values = mFilteredPosts;
                 return filterResults;
             }
+
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 mFilteredPosts = (ArrayList<Post>) filterResults.values;
@@ -464,8 +432,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             super(itemView);
 
             // Set the variables to the corresponding IDs in the xml layout
-            ivEventImage =  itemView.findViewById(R.id.ivEventImage);
-            ivUserProfile =  itemView.findViewById(R.id.ivUserProfile);
+            ivEventImage = itemView.findViewById(R.id.ivEventImage);
+            ivUserProfile = itemView.findViewById(R.id.ivUserProfile);
             tvTime = (TextView) itemView.findViewById(R.id.tvTimeOfEvent);
             tvFirstLast = (TextView) itemView.findViewById(R.id.tvFirstLast);
             tvUsertag = (TextView) itemView.findViewById(R.id.tvUsertag);
@@ -476,7 +444,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             tvAddress = itemView.findViewById(R.id.tvAddress);
             ivHeart = (ImageView) itemView.findViewById(R.id.ivHeart);
             ibBookmark = (ImageButton) itemView.findViewById(R.id.ibBookmark);
-            tvMonth = (TextView) itemView.findViewById(R.id.tvMonth);
+            tvMonth = (TextView) itemView.findViewById(R.id.tvDate);
             tvDay = (TextView) itemView.findViewById(R.id.tvDay);
             tvYear = (TextView) itemView.findViewById(R.id.tvYear);
 

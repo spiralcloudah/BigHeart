@@ -128,7 +128,7 @@ public class NestedPostsFragment extends Fragment {
             public void done(List<Post> objects, ParseException e) {
                 if (e == null) {
                     postArrayList.clear();
-                    for ( int i = 0; i < bookmarked.length() - 1 ; i++) {
+                    for ( int i = 0; i < bookmarked.length(); i++) {
                         for (int j = 0; j < objects.size(); j++) {
                             try {
                                 if (objects.get(j).getObjectId().equals(bookmarked.get(i).toString())) {

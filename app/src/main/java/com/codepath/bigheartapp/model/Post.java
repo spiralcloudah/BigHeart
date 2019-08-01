@@ -147,26 +147,53 @@ public class Post extends ParseObject implements Serializable {
         currentUser.saveInBackground();
     }
 
-//    public boolean isBookmarked(Post post) {
-//        JSONArray bookmarks = getBookmarked();
-//        if(bookmarks != null) {
-//            for (int i = 0; i < bookmarks.length(); i++) {
-//                try {
-//                    if (bookmarks.getJSONObject(i).getString("objectId").equals(post.getObjectId())) {
-//                        return true;
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//        return false;
-//    }
+    public boolean isBookmarked(Post post) {
+        JSONArray bookmarks = getBookmarked();
+        if(bookmarks != null) {
+            for (int i = 0; i < bookmarks.length(); i++) {
+                try {
+                    if (bookmarks.get(i).toString().equals(post.getObjectId())) {
+                        return true;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
 
-//        // Get the number of bookmarked events
-//        public int getNumBookmarks () {
-//            return getBookmarked().length();
-//        }
+    public JSONArray getBookmarked() {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        return currentUser.getJSONArray(KEY_BOOKMARKED);
+    }
+
+    public void removeBookmark (Post post) {
+        ParseUser user = ParseUser.getCurrentUser();
+        String rmId = post.getEventId();
+
+        JSONArray bookmarks = user.getJSONArray(KEY_BOOKMARKED);
+        JSONArray newbookmarks = new JSONArray();
+
+        for (int i = 0; i < bookmarks.length(); i++ ) {
+
+            try {
+                if (!rmId.equals(bookmarks.get(i).toString())) {
+                    newbookmarks.put(bookmarks.get(i).toString());
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+      user.put(KEY_BOOKMARKED, newbookmarks);
+      user.saveInBackground();
+    }
+
+        // Get the number of bookmarked events
+        public int getNumBookmarks () {
+            return getBookmarked().length();
+        }
 
 
         // Querying for posts
