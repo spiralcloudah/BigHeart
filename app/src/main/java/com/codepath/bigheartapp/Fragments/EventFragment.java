@@ -1,17 +1,23 @@
 package com.codepath.bigheartapp.Fragments;
 
+import android.Manifest;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +37,9 @@ import com.codepath.bigheartapp.helpers.HorizontalSpaceItemDecoration;
 import com.codepath.bigheartapp.helpers.PostBroadcastReceiver;
 import com.codepath.bigheartapp.helpers.VerticalSpaceItemDecoration;
 import com.codepath.bigheartapp.model.Post;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -39,6 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 public class EventFragment extends Fragment implements FetchResults, FragmentUpdated {
 
@@ -47,6 +57,10 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
     public RecyclerView rvEventPosts;
     SearchView searchEvents;
     ImageButton ibFilter;
+    private final static String KEY_LOCATION = "location";
+    private final int MY_LOCATION_REQUEST_CODE = 130;
+
+    public static Location mCurrentLocation;
     private SwipeRefreshLayout swipeContainer;
     private ArrayList<Post> posts;
     private PostAdapter adapter;
@@ -125,7 +139,6 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
             }
         });
 
-        loadTopPosts();
         return rootView;
     }
 
@@ -136,6 +149,19 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
         // Allows us to filter and search for events in the Filter Activity
         searchEvents.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchEvents.setMaxWidth(Integer.MAX_VALUE);
+
+        if (savedInstanceState != null && savedInstanceState.keySet().contains(KEY_LOCATION)) {
+
+            // KEY_LOCATION was found in the Bundle, so mCurrentLocation is not null
+            mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
+        }
+
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+            getMyLocation();
+        } else {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_LOCATION_REQUEST_CODE);
+        }
 
         // Listening to search query text change
         searchEvents.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -155,6 +181,7 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
                 return false;
             }
         });
+        loadTopPosts();
     }
 
     public void loadTopPosts(){
@@ -171,14 +198,25 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
 
         // Only loads posts that are events
         postQuery.whereEqualTo(Post.KEY_IS_EVENT, true);
-        if(MapsFragment.mCurrentLocation != null) {
-            ParseGeoPoint userLocation = new ParseGeoPoint(MapsFragment.mCurrentLocation.getLatitude(), MapsFragment.mCurrentLocation.getLongitude());
+        if(mCurrentLocation != null) {
+            ParseGeoPoint userLocation = new ParseGeoPoint(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             postQuery.whereWithinMiles(Post.KEY_LOCATION, userLocation, MAX_DISTANCE);
             Toast.makeText(getContext(),"Showing events within " + MAX_DISTANCE + " miles of you", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(getContext(),"Could not load user location", Toast.LENGTH_LONG).show();
         }
         return postQuery;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        getActivity().onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            getMyLocation();
+        } else {
+            Toast.makeText(getContext(), "App does not have access to user's location", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -218,6 +256,39 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
             });
         }
 
+    }
+
+    // Function to find the location set by the user
+    @SuppressWarnings({"MissingPermission"})
+    void getMyLocation() {
+        FusedLocationProviderClient locationClient = getFusedLocationProviderClient(getContext());
+        locationClient.getLastLocation()
+                .addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            onLocationChanged(location);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("MapDemoActivity", "Error trying to get last GPS location");
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    public void onLocationChanged(Location location) {
+
+        // GPS may be turned off; nothing happens
+        if (location == null) {
+            return;
+        }
+
+        // If not null, then set current location to changed location
+        mCurrentLocation = location;
     }
 
     @Override
