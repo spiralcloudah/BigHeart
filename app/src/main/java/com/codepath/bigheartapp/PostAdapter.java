@@ -123,13 +123,15 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         if (post.isLiked()) {
             holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
         } else {
             holder.ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
         }
-        if (post.isBookmarked(post)) {
 
+
+        if (post.isBookmarked(post)) {
             // Set the bookmark image to filled if a post is already bookmarked
             holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
         }
@@ -167,27 +169,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             }
         });
 
-        if (post.isLiked()) {
-            holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
-        }
-
-        holder.ivHeart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!post.isLiked()) {
-                    post.likePost(ParseUser.getCurrentUser());
-                    holder.ivHeart.setImageResource(R.drawable.hot_pink_heart);
-
-                    post.saveInBackground();
-
-                } else {
-                    post.unlikePost(ParseUser.getCurrentUser());
-                    holder.ivHeart.setImageResource(R.drawable.heart_logo_vector);
-
-                    post.saveInBackground();
-                }
-            }
-        });
 
         // onClickListener for the bookmark image button
         holder.ibBookmark.setOnClickListener(new View.OnClickListener() {
@@ -243,7 +224,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             holder.ivEventImage.setVisibility(View.GONE);
         }
         if (!(post.getDay() == null)) {
-
             // Set the date, time, and event title if a date is given by user
             holder.tvDateOfEvent.setText(post.getDay());
             holder.tvTime.setText(post.getTime());
@@ -264,6 +244,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         if (post.isLiked()) {
             holder.ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
         } else {
@@ -318,14 +299,12 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         // Set the description for the post
         holder.tvDesc.setText(post.getDescription());
         if (!(post.getImage() == null)) {
-
             // Set the image to be posted
             Glide.with(context)
                     .load(post.getImage().getUrl())
                     .bitmapTransform(new CenterCrop(context))
                     .into(holder.ivImage);
         } else {
-
             // Set the visibility of the post image to GONE if no picture is taken
             holder.ivImage.setVisibility(View.GONE);
         }
