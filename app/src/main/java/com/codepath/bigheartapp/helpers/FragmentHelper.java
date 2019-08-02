@@ -1,5 +1,7 @@
 package com.codepath.bigheartapp.helpers;
 
+import android.util.Log;
+
 import com.codepath.bigheartapp.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -21,6 +23,7 @@ public class FragmentHelper {
                 if (e == null) {
                     curFragment.onFetchSuccess(objects);
                 } else {
+                    Log.e("FragmentHelper", e.getMessage());
                     curFragment.onFetchFailure();
                 }
                 curFragment.onFetchFinish();

@@ -114,8 +114,14 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                Double dist;
                 String distance = spDistance.getSelectedItem().toString();
-                Double dist = Double.parseDouble(distance.substring(0, distance.indexOf(" ")));
+                if (!distance.equals("")) {
+                    dist = Double.parseDouble(distance.substring(0, distance.indexOf(" ")));
+                } else {
+                    dist = 0.0;
+                }
+
 
                 // Create a new intent that takes user to the filtered event fragment
                 Intent backToEvents = new Intent();
