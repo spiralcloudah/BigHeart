@@ -227,8 +227,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         }
         if (!(post.getDay() == null)) {
             // Set the date, time, and event title if a date is given by user
-            holder.tvDateOfEvent.setText(post.getDay());
-            holder.tvTime.setText(post.getTime());
+            holder.tvDateOfEvent.setText(post.getDay() + " - " + post.getTime());
             holder.tvEventTitle.setText(post.getEventTitle());
         }
     }
@@ -425,7 +424,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         public TextView tvMonth;
         public TextView tvDay;
         public TextView tvYear;
-        public TextView tvTime;
         public TextView tvDateOfEvent;
         public TextView tvTimePosted;
         public TextView tvAddress;
@@ -436,7 +434,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             // Set the variables to the corresponding IDs in the xml layout
             ivEventImage = itemView.findViewById(R.id.ivEventImage);
             ivUserProfile = itemView.findViewById(R.id.ivUserProfile);
-            tvTime = (TextView) itemView.findViewById(R.id.tvTimeOfEvent);
             tvFirstLast = (TextView) itemView.findViewById(R.id.tvFirstLast);
             tvUsertag = (TextView) itemView.findViewById(R.id.tvUsertag);
             tvEventDesc = (TextView) itemView.findViewById(R.id.tvEventDesc);
