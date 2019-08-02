@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="209dp"
         android:ems="10"
         android:hint="Username"
         android:inputType="textPersonName"
@@ -40,12 +40,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="173dp"
+        android:layout_marginBottom="150dp"
         android:background="?attr/colorControlHighlight"
-        android:text="Login"
-        android:textColor="?attr/colorButtonNormal"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
+        android:text="Login"
+        android:textColor="?attr/colorButtonNormal"
         tools:clickable="true" />
 
     <Button
@@ -68,7 +68,21 @@
         android:layout_height="458dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="-9dp"
+        android:layout_marginTop="58dp"
         app:srcCompat="@drawable/heart_logo_vector" />
+
+    <TextView
+        android:id="@+id/tvApp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="18dp"
+        android:fontFamily="cursive"
+        android:text="BigHeart"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="#FFFFFF"
+        android:textSize="72sp" />
 
 </RelativeLayout>
