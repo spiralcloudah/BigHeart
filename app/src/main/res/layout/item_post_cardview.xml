@@ -22,7 +22,7 @@
             android:layout_height="50dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/profile" />
@@ -31,12 +31,14 @@
             android:id="@+id/tvUser2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/rvPosts"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_toEndOf="@+id/ivProfilePic"
+            android:layout_alignStart="@+id/tvFirstLast"
+            android:layout_alignLeft="@+id/tvFirstLast"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="34dp"
             android:text="Username"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             tools:textColor="@color/colorPrimaryDark" />
 
@@ -58,20 +60,6 @@
             tools:background="#000000"
             tools:layout_editor_absoluteX="53dp"
             tools:layout_editor_absoluteY="16dp" />
-
-        <TextView
-            android:id="@+id/tvUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/ivHeart"
-            android:layout_alignStart="@+id/ivHeart"
-            android:layout_alignParentBottom="false"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="0dp"
-            android:text="Username"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            tools:textColor="@color/colorPrimaryDark" />
 
         <TextView
             android:id="@+id/tvLocation"
@@ -148,5 +136,19 @@
             android:layout_marginBottom="7dp"
             android:background="@drawable/save"
             android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tvFirstLast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/ivProfilePic"
+            android:layout_toRightOf="@+id/ivProfilePic"
+            android:text="First Last"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

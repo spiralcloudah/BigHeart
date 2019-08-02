@@ -242,7 +242,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             holder.tvDate.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
             holder.tvLocation.setText(post.getAddress());
             holder.tvUserName2.setText(post.getUser().fetchIfNeeded().getUsername());
-            holder.tvUserName.setText(post.getUser().fetchIfNeeded().getUsername());
+            holder.tvFirstLast.setText(post.getUser().fetchIfNeeded().get("firstName").toString() + " " + post.getUser().fetchIfNeeded().get("lastName").toString());
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -367,7 +367,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         // Define the variables for the views and buttons
         public ImageView ivProfilePic;
         public ImageView ivImage;
-        public TextView tvUserName;
+        public TextView tvFirstLast;
         public TextView tvUserName2;
         public TextView tvDesc;
         public TextView tvDate;
@@ -380,7 +380,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
             // Set the variables to the corresponding IDs in the xml layout
             ivImage = (ImageView) itemView.findViewById(R.id.ivImage);
-            tvUserName = (TextView) itemView.findViewById(R.id.tvUser);
+            tvFirstLast = (TextView) itemView.findViewById(R.id.tvFirstLast);
             tvUserName2 = (TextView) itemView.findViewById(R.id.tvUser2);
             tvDesc = (TextView) itemView.findViewById(R.id.tvDescription);
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
