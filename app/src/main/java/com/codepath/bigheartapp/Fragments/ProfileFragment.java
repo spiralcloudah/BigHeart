@@ -1,10 +1,6 @@
 package com.codepath.bigheartapp.Fragments;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -92,6 +88,7 @@ public class ProfileFragment extends Fragment {
 
         //give TabLayout the ViewPager
         tabLayout.setupWithViewPager(viewPager);
+        //set icon images when creating tabs;
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_bookmark_border_black_24dp);
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_format_list_bulleted_black_24dp);
 
