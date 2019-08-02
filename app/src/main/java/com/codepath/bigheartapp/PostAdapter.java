@@ -227,7 +227,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         }
         if (!(post.getDay() == null)) {
             // Set the date, time, and event title if a date is given by user
-            holder.tvDateOfEvent.setText(post.getDay() + " - " + post.getTime());
+            holder.tvDateOfEvent.setText(post.getDay() + " · " + post.getTime());
             holder.tvEventTitle.setText(post.getEventTitle());
         }
     }
