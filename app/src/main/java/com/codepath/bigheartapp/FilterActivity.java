@@ -13,10 +13,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Spinner;
-
-import com.codepath.bigheartapp.Fragments.EventFragment;
 import com.codepath.bigheartapp.model.Post;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;

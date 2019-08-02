@@ -46,8 +46,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
-
-import static com.codepath.bigheartapp.PostDetailsActivity.ACTION;
 import static java.lang.Double.parseDouble;
 
 public class ComposeActivity extends AppCompatActivity {
@@ -78,7 +76,6 @@ public class ComposeActivity extends AppCompatActivity {
     public boolean isEvent = false;
 
     // API key and URL information..
-    // TODO - store in a more secure place!
     private String API_KEY = "AIzaSyBlqBLcO4u2GXQ8utsYRlsV55kmCavovfI";
     private String BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
 
@@ -236,12 +233,11 @@ public class ComposeActivity extends AppCompatActivity {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("address", location );
-        params.put("key", API_KEY );
+        params.put("key", API_KEY);
         client.get(BASE_URL, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
-                    Log.d("ComposeActivity", "Request Success!");
 
                     // retrieve json lat and long coordinates
                     lat = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("geometry")
@@ -309,12 +305,12 @@ public class ComposeActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("ComposeActivity", "Request Failure.");
+                Toast.makeText(ComposeActivity.this, "Failed to post event", Toast.LENGTH_LONG).show();
                 throwable.printStackTrace();
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                Log.d("ComposeActivity", "Request Success!");
+                Toast.makeText(ComposeActivity.this, "Failed to post event", Toast.LENGTH_LONG).show();
                 throwable.printStackTrace();
             }
         });
