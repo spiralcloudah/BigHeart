@@ -158,6 +158,9 @@ public class NestedPostsFragment extends Fragment implements FetchResults, Fragm
             @Override
             public void done(List<Post> objects, ParseException e) {
                 if (e == null) {
+                    if (bookmarked == null ) {
+                        return;
+                    }
                     postArrayList.clear();
                     for ( int i = 0; i < bookmarked.length(); i++) {
                         for (int j = 0; j < objects.size(); j++) {
