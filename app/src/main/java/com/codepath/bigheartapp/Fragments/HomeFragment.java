@@ -105,7 +105,6 @@ public class HomeFragment extends Fragment implements FetchResults, FragmentUpda
 
     // load the latest posts
     public void loadTopPosts(){
-        adapter.clear();
         FragmentHelper fragmentHelper = new FragmentHelper(getPostQuery());
         fragmentHelper.fetchPosts(this);
     }

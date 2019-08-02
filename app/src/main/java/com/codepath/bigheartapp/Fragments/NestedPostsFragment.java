@@ -26,8 +26,6 @@ import com.codepath.bigheartapp.helpers.HorizontalSpaceItemDecoration;
 import com.codepath.bigheartapp.helpers.PostBroadcastReceiver;
 import com.codepath.bigheartapp.helpers.VerticalSpaceItemDecoration;
 import com.codepath.bigheartapp.model.Post;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
@@ -45,6 +43,7 @@ public class NestedPostsFragment extends Fragment implements FetchResults, Fragm
     RecyclerView rvUserPosts;
     ArrayList<Post> postArrayList;
     PostAdapter postsAdapter;
+    private boolean isBookmarks;
     private BroadcastReceiver detailsChangedReceiver;
 
     public static NestedPostsFragment newInstance(int page, int postType) {
@@ -117,8 +116,10 @@ public class NestedPostsFragment extends Fragment implements FetchResults, Fragm
                 postsAdapter.clear();
                 int postType = getArguments().getInt(POST_TYPE);
                 if (postType == 0) {
+                    isBookmarks = false;
                     loadTopPosts();
                 } else {
+                    isBookmarks = true;
                     loadBookmarkedEvents();
 
                 }
@@ -138,10 +139,11 @@ public class NestedPostsFragment extends Fragment implements FetchResults, Fragm
         // toggle created to display user posts in database and user bookmarks in database
         int postType = getArguments().getInt(POST_TYPE);
         if (postType == 0) {
+            isBookmarks = false;
             loadTopPosts();
         } else {
+            isBookmarks = true;
             loadBookmarkedEvents();
-
         }
     }
 
@@ -149,40 +151,17 @@ public class NestedPostsFragment extends Fragment implements FetchResults, Fragm
     public void loadBookmarkedEvents() {
         final Post.Query eventsQuery = new Post.Query();
 
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        final JSONArray bookmarked = currentUser.getJSONArray("bookmarked");
 
         eventsQuery.whereEqualTo(Post.KEY_IS_EVENT, true);
 
-        eventsQuery.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> objects, ParseException e) {
-                if (e == null) {
-                    if (bookmarked == null ) {
-                        return;
-                    }
-                    postArrayList.clear();
-                    for ( int i = 0; i < bookmarked.length(); i++) {
-                        for (int j = 0; j < objects.size(); j++) {
-                            try {
-                                if (objects.get(j).getObjectId().equals(bookmarked.get(i).toString())) {
-                                    postArrayList.add(0,objects.get(j));
-                                    postsAdapter.notifyItemInserted(postArrayList.size() - 1);
-                                }
-                            } catch (JSONException e1) {
-                                e1.printStackTrace();
-                            }
-                        }
-                    }
-                }
+        postsAdapter.clear();
+        postArrayList.clear();
 
-            }
-        });
-        swipeContainer.setRefreshing(false);
+        FragmentHelper fragmentHelper = new FragmentHelper(eventsQuery);
+        fragmentHelper.fetchPosts(this);
     }
 
     public void loadTopPosts(){
-        postsAdapter.clear();
         FragmentHelper fragmentHelper = new FragmentHelper(getPostQuery());
         fragmentHelper.fetchPosts(this);
     }
@@ -198,8 +177,28 @@ public class NestedPostsFragment extends Fragment implements FetchResults, Fragm
 
     @Override
     public void onFetchSuccess(List<Post> objects) {
-        postArrayList.addAll(objects);
-        postsAdapter.notifyDataSetChanged();
+        if(isBookmarks) {
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            final JSONArray bookmarked = currentUser.getJSONArray("bookmarked");
+            if (bookmarked == null) {
+                return;
+            }
+            for (int i = 0; i < bookmarked.length(); i++) {
+                for (int j = 0; j < objects.size(); j++) {
+                    try {
+                        if (objects.get(j).getObjectId().equals(bookmarked.get(i).toString())) {
+                            postArrayList.add(0, objects.get(j));
+                            postsAdapter.notifyItemInserted(postArrayList.size() - 1);
+                        }
+                    } catch (JSONException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        } else {
+            postArrayList.addAll(objects);
+            postsAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

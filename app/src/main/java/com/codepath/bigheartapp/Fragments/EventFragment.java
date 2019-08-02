@@ -181,11 +181,11 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
                 return false;
             }
         });
+
         loadTopPosts();
     }
 
     public void loadTopPosts(){
-        adapter.clear();
         FragmentHelper fragmentHelper = new FragmentHelper(getPostQuery());
         fragmentHelper.fetchPosts(this);
     }
@@ -223,7 +223,6 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
             Toast.makeText(getContext(), "Showing filtered events", Toast.LENGTH_LONG).show();
-            posts.clear();
 
             final Post.Query postQuery = new Post.Query();
             postQuery.getTop().withUser();
@@ -252,21 +251,10 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
                 }
             }
 
-            postQuery.findInBackground(new FindCallback<Post>() {
-                @Override
-                public void done(List<Post> objects, ParseException e) {
-                    if(e == null) {
-                        adapter.clear();
-                        for(int i = 0; i < objects.size(); i++) {
-                            posts.add(objects.get(i));
-                            adapter.notifyItemInserted(posts.size() - 1);
-                        }
-                    } else {
-                        Toast.makeText(getContext(), "No posts matching applied filters", Toast.LENGTH_LONG).show();
-                    }
-                    swipeContainer.setRefreshing(false);
-                }
-            });
+            posts.clear();
+            adapter.clear();
+            FragmentHelper fragmentHelper = new FragmentHelper(postQuery);
+            fragmentHelper.fetchPosts(this);
         }
 
     }
