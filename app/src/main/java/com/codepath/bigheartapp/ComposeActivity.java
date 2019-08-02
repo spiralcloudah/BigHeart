@@ -46,8 +46,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
-
-import static com.codepath.bigheartapp.PostDetailsActivity.ACTION;
 import static java.lang.Double.parseDouble;
 
 public class ComposeActivity extends AppCompatActivity {
@@ -78,8 +76,6 @@ public class ComposeActivity extends AppCompatActivity {
     public boolean isEvent = false;
 
     // API key and URL information..
-    // TODO - store in a more secure place!
-    private String API_KEY = "AIzaSyBlqBLcO4u2GXQ8utsYRlsV55kmCavovfI";
     private String BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
 
     // Instantiate vars that will store retrieved lat and long coordinates
@@ -236,7 +232,7 @@ public class ComposeActivity extends AppCompatActivity {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("address", location );
-        params.put("key", API_KEY );
+        params.put("key", R.string.google_maps_api_key );
         client.get(BASE_URL, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

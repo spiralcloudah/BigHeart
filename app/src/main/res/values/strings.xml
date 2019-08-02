@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">bigheartapp</string>
+    <string name="app_name">"BigHeart"</string>
     <string name="google_maps_api_key">"AIzaSyBlqBLcO4u2GXQ8utsYRlsV55kmCavovfI"</string>
     <string name="result_code">"result_code"</string>
 
