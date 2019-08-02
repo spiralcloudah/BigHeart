@@ -239,6 +239,16 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
             if (data.getStringExtra(Post.KEY_TIME) != null) {
                 postQuery.whereEqualTo(Post.KEY_TIME, data.getStringExtra(Post.KEY_TIME));
             }
+
+            // Do not take distance into account in the filter if it is null
+            if (data.getStringExtra(Post.KEY_LOCATION) != null && mCurrentLocation != null) {
+                ParseGeoPoint userLocation = new ParseGeoPoint(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+                postQuery.whereWithinMiles(Post.KEY_LOCATION, userLocation, data.getDoubleExtra(Post.KEY_LOCATION, 0.0));
+                Toast.makeText(getContext(),"Showing events within " + Post.KEY_LOCATION + " miles of you", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getContext(),"Cannot get current location", Toast.LENGTH_LONG).show();
+            }
+
             postQuery.findInBackground(new FindCallback<Post>() {
                 @Override
                 public void done(List<Post> objects, ParseException e) {

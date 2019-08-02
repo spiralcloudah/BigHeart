@@ -4,10 +4,7 @@
     <string name="result_code">"result_code"</string>
 
     <string-array name="distance_array">
-        <item>2</item>
-    </string-array>
-
-    <string-array name="distance_array">
+        <item> </item>
         <item>5 miles</item>
         <item>10 miles</item>
         <item>15 miles</item>

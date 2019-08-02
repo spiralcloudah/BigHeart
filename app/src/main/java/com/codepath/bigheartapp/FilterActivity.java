@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Spinner;
 
+import com.codepath.bigheartapp.Fragments.EventFragment;
 import com.codepath.bigheartapp.model.Post;
 
 import java.text.SimpleDateFormat;
@@ -113,10 +114,14 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                String distance = spDistance.getSelectedItem().toString();
+                Double dist = Double.parseDouble(distance.substring(0, distance.indexOf(" ")));
+
                 // Create a new intent that takes user to the filtered event fragment
                 Intent backToEvents = new Intent();
                 backToEvents.putExtra(Post.KEY_DAY, day);
                 backToEvents.putExtra(Post.KEY_TIME, time);
+                backToEvents.putExtra(Post.KEY_LOCATION, dist);
                 setResult(RESULT_OK, backToEvents);
                 finish();
             }
