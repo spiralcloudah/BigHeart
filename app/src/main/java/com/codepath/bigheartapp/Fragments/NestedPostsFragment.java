@@ -95,7 +95,7 @@ public class NestedPostsFragment extends Fragment implements FetchResults, Fragm
                 view.post(new Runnable() {
                     @Override
                     public void run() {
-                        // should have something to load more posts...
+                        // load more posts.. but since on profile  current user posts will not need to be updated
                     }
                 });
             }

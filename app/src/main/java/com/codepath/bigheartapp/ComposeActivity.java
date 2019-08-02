@@ -46,6 +46,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
+
 import static java.lang.Double.parseDouble;
 
 public class ComposeActivity extends AppCompatActivity {
@@ -245,7 +246,7 @@ public class ComposeActivity extends AppCompatActivity {
                     lng = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("geometry")
                             .getJSONObject("location").get("lng").toString();
 
-                    // TODO - for some reason, retrieving the formatted address has an infinite/veryy long runtime. For now i will  just have the String location be what the user inputs.
+                    // TODO - for some reason, retrieving the formatted address has an infinite/veryy long runtime. I will  just have the String location be what the user inputs.
                     // address = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("formatted_address").toString();
                     // since async API call Post object must me created within the onSuccess function to ba able to access lat and lng data.
                     final Post newPost = new Post();

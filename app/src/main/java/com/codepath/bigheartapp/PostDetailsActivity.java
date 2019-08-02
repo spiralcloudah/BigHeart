@@ -31,7 +31,6 @@ public class PostDetailsActivity extends AppCompatActivity {
     // The view and button objects
     ImageView ivImage;
     ImageView ivProfilePic;
-    TextView tvUser;
     TextView tvUser2;
     TextView tvMonth;
     TextView tvDay;
@@ -52,7 +51,6 @@ public class PostDetailsActivity extends AppCompatActivity {
         // Resolve the view and button objects
         ivImage = (ImageView) findViewById(R.id.ivImage);
         ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
-        tvUser = (TextView) findViewById(R.id.tvUser);
         tvUser2 = (TextView) findViewById(R.id.tvUser2);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
         ivHeart = (ImageView) findViewById(R.id.ivDetailsHeart);
@@ -179,7 +177,6 @@ public class PostDetailsActivity extends AppCompatActivity {
         try {
 
             // Set the username for the current user
-            tvUser.setText(post.getUser().fetchIfNeeded().getUsername());
             tvUser2.setText(post.getUser().fetchIfNeeded().getUsername());
         } catch (ParseException e) {
             e.printStackTrace();

@@ -84,6 +84,7 @@ public class ProfileFragment extends Fragment {
 
         //give TabLayout the ViewPager
         tabLayout.setupWithViewPager(viewPager);
+        //set icon images when creating tabs;
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_bookmark_border_black_24dp);
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_format_list_bulleted_black_24dp);
 
