@@ -109,6 +109,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, FetchR
         getActivity().onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             getMyLocation();
+            moveCamera();
         } else {
             Toast.makeText(getContext(), "App does not have access to user's location", Toast.LENGTH_LONG).show();
         }
@@ -126,7 +127,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, FetchR
                         if (location != null) {
                             onLocationChanged(location);
                             moveCamera();
-                    }
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -139,7 +140,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, FetchR
     }
 
     public void moveCamera() {
-        if(mCurrentLocation != null) {
+        if (mCurrentLocation != null) {
             LatLng userLocation = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             CameraPosition cameraPosition = CameraPosition.builder().target(userLocation).zoom(16).bearing(0).tilt(45).build();
             mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -209,7 +210,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, FetchR
         // query for list of post objects unique to current user
         Post.Query postQuery = new Post.Query();
         postQuery.getTop().withUser();
-        postQuery.whereEqualTo("userId",currentUser);
+        postQuery.whereEqualTo("userId", currentUser);
         return postQuery;
     }
 }

@@ -39,10 +39,6 @@ public class ProfileFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
-    File photoFile;
-    String currentPath;
-    ParseFile parseFile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

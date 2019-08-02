@@ -38,10 +38,9 @@ import com.codepath.bigheartapp.helpers.PostBroadcastReceiver;
 import com.codepath.bigheartapp.helpers.VerticalSpaceItemDecoration;
 import com.codepath.bigheartapp.model.Post;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 
 import java.util.ArrayList;
@@ -100,7 +99,8 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 view.post(new Runnable() {
                     @Override
-                    public void run() {}
+                    public void run() {
+                    }
                 });
             }
         };
@@ -181,11 +181,9 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
                 return false;
             }
         });
-
-        loadTopPosts();
     }
 
-    public void loadTopPosts(){
+    public void loadTopPosts() {
         FragmentHelper fragmentHelper = new FragmentHelper(getPostQuery());
         fragmentHelper.fetchPosts(this);
     }
@@ -198,12 +196,12 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
 
         // Only loads posts that are events
         postQuery.whereEqualTo(Post.KEY_IS_EVENT, true);
-        if(mCurrentLocation != null) {
+        if (mCurrentLocation != null) {
             ParseGeoPoint userLocation = new ParseGeoPoint(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             postQuery.whereWithinMiles(Post.KEY_LOCATION, userLocation, MAX_DISTANCE);
-            Toast.makeText(getContext(),"Showing events within " + MAX_DISTANCE + " miles of you", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Showing events within " + MAX_DISTANCE + " miles of you", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getContext(),"Could not load user location", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Could not load user location", Toast.LENGTH_LONG).show();
         }
         return postQuery;
     }
@@ -216,12 +214,13 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
             getMyLocation();
         } else {
             Toast.makeText(getContext(), "App does not have access to user's location", Toast.LENGTH_LONG).show();
+            loadTopPosts();
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             Toast.makeText(getContext(), "Showing filtered events", Toast.LENGTH_LONG).show();
 
             final Post.Query postQuery = new Post.Query();
@@ -241,7 +240,7 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
 
             double distance = data.getDoubleExtra(Post.KEY_LOCATION, 0.0);
             // Do not take distance into account in the filter if it is null
-            if(distance != 0.0){
+            if (distance != 0.0) {
                 if (mCurrentLocation != null) {
                     ParseGeoPoint userLocation = new ParseGeoPoint(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
                     postQuery.whereWithinMiles(Post.KEY_LOCATION, userLocation, data.getDoubleExtra(Post.KEY_LOCATION, 0.0));
@@ -269,14 +268,15 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
                     public void onSuccess(Location location) {
                         if (location != null) {
                             onLocationChanged(location);
+                            loadTopPosts();
                         }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("MapDemoActivity", "Error trying to get last GPS location");
-                        e.printStackTrace();
+                        Toast.makeText(getContext(), "Error trying to get last GPS location", Toast.LENGTH_LONG).show();
+                        loadTopPosts();
                     }
                 });
     }
