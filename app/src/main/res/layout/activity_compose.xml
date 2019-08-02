@@ -7,6 +7,23 @@
     android:background="@drawable/compose_background"
     tools:context=".ComposeActivity">
 
+    <ImageView
+        android:id="@+id/ivPicture"
+        android:layout_width="140dp"
+        android:layout_height="177dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:scaleType="centerCrop"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.027"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:color/black" />
+
     <EditText
         android:id="@+id/etDescription"
         android:layout_width="0dp"
@@ -25,7 +42,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPicture" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnPost"
@@ -79,93 +96,77 @@
         android:id="@+id/btnAddImage"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="16dp"
         android:background="?attr/colorControlHighlight"
-        android:text="Add Picture"
-        android:textColor="?attr/colorButtonNormal"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        app:layout_constraintStart_toStartOf="@+id/switchEvent"
-        app:layout_constraintTop_toBottomOf="@+id/etEventTitle" />
+        android:text="Add Picture"
+        android:textColor="?attr/colorButtonNormal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <Button
         android:id="@+id/btnDateChooser"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginRight="16dp"
         android:background="?attr/colorControlHighlight"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:gravity="center"
         android:hint="Date"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorPrimaryText"
         android:textColorHint="@color/colorTextHint"
-        android:visibility="gone"
-        android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:layout_constraintEnd_toStartOf="@+id/btnTimeChooser"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switchEvent" />
 
 
-    <ImageView
-        android:id="@+id/ivPicture"
-        android:layout_width="wrap_content"
-        android:layout_height="300dp"
+    <Button
+        android:id="@+id/btnTimeChooser"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:scaleType="centerCrop"
-        android:visibility="gone"
+        android:layout_marginRight="16dp"
+        android:background="?attr/colorControlHighlight"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:gravity="center"
+        android:hint="Time"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorPrimaryText"
+        android:textColorHint="@color/colorTextHint"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:color/black" />
+        app:layout_constraintTop_toBottomOf="@+id/btnDateChooser" />
 
     <EditText
         android:id="@+id/etEventTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Event Title"
         android:inputType="textPersonName"
         android:textAllCaps="false"
         android:textColor="@color/colorPrimaryText"
         android:textColorHint="@color/colorTextHint"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnDateChooser" />
-
-    <Button
-        android:id="@+id/btnTimeChooser"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="?attr/colorControlHighlight"
-        android:hint="Time"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/colorPrimaryText"
-        android:textColorHint="@color/colorTextHint"
-        android:textColorLink="@color/colorTextHint"
-        android:visibility="gone"
-        android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnDateChooser"
-        app:layout_constraintTop_toTopOf="@+id/btnDateChooser" />
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@+id/switchEvent"
+        app:layout_constraintTop_toBottomOf="@+id/switchEvent" />
 
 </android.support.constraint.ConstraintLayout>
