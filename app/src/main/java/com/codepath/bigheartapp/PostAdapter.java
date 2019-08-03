@@ -133,9 +133,9 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
         if (post.isBookmarked(post)) {
             // Set the bookmark image to filled if a post is already bookmarked
-            holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
+            holder.ibBookmark.setBackgroundResource(R.drawable.ic_bookmark_filled);
         } else {
-            holder.ibBookmark.setBackgroundResource(R.drawable.save);
+            holder.ibBookmark.setBackgroundResource(R.drawable.ic_bookmark_outline);
         }
 
         // onClickListener for the heart image button
@@ -181,7 +181,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
                     // If a post is not yet bookmarked, set the bookmark to filled
                     post.bookmarkPost(post.getEventId());
-                    holder.ibBookmark.setBackgroundResource(R.drawable.save_filled);
+                    holder.ibBookmark.setBackgroundResource(R.drawable.ic_bookmark_filled);
 
                     // save the post as bookmarked
                     post.saveInBackground();
@@ -189,7 +189,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
                     // If a post is already bookmarked, set the bookmark to unfilled
                     post.removeBookmark(post);
-                    holder.ibBookmark.setBackgroundResource(R.drawable.save);
+                    holder.ibBookmark.setBackgroundResource(R.drawable.ic_bookmark_outline);
 
                     // save the post as not bookmarked
                     post.saveInBackground();
