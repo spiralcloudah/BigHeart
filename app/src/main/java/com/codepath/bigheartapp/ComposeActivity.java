@@ -44,6 +44,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -219,7 +220,7 @@ public class ComposeActivity extends AppCompatActivity {
                 try {
                     final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
                     final Date dateObj = sdf.parse(preFormat);
-                    time = new SimpleDateFormat("K:mm a").format(dateObj);
+                    time = new SimpleDateFormat("h:mm a").format(dateObj);
                 } catch (java.text.ParseException e) {
                     e.printStackTrace();
                 }
