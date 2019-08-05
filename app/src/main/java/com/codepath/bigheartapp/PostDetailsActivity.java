@@ -177,7 +177,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         try {
 
             // Set the username for the current user
-            tvUser2.setText(post.getUser().fetchIfNeeded().getUsername());
+            tvUser2.setText("@" + post.getUser().fetchIfNeeded().getUsername());
         } catch (ParseException e) {
             e.printStackTrace();
         }

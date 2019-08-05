@@ -240,7 +240,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             // Set the IDs for the views in post
             holder.tvDate.setText(ParseRelativeDate.getRelativeTimeAgo(post.getCreatedAt()));
             holder.tvLocation.setText(post.getAddress());
-            holder.tvUserName2.setText(post.getUser().fetchIfNeeded().getUsername());
+            holder.tvUserName2.setText("@" + post.getUser().fetchIfNeeded().getUsername());
             holder.tvFirstLast.setText(post.getUser().fetchIfNeeded().get("firstName").toString() + " " + post.getUser().fetchIfNeeded().get("lastName").toString());
         } catch (ParseException e) {
             e.printStackTrace();
