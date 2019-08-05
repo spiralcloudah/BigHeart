@@ -151,8 +151,8 @@ public class NestedPostsFragment extends Fragment implements FetchResults, Fragm
     public void loadBookmarkedEvents() {
         final Post.Query eventsQuery = new Post.Query();
 
-
         eventsQuery.whereEqualTo(Post.KEY_IS_EVENT, true);
+        eventsQuery.addDescendingOrder(Post.KEY_DATE);
 
         postsAdapter.clear();
         postArrayList.clear();
@@ -172,6 +172,7 @@ public class NestedPostsFragment extends Fragment implements FetchResults, Fragm
         postQuery.getTop().withUser();
         // Only load the current user's posts
         postQuery.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+        postQuery.addDescendingOrder(Post.KEY_DATE);
         return postQuery;
     }
 
