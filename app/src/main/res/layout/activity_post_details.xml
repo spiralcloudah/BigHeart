@@ -79,6 +79,7 @@
         android:layout_marginEnd="8dp"
         android:text="Location"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:visibility="visible" />
 
@@ -97,7 +98,8 @@
         android:autoLink="web"
         android:text="Write a caption..."
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/colorSecondaryText" />
+        android:textColor="@color/colorSecondaryText"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/tvTitle"
@@ -131,6 +133,7 @@
         android:text="Day"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/colorSecondaryText"
+        android:textSize="18sp"
         android:visibility="visible" />
 
     <ImageView
@@ -150,19 +153,18 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/tvDescription"
         android:layout_alignLeft="@+id/ivDetailsHeart"
-        android:layout_alignTop="@id/ivDetailsHeart"
         android:layout_alignParentRight="false"
-        android:layout_alignParentBottom="false"
+        android:layout_alignParentBottom="true"
         android:layout_marginStart="-1dp"
         android:layout_marginLeft="-368dp"
-        android:layout_marginTop="8dp"
         android:layout_marginRight="1dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="3dp"
         android:autoLink="all"
         android:fontFamily="sans-serif-light"
         android:text="Date here"
         android:textAlignment="textStart"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textSize="14sp"
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
