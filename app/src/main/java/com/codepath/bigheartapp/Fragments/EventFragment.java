@@ -125,10 +125,10 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
 
         // Scheme colors for animation
         swipeContainer.setColorSchemeColors(
-                getResources().getColor(android.R.color.holo_blue_bright),
-                getResources().getColor(android.R.color.holo_green_light),
-                getResources().getColor(android.R.color.holo_orange_light),
-                getResources().getColor(android.R.color.holo_red_light)
+                getResources().getColor(R.color.colorPrimary),
+                getResources().getColor(R.color.colorAccent),
+                getResources().getColor(R.color.colorAccentDark),
+                getResources().getColor(R.color.colorPrimaryDark)
         );
 
         ibFilter.setOnClickListener(new View.OnClickListener() {
