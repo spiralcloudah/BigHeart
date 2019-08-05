@@ -108,7 +108,7 @@ public class ComposeActivity extends AppCompatActivity {
         switchEvent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
+                if (isChecked) {
                     etEventTitle.setVisibility(View.VISIBLE);
                     btnDatePicker.setVisibility(View.VISIBLE);
                     btnTimePicker.setVisibility(View.VISIBLE);
@@ -139,23 +139,23 @@ public class ComposeActivity extends AppCompatActivity {
                 final String description = etDescription.getText().toString();
                 final ParseUser user = ParseUser.getCurrentUser();
                 final String eventTitle = etEventTitle.getText().toString();
-                final String location = etLocation.getText().toString().replace(" ","+");
+                final String location = etLocation.getText().toString().replace(" ", "+");
                 final String address = etLocation.getText().toString();
 
-                    // If there is no address provided...
+                // If there is no address provided...
                 if (address.equals("")) {
                     Toast.makeText(getApplicationContext(), "Must select a location!", Toast.LENGTH_LONG).show();
 
                     // If there is no date provided...
-                } else if(isEvent && day == null) {
+                } else if (isEvent && day == null) {
                     Toast.makeText(getApplicationContext(), "Must select a date!", Toast.LENGTH_LONG).show();
 
                     // If there is no time provided...
-                } else if(isEvent && time == null) {
+                } else if (isEvent && time == null) {
                     Toast.makeText(getApplicationContext(), "Must specify a time!", Toast.LENGTH_LONG).show();
 
                     // If there is no event title provided...
-                } else if(isEvent && eventTitle.equals("")) {
+                } else if (isEvent && eventTitle.equals("")) {
                     Toast.makeText(getApplicationContext(), "Must give event a title!", Toast.LENGTH_LONG).show();
                 } else {
 
@@ -234,7 +234,7 @@ public class ComposeActivity extends AppCompatActivity {
         // Set up the client and params
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        params.put("address", location );
+        params.put("address", location);
         params.put("key", API_KEY);
         client.get(BASE_URL, params, new JsonHttpResponseHandler() {
             @Override
@@ -242,74 +242,79 @@ public class ComposeActivity extends AppCompatActivity {
                 try {
 
                     // retrieve json lat and long coordinates
-                    lat = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("geometry")
+                    lat = ((JSONArray) response.get("results")).getJSONObject(0).getJSONObject("geometry")
                             .getJSONObject("location").get("lat").toString();
-                    lng = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("geometry")
+                    lng = ((JSONArray) response.get("results")).getJSONObject(0).getJSONObject("geometry")
                             .getJSONObject("location").get("lng").toString();
-
-                    // TODO - for some reason, retrieving the formatted address has an infinite/veryy long runtime. I will  just have the String location be what the user inputs.
-                    // address = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("formatted_address").toString();
-                    // since async API call Post object must me created within the onSuccess function to ba able to access lat and lng data.
-                    final Post newPost = new Post();
-
-                    // set values to post object
-                    newPost.setDescription(description);
-                    newPost.setUser(user);
-                    newPost.setAddress(address);
-                    newPost.setIsEvent(isEvent);
-
-                    // if post is an event, then date information will be updated in Parse DB
-                    if(isEvent) {
-                        newPost.setDay(day);
-                        newPost.setTime(time);
-                        newPost.setEventTitle(eventTitle);
-                    }
-
-                    // create new ParseGeopoint to store lat and lng as doubles...
-                    ParseGeoPoint coordinates = new ParseGeoPoint(parseDouble(lat),parseDouble(lng));
-                    newPost.setLocation(coordinates);
-                    newPost.setAddress(address);
-
-                    // checks for optional photo, if photo exists, adds to post object.
-                    final File file = photoFile;
-                    if (file != null ) {
-                        ParseFile postPic = new ParseFile(file);
-                        postPic.saveInBackground();
-                        newPost.setImage(postPic);
-                    }
-
-                    // finally save post object to parse database
-                    newPost.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                if(isEvent)
-                                    Toast.makeText(ComposeActivity.this, "Successfully posted event!", Toast.LENGTH_SHORT).show();
-                                else
-                                    Toast.makeText(ComposeActivity.this, "Successfully posted!", Toast.LENGTH_SHORT).show();
-                                Intent backHome = new Intent();
-                                backHome.putExtra(Post.class.getSimpleName(), (Serializable) newPost);
-                                setResult(RESULT_OK, backHome);
-                                finish();
-                            } else {
-                                if(isEvent)
-                                    Toast.makeText(ComposeActivity.this, "Failed to post event", Toast.LENGTH_LONG).show();
-                                else
-                                    Toast.makeText(ComposeActivity.this, "Failed to post", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    lat = null;
+                    lng = null;
+                }
+                // TODO - for some reason, retrieving the formatted address has an infinite/veryy long runtime. I will  just have the String location be what the user inputs.
+                // address = ((JSONArray)response.get("results")).getJSONObject(0).getJSONObject("formatted_address").toString();
+                // since async API call Post object must me created within the onSuccess function to ba able to access lat and lng data.
+                final Post newPost = new Post();
+
+                // set values to post object
+                newPost.setDescription(description);
+                newPost.setUser(user);
+                newPost.setAddress(address);
+                newPost.setIsEvent(isEvent);
+
+                // if post is an event, then date information will be updated in Parse DB
+                if (isEvent) {
+                    newPost.setDay(day);
+                    newPost.setTime(time);
+                    newPost.setEventTitle(eventTitle);
                 }
 
+                if(lat != null && lng != null) {
+                    // create new ParseGeopoint to store lat and lng as doubles...
+                    ParseGeoPoint coordinates = new ParseGeoPoint(parseDouble(lat), parseDouble(lng));
+                    newPost.setLocation(coordinates);
+                } else {
+                    ParseGeoPoint coordinates = new ParseGeoPoint(89.151011, 160.502924);
+                    newPost.setLocation(coordinates);
+                }
+
+                // checks for optional photo, if photo exists, adds to post object.
+                final File file = photoFile;
+                if (file != null) {
+                    ParseFile postPic = new ParseFile(file);
+                    postPic.saveInBackground();
+                    newPost.setImage(postPic);
+                }
+
+                // finally save post object to parse database
+                newPost.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            if (isEvent)
+                                Toast.makeText(ComposeActivity.this, "Successfully posted event!", Toast.LENGTH_SHORT).show();
+                            else
+                                Toast.makeText(ComposeActivity.this, "Successfully posted!", Toast.LENGTH_SHORT).show();
+                            Intent backHome = new Intent();
+                            backHome.putExtra(Post.class.getSimpleName(), (Serializable) newPost);
+                            setResult(RESULT_OK, backHome);
+                            finish();
+                        } else {
+                            if (isEvent)
+                                Toast.makeText(ComposeActivity.this, "Failed to post event", Toast.LENGTH_LONG).show();
+                            else
+                                Toast.makeText(ComposeActivity.this, "Failed to post", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
             }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Toast.makeText(ComposeActivity.this, "Failed to post event", Toast.LENGTH_LONG).show();
                 throwable.printStackTrace();
             }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 Toast.makeText(ComposeActivity.this, "Failed to post event", Toast.LENGTH_LONG).show();
@@ -343,7 +348,7 @@ public class ComposeActivity extends AppCompatActivity {
         File mediaStorageDir = new File(ComposeActivity.this.getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
 
         // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
             Log.d(APP_TAG, "failed to create directory");
         }
 
