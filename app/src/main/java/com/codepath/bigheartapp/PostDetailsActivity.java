@@ -20,6 +20,7 @@ import com.parse.ParseUser;
 import java.io.Serializable;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class PostDetailsActivity extends AppCompatActivity {
     public static final String ACTION = "com.codepath.bigheartapp";
@@ -35,7 +36,6 @@ public class PostDetailsActivity extends AppCompatActivity {
     TextView tvMonth;
     TextView tvDay;
     TextView tvYear;
-    TextView tvTime;
     TextView tvDescription;
     TextView tvDate;
     ImageView ivHeart;
@@ -59,7 +59,6 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvMonth = (TextView) findViewById(R.id.tvDate);
         tvDay = (TextView) findViewById(R.id.tvDay);
         tvYear = (TextView) findViewById(R.id.tvYear);
-        tvTime = (TextView) findViewById(R.id.tvTime);
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvLocation = (TextView) findViewById(R.id.tvLocation);
 
@@ -69,36 +68,41 @@ public class PostDetailsActivity extends AppCompatActivity {
 
         // Set the texts after post has been created
         tvDescription.setText(post.getDescription());
-        tvDay.setText(post.getDay());
-        tvTime.setText(post.getTime());
+        tvDay.setText(post.getDay() + " · " + post.getTime());
         tvTitle.setText(post.getEventTitle());
         tvLocation.setText(post.getAddress());
 
         // If a post is already liked, set the heart image to be filled
         if(post.isLiked()) {
             ivHeart.setBackgroundResource(R.drawable.hot_pink_heart);
+        } else {
+            ivHeart.setBackgroundResource(R.drawable.heart_logo_vector);
         }
 
         // If a post is not an event, make the visibility of the bookmark GONE
         if (post.getIsEvent() == false) {
             ibBookmark.setVisibility(View.GONE);
+            tvTitle.setVisibility(View.GONE);
+            tvDay.setVisibility(View.GONE);
         }
 
         // If a post is bookmarked, set the bookmark image to be filled
-//        if(post.isBookmarked()) {
-//            ibBookmark.setBackgroundResource(R.drawable.save_filled);
-//        }
+        if(post.isBookmarked(post)) {
+            ibBookmark.setBackgroundResource(R.drawable.ic_bookmark_filled);
+        } else {
+            ibBookmark.setBackgroundResource(R.drawable.ic_bookmark_outline);
+        }
 
         // Event title only visible for an event
         if (post.getEventTitle() == null) {
-            tvTitle.setVisibility(View.INVISIBLE);
+            tvTitle.setVisibility(View.GONE);
         } else {
             tvTitle.setVisibility(View.VISIBLE);
         }
 
         // Address only visible for an event
         if (post.getAddress() == null) {
-            tvLocation.setVisibility(View.INVISIBLE);
+            tvLocation.setVisibility(View.GONE);
         } else {
             tvLocation.setVisibility(View.VISIBLE);
         }
@@ -141,24 +145,24 @@ public class PostDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-//                if(!post.isBookmarked()) {
-//
-//                    // If a post is not yet bookmarked, set the bookmark to filled
-//                    post.bookmarkPost(ParseUser.getCurrentUser());
-//                    ibBookmark.setBackgroundResource(R.drawable.save_filled);
-//
-//                    // save the post as bookmarked
-//                    post.saveInBackground();
-//
-//                } else {
-//
-//                    // If a post is already bookmarked, set the bookmark to unfilled
-//                    post.unbookmarkPost(ParseUser.getCurrentUser());
-//                    ibBookmark.setBackgroundResource(R.drawable.save);
-//
-//                    // save the post as not bookmarked
-//                    post.saveInBackground();
-//                }
+                if(!post.isBookmarked(post)) {
+
+                    // If a post is not yet bookmarked, set the bookmark to filled
+                    post.bookmarkPost(post.getEventId());
+                    ibBookmark.setBackgroundResource(R.drawable.ic_bookmark_filled);
+
+                    // save the post as bookmarked
+                    post.saveInBackground();
+
+                } else {
+
+                    // If a post is already bookmarked, set the bookmark to unfilled
+                    post.removeBookmark(post);
+                    ibBookmark.setBackgroundResource(R.drawable.ic_bookmark_outline);
+
+                    // save the post as not bookmarked
+                    post.saveInBackground();
+                }
             }
         });
 
@@ -167,7 +171,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         if (photo != null) {
             Glide.with(PostDetailsActivity.this)
                     .load(photo.getUrl())
-                    .bitmapTransform(new CenterCrop(PostDetailsActivity.this))
+                    .bitmapTransform(new RoundedCornersTransformation(this, 100, 10))
                     .into(ivImage);
         } else {
 
