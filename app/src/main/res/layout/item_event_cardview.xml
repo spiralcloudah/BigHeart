@@ -100,7 +100,7 @@
 
         <TextView
             android:id="@+id/tvEventDesc"
-            android:layout_width="392dp"
+            android:layout_width="386dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvDate"
             android:layout_alignStart="@+id/tvAddress"
