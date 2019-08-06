@@ -22,8 +22,6 @@ import com.codepath.bigheartapp.R;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
-import java.io.File;
-
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 
