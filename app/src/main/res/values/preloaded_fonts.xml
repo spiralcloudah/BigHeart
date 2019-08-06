@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/allura</item>
+        <item>@font/clicker_script</item>
+        <item>@font/dynalight</item>
+        <item>@font/great_vibes</item>
+        <item>@font/leckerli_one</item>
+        <item>@font/miniver</item>
+        <item>@font/redressed</item>
+        <item>@font/rouge_script</item>
+        <item>@font/sofia</item>
+        <item>@font/vibur</item>
+    </array>
+</resources>
