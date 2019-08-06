@@ -29,6 +29,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -83,6 +84,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, FetchR
             // KEY_LOCATION was found in the Bundle, so mCurrentLocation is not null
             mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
         }
+
     }
 
     @Override
@@ -127,6 +129,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, FetchR
                         if (location != null) {
                             onLocationChanged(location);
                             moveCamera();
+                            drawCircle();
+                            drawMarkers();
                         }
                     }
                 })
@@ -137,6 +141,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, FetchR
                         e.printStackTrace();
                     }
                 });
+    }
+
+    private void drawCircle() {
+        LatLng userLocation = new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
+        CircleOptions circleOptions = new CircleOptions();
+        circleOptions.center(userLocation).radius(5000); // In meters
+
+        mGoogleMap.addCircle(circleOptions);
+
+        return;
     }
 
     public void moveCamera() {
