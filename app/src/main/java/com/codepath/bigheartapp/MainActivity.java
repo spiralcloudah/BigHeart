@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         btnSignup = findViewById(R.id.btnSignUp);
         tvApp = findViewById(R.id.tvApp);
-        tvApp.setText("Big<3");
+        tvApp.setText("Big<3 ");
 
         // User persistence
         ParseUser currentUser = ParseUser.getCurrentUser();
