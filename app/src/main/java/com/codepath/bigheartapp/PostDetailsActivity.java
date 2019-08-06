@@ -33,6 +33,7 @@ public class PostDetailsActivity extends AppCompatActivity {
     ImageView ivImage;
     ImageView ivProfilePic;
     TextView tvUser2;
+    TextView tvFirstLast;
     TextView tvMonth;
     TextView tvDay;
     TextView tvYear;
@@ -52,6 +53,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         ivImage = (ImageView) findViewById(R.id.ivImage);
         ivProfilePic = (ImageView) findViewById(R.id.ivProfilePic);
         tvUser2 = (TextView) findViewById(R.id.tvUser2);
+        tvFirstLast = (TextView) findViewById(R.id.tvFirstLast);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
         ivHeart = (ImageView) findViewById(R.id.ivDetailsHeart);
         ibBookmark = (ImageButton) findViewById(R.id.ibBookmark);
@@ -68,6 +70,11 @@ public class PostDetailsActivity extends AppCompatActivity {
 
         // Set the texts after post has been created
         tvDescription.setText(post.getDescription());
+        try {
+            tvFirstLast.setText(post.getUser().fetchIfNeeded().get("firstName").toString() + " " + post.getUser().fetchIfNeeded().get("lastName").toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         tvDay.setText(post.getDay() + " · " + post.getTime());
         tvTitle.setText(post.getEventTitle());
         tvLocation.setText(post.getAddress());
