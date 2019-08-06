@@ -171,8 +171,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         if (photo != null) {
             Glide.with(PostDetailsActivity.this)
                     .load(photo.getUrl())
-                    .bitmapTransform(new CenterCrop(getApplicationContext())) // TODO CANT DO BOTH?
-                    .bitmapTransform(new RoundedCornersTransformation(getApplicationContext(), 10, 10))
+                    .bitmapTransform(new RoundedCornersTransformation(getApplicationContext(), 20, 10))
                     .into(ivImage);
         } else {
 

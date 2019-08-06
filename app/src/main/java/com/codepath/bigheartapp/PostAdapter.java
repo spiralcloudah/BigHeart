@@ -219,8 +219,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             // Set the image to be posted
             Glide.with(context)
                     .load(post.getImage().getUrl())
-                    .bitmapTransform(new CenterCrop(context)) // TODO CANT DO BOTH?
-                    .bitmapTransform(new RoundedCornersTransformation(context, 10, 10))
+                    .bitmapTransform(new CenterCrop(context), new RoundedCornersTransformation(context, 20, 10))
                     .into(holder.ivEventImage);
         } else {
 
@@ -305,8 +304,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             // Set the image to be posted
             Glide.with(context)
                     .load(post.getImage().getUrl())
-                    .bitmapTransform(new CenterCrop(context)) // TODO CANT DO BOTH?
-                    .bitmapTransform(new RoundedCornersTransformation(context, 10, 10))
+                    .bitmapTransform(new CenterCrop(context), new RoundedCornersTransformation(context, 20, 10))
                     .into(holder.ivImage);
         } else {
             // Set the visibility of the post image to GONE if no picture is taken
