@@ -119,6 +119,9 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == HomeActivity.COMPOSE_REQUEST_CODE && resultCode == RESULT_OK) {
+            HomeFragment.posts.add(0, (Post) data.getSerializableExtra(Post.class.getSimpleName()));
+            HomeFragment.adapter.notifyItemInserted(0);
+            HomeFragment.rvPost.scrollToPosition(0);
             change_fragment = true;
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -129,7 +132,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(change_fragment) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeFragment()).commit();
+            bottomNavigationView.setSelectedItemId(R.id.miHome);
             change_fragment = false;
         }
     }
