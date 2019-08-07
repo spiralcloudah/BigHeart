@@ -49,7 +49,7 @@
         android:background="@color/colorAccentLight"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        android:text="Post"
+        android:text="POST"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorSecondaryText"
         android:textStyle="bold"
@@ -63,7 +63,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="16sp"
         android:fontFamily="sans-serif-light"
-        android:switchTextAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:switchTextAppearance="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large"
         android:text="Event? "
         android:textColor="#000000"
         android:textOff="NO"
@@ -103,7 +103,6 @@
         android:text="Add Picture"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorSecondaryText"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
