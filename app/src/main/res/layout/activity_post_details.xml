@@ -179,7 +179,7 @@
         android:layout_alignBottom="@id/tvLocation"
         android:layout_marginBottom="3dp"
         android:src="@drawable/maps"
-        android:tint="@color/colorAccentLight" />
+        android:tint="@color/colorAccent" />
 
     <ImageView
         android:id="@+id/ivDetailsCal"
@@ -190,6 +190,6 @@
         android:layout_marginTop="0dp"
         android:layout_marginBottom="2dp"
         android:src="@drawable/ic_calendar_clock"
-        android:tint="@color/colorAccentLight" />
+        android:tint="@color/colorAccent" />
 
 </RelativeLayout>
