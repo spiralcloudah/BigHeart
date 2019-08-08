@@ -40,7 +40,7 @@ public class PostDetailsActivity extends AppCompatActivity {
     TextView tvDescription;
     TextView tvDate;
     ImageView ivHeart;
-    ImageButton ibBookmark;
+    ImageView ibBookmark;
     TextView tvTitle;
     TextView tvLocation;
 
@@ -56,7 +56,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvFirstLast = (TextView) findViewById(R.id.tvFirstLast);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
         ivHeart = (ImageView) findViewById(R.id.ivDetailsHeart);
-        ibBookmark = (ImageButton) findViewById(R.id.ibBookmark);
+        ibBookmark = (ImageView) findViewById(R.id.ibBookmark);
         tvDate = (TextView) findViewById(R.id.tvDate);
         tvMonth = (TextView) findViewById(R.id.tvDate);
         tvDay = (TextView) findViewById(R.id.tvDay);

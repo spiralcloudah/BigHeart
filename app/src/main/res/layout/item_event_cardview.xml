@@ -40,8 +40,7 @@
             android:layout_toRightOf="@+id/ivUserProfile"
             android:text="Username"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textStyle="bold"
-            tools:textColor="@color/colorSecondaryText" />
+            android:textStyle="bold" />
 
 
         <ImageView
@@ -88,8 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvEventTitle"
             android:layout_alignParentLeft="false"
-            android:layout_marginStart="11dp"
-            android:layout_marginLeft="11dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="0dp"
             android:layout_toEndOf="@+id/imageView"
             android:layout_toRightOf="@+id/imageView"
@@ -100,18 +98,14 @@
 
         <TextView
             android:id="@+id/tvEventDesc"
-            android:layout_width="380dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvDate"
-            android:layout_alignStart="@+id/tvAddress"
-            android:layout_alignLeft="@+id/tvAddress"
+            android:layout_alignStart="@id/imageView"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="false"
-            android:layout_marginStart="-35dp"
-            android:layout_marginLeft="-35dp"
+            android:layout_marginStart="0dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="-3dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginBottom="0dp"
             android:autoLink="web"
             android:text="Write a caption..."
@@ -125,17 +119,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/ivUserProfile"
             android:layout_alignStart="@+id/ivUserProfile"
-            android:layout_alignLeft="@+id/ivUserProfile"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="false"
-            android:layout_marginStart="9dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
             android:text="TITLE"
             android:textAllCaps="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:textColor="@color/colorAccentDark"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorSecondaryText"
             android:textStyle="bold" />
 
         <TextView
@@ -143,13 +132,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvAddress"
-            android:layout_alignLeft="@id/tvAddress"
+            android:layout_alignStart="@id/tvAddress"
             android:layout_alignTop="@id/tvAddress"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="false"
-            android:layout_marginStart="44dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="24dp"
             android:text="Day"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/colorSecondaryText"
@@ -200,44 +185,43 @@
             android:layout_toEndOf="@+id/ivUserProfile"
             android:layout_toRightOf="@+id/ivUserProfile"
             android:text="First Last"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            tools:textColor="@color/colorSecondaryText" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         <ImageButton
             android:id="@+id/ibBookmark"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="33dp"
+            android:layout_height="36dp"
             android:layout_alignTop="@+id/ivHeart"
             android:layout_marginTop="-3dp"
-            android:layout_marginEnd="7dp"
-            android:layout_marginRight="7dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
             android:layout_toStartOf="@+id/ivHeart"
             android:layout_toLeftOf="@+id/ivHeart"
             android:background="@drawable/ic_bookmark_outline" />
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="18dp"
+            android:layout_height="16dp"
             android:layout_below="@+id/tvEventTitle"
-            android:layout_alignLeft="@id/ivUserProfile"
+            android:layout_alignStart="@id/tvEventTitle"
             android:layout_alignBottom="@id/tvAddress"
-            android:layout_alignParentLeft="false"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginLeft="-2dp"
+            android:layout_marginTop="1dp"
             android:layout_marginRight="0dp"
+            android:layout_marginBottom="-1dp"
             android:tint="@color/colorAccentLight"
             card_view:srcCompat="@drawable/maps" />
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/imageView"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignStart="@id/imageView"
             android:layout_alignBottom="@id/tvDate"
-            android:layout_marginLeft="0dp"
             android:layout_marginTop="0dp"
             android:layout_marginRight="0dp"
+            android:layout_marginBottom="3dp"
             android:tint="@color/colorAccentLight"
             card_view:srcCompat="@drawable/ic_calendar_clock" />
 

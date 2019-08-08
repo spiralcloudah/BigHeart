@@ -74,8 +74,8 @@ public class HomeFragment extends Fragment implements FetchResults, FragmentUpda
 
         // Adds the scroll listener and item decoration to RecyclerView
         rvPost.addOnScrollListener(scrollListener);
-        rvPost.addItemDecoration(new VerticalSpaceItemDecoration(6));
-        rvPost.addItemDecoration(new HorizontalSpaceItemDecoration(6));
+        rvPost.addItemDecoration(new VerticalSpaceItemDecoration(12));
+        rvPost.addItemDecoration(new HorizontalSpaceItemDecoration(12));
         swipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
 
         // Setup refresh listener which triggers new data loading
