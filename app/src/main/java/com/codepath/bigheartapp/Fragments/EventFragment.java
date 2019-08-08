@@ -105,8 +105,8 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
 
         // Add the scroll listener and item decoration to recyclerview
         rvEventPosts.addOnScrollListener(scrollListener);
-        rvEventPosts.addItemDecoration(new VerticalSpaceItemDecoration(6));
-        rvEventPosts.addItemDecoration(new HorizontalSpaceItemDecoration(6));
+        rvEventPosts.addItemDecoration(new VerticalSpaceItemDecoration(12));
+        rvEventPosts.addItemDecoration(new HorizontalSpaceItemDecoration(12));
         swipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
 
         // Setup refresh listener which triggers new data loading

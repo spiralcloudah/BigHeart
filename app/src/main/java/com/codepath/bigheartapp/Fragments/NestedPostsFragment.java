@@ -65,8 +65,8 @@ public class NestedPostsFragment extends Fragment implements FetchResults, Fragm
         // link variable to layout id
         rvUserPosts = rootView.findViewById(R.id.rvNestPosts);
 
-        rvUserPosts.addItemDecoration(new VerticalSpaceItemDecoration(6));
-        rvUserPosts.addItemDecoration(new HorizontalSpaceItemDecoration(6));
+        rvUserPosts.addItemDecoration(new VerticalSpaceItemDecoration(12));
+        rvUserPosts.addItemDecoration(new HorizontalSpaceItemDecoration(12));
 
         //create new array list  for posts
         postArrayList = new ArrayList<>();
