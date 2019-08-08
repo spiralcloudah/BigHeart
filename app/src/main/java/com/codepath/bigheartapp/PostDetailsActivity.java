@@ -43,6 +43,7 @@ public class PostDetailsActivity extends AppCompatActivity {
     ImageView ibBookmark;
     TextView tvTitle;
     TextView tvLocation;
+    ImageView ivCal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvYear = (TextView) findViewById(R.id.tvYear);
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvLocation = (TextView) findViewById(R.id.tvLocation);
+        ivCal = (ImageView) findViewById(R.id.ivDetailsCal);
 
         // Unwrap the post passed in via intent, using its simple name as a key
         post = (Post) getIntent().getParcelableExtra(Post.class.getSimpleName());
@@ -89,6 +91,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         // If a post is not an event, make the visibility of the bookmark GONE
         if (post.getIsEvent() == false) {
             ibBookmark.setVisibility(View.GONE);
+            ivCal.setVisibility(View.GONE);
             tvTitle.setVisibility(View.GONE);
             tvDay.setVisibility(View.GONE);
         }
