@@ -64,6 +64,7 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
     private final int REQUEST_CODE = 120;
     private final double MAX_DISTANCE = 10.0;
     private BroadcastReceiver detailsChangedReceiver;
+    private boolean isFiltering = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -242,12 +243,12 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
                 if (mCurrentLocation != null) {
                     ParseGeoPoint userLocation = new ParseGeoPoint(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
                     postQuery.whereWithinMiles(Post.KEY_LOCATION, userLocation, data.getDoubleExtra(Post.KEY_LOCATION, 0.0));
-                    Toast.makeText(getContext(), "Showing events within " + distance + " miles of you", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getContext(), "Cannot get current location", Toast.LENGTH_LONG).show();
                 }
             }
 
+            isFiltering = true;
             posts.clear();
             adapter.clear();
             FragmentHelper fragmentHelper = new FragmentHelper(postQuery);
@@ -292,9 +293,14 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
 
     @Override
     public void onFetchSuccess(List<Post> objects) {
-        if (objects.size() == 0) {
-            Toast.makeText(getContext(), "No results for filter", Toast.LENGTH_LONG).show();
-        } else {Toast.makeText(getContext(), "Showing filtered events", Toast.LENGTH_LONG).show();}
+        if(isFiltering) {
+            if (objects.size() == 0) {
+                Toast.makeText(getContext(), "No results for filter", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getContext(), "Showing filtered events", Toast.LENGTH_LONG).show();
+            }
+            isFiltering = false;
+        }
         posts.addAll(objects);
         adapter.notifyDataSetChanged(); //or range inserted
     }
