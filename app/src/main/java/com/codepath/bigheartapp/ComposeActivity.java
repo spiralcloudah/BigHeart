@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TimePicker;
@@ -62,6 +63,8 @@ public class ComposeActivity extends AppCompatActivity {
     private Switch switchEvent;
     private EditText etEventTitle;
     private Button btnTimePicker;
+    private ImageView ivCalendar;
+    private ImageView ivClock;
 
     // Set the date and time picker listeners
     private DatePickerDialog.OnDateSetListener dateSetListener;
@@ -102,6 +105,8 @@ public class ComposeActivity extends AppCompatActivity {
         btnAddPic = findViewById(R.id.btnAddImage);
         etEventTitle = findViewById(R.id.etEventTitle);
         btnTimePicker = findViewById(R.id.btnTimeChooser);
+        ivCalendar = findViewById(R.id.ivCalendar);
+        ivClock = findViewById(R.id.ivClock);
 
         // Function that reveals extra input fields if post is an event
         switchEvent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -111,11 +116,15 @@ public class ComposeActivity extends AppCompatActivity {
                     etEventTitle.setVisibility(View.VISIBLE);
                     btnDatePicker.setVisibility(View.VISIBLE);
                     btnTimePicker.setVisibility(View.VISIBLE);
+                    ivCalendar.setVisibility(View.VISIBLE);
+                    ivClock.setVisibility(View.VISIBLE);
                     isEvent = true;
                 } else {
                     etEventTitle.setVisibility(View.GONE);
                     btnDatePicker.setVisibility(View.GONE);
                     btnTimePicker.setVisibility(View.GONE);
+                    ivCalendar.setVisibility(View.GONE);
+                    ivClock.setVisibility(View.GONE);
                     isEvent = false;
                 }
             }
