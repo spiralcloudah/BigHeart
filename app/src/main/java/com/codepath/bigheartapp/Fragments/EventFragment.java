@@ -17,7 +17,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,6 @@ import com.codepath.bigheartapp.helpers.PostBroadcastReceiver;
 import com.codepath.bigheartapp.helpers.VerticalSpaceItemDecoration;
 import com.codepath.bigheartapp.model.Post;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.parse.ParseGeoPoint;
@@ -221,7 +219,7 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            Toast.makeText(getContext(), "Showing filtered events", Toast.LENGTH_LONG).show();
+
 
             final Post.Query postQuery = new Post.Query();
             postQuery.getTop().withUser();
@@ -294,6 +292,9 @@ public class EventFragment extends Fragment implements FetchResults, FragmentUpd
 
     @Override
     public void onFetchSuccess(List<Post> objects) {
+        if (objects.size() == 0) {
+            Toast.makeText(getContext(), "No results for filter", Toast.LENGTH_LONG).show();
+        } else {Toast.makeText(getContext(), "Showing filtered events", Toast.LENGTH_LONG).show();}
         posts.addAll(objects);
         adapter.notifyDataSetChanged(); //or range inserted
     }
