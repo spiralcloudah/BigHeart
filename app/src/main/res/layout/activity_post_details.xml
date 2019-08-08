@@ -87,7 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvDay"
-        android:layout_alignStart="@id/imageView3"
+        android:layout_alignStart="@id/ivDetailsCal"
         android:layout_marginStart="0dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
@@ -180,7 +180,7 @@
         android:tint="@color/colorAccentLight" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/ivDetailsCal"
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:layout_alignStart="@id/imageView"

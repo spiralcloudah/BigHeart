@@ -214,7 +214,7 @@
             card_view:srcCompat="@drawable/maps" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/ivCal"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_alignStart="@id/imageView"
