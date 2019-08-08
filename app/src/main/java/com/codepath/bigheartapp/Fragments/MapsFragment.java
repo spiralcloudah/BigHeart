@@ -190,10 +190,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, FetchR
                 BitmapDescriptor coloredIcon;
                 if (objects.get(i).getIsEvent()) {
                     // Events have a blue icon
-                    coloredIcon = BitmapDescriptorFactory.defaultMarker(307);
+                    coloredIcon = BitmapDescriptorFactory.defaultMarker(305);
 
                 } else {
-                    coloredIcon = BitmapDescriptorFactory.defaultMarker(188);
+                    coloredIcon = BitmapDescriptorFactory.defaultMarker(187);
                 }
                 mGoogleMap.addMarker(new MarkerOptions()
                         .position(pos)
