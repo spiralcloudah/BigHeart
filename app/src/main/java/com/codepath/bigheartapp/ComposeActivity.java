@@ -381,7 +381,6 @@ public class ComposeActivity extends AppCompatActivity {
 
                 // Result was a failure
             } else {
-                Toast.makeText(ComposeActivity.this, "No picture taken!", Toast.LENGTH_LONG).show();
                 photoFile = null;
             }
         }
