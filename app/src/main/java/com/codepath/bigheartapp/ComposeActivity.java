@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputFilter;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
@@ -114,6 +115,7 @@ public class ComposeActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     etEventTitle.setVisibility(View.VISIBLE);
+                    etEventTitle.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
                     btnDatePicker.setVisibility(View.VISIBLE);
                     btnTimePicker.setVisibility(View.VISIBLE);
                     ivCalendar.setVisibility(View.VISIBLE);
