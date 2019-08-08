@@ -193,7 +193,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, FetchR
                     coloredIcon = BitmapDescriptorFactory.defaultMarker(305);
 
                 } else {
-                    coloredIcon = BitmapDescriptorFactory.defaultMarker(186);
+                    coloredIcon = BitmapDescriptorFactory.defaultMarker(187);
                 }
                 mGoogleMap.addMarker(new MarkerOptions()
                         .position(pos)
